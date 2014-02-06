@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Projeto Cloud</title>
+
+	<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+	<link rel="stylesheet" type="text/css" href="css/bootstrap-theme.css">
+	<link rel="stylesheet" type="text/css" href="css/bootstrap-datetimepicker.min.css">>
+	<link rel="stylesheet" type="text/css" href="css/dashboard.css">
+</head>
+
+
+<body>
+<div class="page-container">
+  
+	<!-- top navbar -->
+    <div class="navbar navbar-default navbar-fixed-top" role="navigation">
+       <div class="container">
+    	<div class="navbar-header">
+           <button type="button" class="navbar-toggle" data-toggle="offcanvas" data-target=".sidebar-nav">
+             <span class="icon-bar"></span>
+             <span class="icon-bar"></span>
+             <span class="icon-bar"></span>
+           </button>
+           <a class="navbar-brand" href="#">Project Name</a>
+    	</div>
+       </div>
+    </div>
+      
+    <div class="container">
+      <div class="row row-offcanvas row-offcanvas-left">
+        <div class="col-sm-9">
+        	
+        </div>
+        <!-- sidebar Menu-->
+        <div class="col-sm-3 sidebar-offcanvas" id="sidebar" role="navigation">
+          <br>
+          <div class="panel panel-primary">
+      				<div class="panel-heading">
+        				<h3 class="panel-title">Configurações de Alarmes</h3>
+      				</div>
+      				<div class="panel-body">
+
+      					<strong>Período Fixo</strong>
+        				<div class="radio">
+        					<label data-toggle="tooltip" data-original-title="Permite">
+        						<input type="radio" name="ultima_hora" id="ultima_hora" value="ultima_hora">Última Hora
+        					</label>
+        				</div>
+        				<div class="radio">
+        					<label data-toggle="tooltip" data-original-title="Permite">
+        						<input type="radio" name="ultimo_dia" id="ultimo_dia" value="ultimo_dia">Último Dia
+        					</label>
+        				</div>
+        				<div class="radio">
+        					<label data-toggle="tooltip" data-original-title="Permite">
+        						<input type="radio" name="ultima_semana" id="ultima_semana" value="ultima_semana">Última Semana
+        					</label>
+        				</div>
+        				<div class="radio">
+        					<label data-toggle="tooltip" data-original-title="Permite">
+        						<input type="radio" name="ultimo_mes" id="ultimo_mes" value="ultimo_mes">Último Mês
+        					</label>
+        				</div>
+        				<br>
+        				<strong>Período Específico</strong>
+        				<br>
+        				<label for="dtp_input1" class="col-sm-3">Início </label>
+			            <div class="input-group date form_datetime col-sm-9" data-date="1979-09-16T05:25:07Z" data-date-format="dd MM yyyy - HH:ii p" data-link-field="dtp_input1">
+			                <input class="form-control" size="14" type="text" value="" readonly>
+			                <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
+							<span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
+			            </div>           
+			        </div>
+    		</div>
+        </div>
+  	
+    </div><!--/.row-->
+  </div><!--/.container-->
+</div><!--/.page-container-->
+	<script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
+	<script src="js/bootstrap.js"></script>
+	<script type="text/javascript" src="js/bootstrap-datetimepicker.js" charset="UTF-8"></script>
+	<script type="text/javascript" src="js/bootstrap-datetimepicker.pt-BR.js" charset="UTF-8"></script>
+</body>
+</html>
