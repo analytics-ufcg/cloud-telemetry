@@ -10,8 +10,20 @@ class DataCollector:
     except:
       print 'could not get Ceilometer client'
 
-  def get_cpu_util_data(self, timestamp=None, resource_id=None):
-    data = self.ceilometer.samples.list('cpu_util')
+  def get_cpu_util_data(self, timestamp_begin=None, timestamp_end=None, resource_id=None):
+    query = []
+
+    if any([timestamp_begin, timestamp_end, resource_id]):
+        if timestamp_begin:
+            query.append({'field':'timestamp', 'op':'gt', 'value':timestamp_begin})
+        
+        if timestamp_end:
+            query.append({'field':'timestamp', 'op':'lt', 'value':timestamp_end})
+
+        if resource_id:
+            query.append({'field':'resource_id', 'op':'eq', 'value':resource_id})
+
+    data = self.ceilometer.samples.list('cpu_util', query)
 
     ret = []
     for d in data:
