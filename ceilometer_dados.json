@@ -1,0 +1,8 @@
+{
+	"resource_id":"Cloud",
+		"children" : [
+			{"resource_id":"68799c22-af81-46d4-91f2-e2d8c8d9cbf3", "size":1000,"cpu_util_percent":0.06,"timestamp":"2014-02-07T16:25:05","flavor.name": "l1.small"},
+			{"resource_id":"68799c22-af81-46d4-91f2-e2d8c8d8cbf3", "size":3000,"cpu_util_percent":0.84,"timestamp": "2014-02-07T16:14:34","flavor.name": "l1.small"},
+			{"resource_id":"68799c22-af81-46d4-91f2-e2d8c8d9cbf4", "size":1000,"cpu_util_percent":0.92,"timestamp": "2014-02-07T16:14:32","flavor.name": "l1.small"}
+			]
+}
