@@ -10,7 +10,7 @@ class DataCollector:
     except:
       print 'could not get Ceilometer client'
 
-  def get_cpu_util_data(self):
+  def get_cpu_util_data(self, timestamp=None, resource_id=None):
     data = self.ceilometer.samples.list('cpu_util')
 
     ret = []
