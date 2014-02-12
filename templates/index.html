@@ -1,161 +1,222 @@
 <!DOCTYPE html>
 <html>
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Cloud Telemetry</title>
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title>Cloud Telemetry</title>
 
-  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
-  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/bootstrap-theme.css') }}">
-  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/dashboard.css') }}">
-  
-  <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
-  <script src="{{ url_for('static', filename='js/bootstrap.js') }}"></script>
-  <script type="text/javascript" src="{{ url_for('static', filename='js/bootstrap-datetimepicker.js') }}" charset="UTF-8"></script>
-  <script type="text/javascript" src="{{ url_for('static', filename='js/bootstrap-datetimepicker.pt-BR.js') }}" charset="UTF-8"></script>
-  <script type="text/javascript" src="{{ url_for('static', filename='js/d3.v3.js') }}"></script>
-  
+		<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
+		<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/bootstrap-theme.css') }}">
+		<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/dashboard.css') }}">
+		<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}">
 
-  <script type="text/javascript" src="https://www.google.com/jsapi"></script>
-    <script type="text/javascript">
-      google.load("visualization", "1", {packages:["treemap"]});
-      google.setOnLoadCallback(drawChart);
-      function drawChart() {
-        // Create and populate the data table.
-        var data = google.visualization.arrayToDataTable([
-          ['Location', 'Parent', 'Market trade volume (size)', 'Market increase/decrease (color)'],
-          ['Global',    null,                 0,                               0],
-          ['America',   'Global',             0,                               0],
-          ['Europe',    'Global',             0,                               0],
-          ['Asia',      'Global',             0,                               0],
-          ['Australia', 'Global',             0,                               0],
-          ['Africa',    'Global',             0,                               0],
-          ['Brazil',    'America',            11,                              10],
-          ['USA',       'America',            52,                              31],
-          ['Mexico',    'America',            24,                              12],
-          ['Canada',    'America',            16,                              -23],
-          ['France',    'Europe',             42,                              -11],
-          ['Germany',   'Europe',             31,                              -2],
-          ['Sweden',    'Europe',             22,                              -13],
-          ['Italy',     'Europe',             17,                              4],
-          ['UK',        'Europe',             21,                              -5],
-          ['China',     'Asia',               36,                              4],
-          ['Japan',     'Asia',               20,                              -12],
-          ['India',     'Asia',               40,                              63],
-          ['Laos',      'Asia',               4,                               34],
-          ['Mongolia',  'Asia',               1,                               -5],
-          ['Israel',    'Asia',               12,                              24],
-          ['Iran',      'Asia',               18,                              13],
-          ['Pakistan',  'Asia',               11,                              -52],
-          ['Egypt',     'Africa',             21,                              0],
-          ['S. Africa', 'Africa',             30,                              43],
-          ['Sudan',     'Africa',             12,                              2],
-          ['Congo',     'Africa',             10,                              12],
-          ['Zaire',     'Africa',             8,                               10]
-        ]);
+		<script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
+		<script src="{{ url_for('static', filename='js/bootstrap.js') }}"></script>
+		<script type="text/javascript" src="{{ url_for('static', filename='js/bootstrap-datetimepicker.js') }}" charset="UTF-8"></script>
+		<script type="text/javascript" src="{{ url_for('static', filename='js/bootstrap-datetimepicker.pt-BR.js') }}" charset="UTF-8"></script>
+		<script type="text/javascript" src="{{ url_for('static', filename='js/d3.js') }}"></script>
+		<script type="text/javascript" src="{{ url_for('static', filename='js/d3.layout.js') }}"></script>
+		
+		
+	</head>
 
-        // Create and draw the visualization.
-        var tree = new google.visualization.TreeMap(document.getElementById('chart_div'));
-        tree.draw(data, {
-          minColor: '#f00',
-          midColor: '#ddd',
-          maxColor: '#0d0',
-          headerHeight: 15,
-          fontColor: 'black',
-          showScale: true});
-        }
-    </script>
+	<body>
+		<div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+			<div class="container-fluid">
+				<div class="navbar-header">
+					<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+						<span class="sr-only">Toggle navigation</span>
+						<span class="icon-bar">
+						</span>
+						<span class="icon-bar">
+						</span>
+						<span class="icon-bar">
+						</span>
+					</button>
+					<a class="navbar-brand" href="#">Project name</a>
+				</div>
+				<div class="navbar-collapse collapse"></div>
+			</div>
+		</div>
 
-</head>
+		<div class="container-fluid">
+			<div class="row-fluid">
+				<div class="col-md-2 col-md-offset-10 sidebar">
+					<div class="panel panel-primary">
+						<div class="panel-heading">
+							<h3 class="panel-title">Configurações de Alarmes</h3>
+						</div>
+						<div class="panel-body">
 
+							<strong>Período Fixo</strong>
+							<div class="radio">
+								<label data-toggle="tooltip" data-original-title="Permite">
+									<input type="radio" name="defaultTime" id="ultima_hora" value="ultima_hora">
+									Última Hora </label>
+							</div>
+							<div class="radio">
+								<label data-toggle="tooltip" data-original-title="Permite">
+									<input type="radio" name="defaultTime" id="ultimo_dia" value="ultimo_dia">
+									Último Dia </label>
+							</div>
+							<div class="radio">
+								<label data-toggle="tooltip" data-original-title="Permite">
+									<input type="radio" name="defaultTime" id="ultima_semana" value="ultima_semana">
+									Última Semana </label>
+							</div>
+							<div class="radio">
+								<label data-toggle="tooltip" data-original-title="Permite">
+									<input type="radio" name="defaultTime" id="ultimo_mes" value="ultimo_mes">
+									Último Mês </label>
+							</div>
+							<strong>Período Específico</strong>
+							<br>
+							<label for="dtp_input1" >Início</label>
+							<div class="input-group date form_datetime" data-date="1979-09-16T05:25:07Z" data-date-format="dd MM yyyy - HH:ii p" data-link-field="dtp_input1">
+								<input class="form-control" size="14" type="text" value="" readonly>
+								<span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
+								<span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
+							</div>
+							<label for="dtp_input2" >Fim</label>
+							<div class="input-group date form_datetime mydatepicker" data-date="1979-09-16T05:25:07Z" data-date-format="dd MM yyyy - HH:ii p" data-link-field="dtp_input2">
+								<input class="form-control" size="14" type="text" value="" readonly>
+								<span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
+								<span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
+							</div>
+							<br>
+							<div align="center">
+								<button type="button" class="btn btn-primary" >
+									Aplicar
+								</button>
+							</div>
+						</div>
 
-<body>
-    <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
-      <div class="container-fluid">
-        <div class="navbar-header">
-          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-            <span class="sr-only">Toggle navigation</span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </button>
-          <a class="navbar-brand" href="#">Project name</a>
-        </div>
-        <div class="navbar-collapse collapse">
-        </div>
-      </div>
-    </div>
+					</div>
 
-    <div class="container-fluid">
-      <div class="row-fluid">
-        <div class="col-md-2 col-md-offset-10 sidebar">
-            <div class="panel panel-primary">
-              <div class="panel-heading">
-                <h3 class="panel-title">Configurações de Alarmes</h3>
-              </div>
-              <div class="panel-body">
+					<ul class="list-group">
+						<li class="list-group-item alert alert-warning">
+							<span class="badge">12</span>
+							<span class="glyphicon glyphicon-warning-sign"></span>Notificações
+						</li>
+					</ul>
+				</div>
+				<div class="col-md-10  main">
+					<!--abas para escolha -->
+					<ul class="nav nav-tabs nav-justified">
+						<li class="active">
+							<a href="">Visão Geral</a>
+						</li>
+						<li>
+							<a href="">Recomendações</a>
+						</li>
+						<li>
+							<a href="">Histórico</a>
+						</li>
+					</ul>
 
-                <strong>Período Fixo</strong>
-                <div class="radio">
-                  <label data-toggle="tooltip" data-original-title="Permite">
-                    <input type="radio" name="ultima_hora" id="ultima_hora" value="ultima_hora">Última Hora
-                  </label>
-                </div>
-                <div class="radio">
-                  <label data-toggle="tooltip" data-original-title="Permite">
-                    <input type="radio" name="ultimo_dia" id="ultimo_dia" value="ultimo_dia">Último Dia
-                  </label>
-                </div>
-                <div class="radio">
-                  <label data-toggle="tooltip" data-original-title="Permite">
-                    <input type="radio" name="ultima_semana" id="ultima_semana" value="ultima_semana">Última Semana
-                  </label>
-                </div>
-                <div class="radio">
-                  <label data-toggle="tooltip" data-original-title="Permite">
-                    <input type="radio" name="ultimo_mes" id="ultimo_mes" value="ultimo_mes">Último Mês
-                  </label>
-                </div>
-                <strong>Período Específico</strong>
-                <br>
-                <label for="dtp_input1" >Início</label>
-                <div class="input-group date form_datetime" data-date="1979-09-16T05:25:07Z" data-date-format="dd MM yyyy - HH:ii p" data-link-field="dtp_input1">
-                    <input class="form-control" size="14" type="text" value="" readonly>
-                    <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
-                    <span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
-                </div>
-                <label for="dtp_input2" >Fim</label>
-                <div class="input-group date form_datetime" data-date="1979-09-16T05:25:07Z" data-date-format="dd MM yyyy - HH:ii p" data-link-field="dtp_input2">
-                    <input class="form-control" size="14" type="text" value="" readonly>
-                    <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
-                    <span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
-                </div>
-                <br>
-                <center><button type="button" class="btn btn-primary" >Aplicar</button></center>
-              </div>
-              
-              
-        </div>
+					<div id="chart_div" style="width: 900px; height: 500px;"></div>
 
-        <ul class="list-group">
-          <li class="list-group-item alert alert-warning">
-            <span class="badge">12</span>
-            <span class="glyphicon glyphicon-warning-sign"></span>Notificações 
-          </li>
-        </ul>
-        </div>
-        <div class="col-md-10  main">
-          <!--abas para escolha -->
-          <ul class="nav nav-tabs nav-justified">
-            <li class="active"><a href="">Visão Geral</a></li>
-            <li><a href="">Recomendações</a></li>
-            <li><a href="">Histórico</a></li>
-          </ul>
-          
-          <div id="chart_div" style="width: 900px; height: 500px;"></div>
-          
-        </div><!-- fim div col-md-10 main -->       
-      </div>
-    </div>	
-</body>
+				</div><!-- fim div col-md-10 main -->
+			</div>
+		</div>
+		<script>
+			$('.mydatepicker').datepicker();
+		</script>
+		<script type="text/javascript">
+			var w = 900 - 80, h = 500 - 180, x = d3.scale.linear().range([0, w]), y = d3.scale.linear().range([0, h]), color = d3.scale.category20c(), root, node;
+
+			var treemap = d3.layout.treemap().round(false).size([w, h]).sticky(true).value(function(d) {
+				return d.size;
+			});
+
+			var svg = d3.select("#chart_div").append("div").attr("class", "chart").style("width", w + "px").style("height", h + "px").append("svg:svg").attr("width", w).attr("height", h).append("svg:g").attr("transform", "translate(.5,.5)");
+
+			d3.json("{{ url_for('static', filename='ceilometer_dados.json') }}", function(data) {
+				node = root = data;
+				var nodes = treemap.nodes(root).filter(function(d) {
+					return !d.children;
+				});
+
+				var cell = svg.selectAll("g").data(nodes).enter().append("svg:g").attr("class", "cell").attr("transform", function(d) {
+					return "translate(" + d.x + "," + d.y + ")";
+				}).on("click", function(d) {
+					return zoom(node == d.parent ? root : d.parent);
+				});
+
+				cell.append("svg:rect").attr("width", function(d) {
+					return d.dx - 1;
+				}).attr("height", function(d) {
+					return d.dy - 1;
+				}).style("fill", function(d) {
+					if (d.cpu_util_percent == 0) {
+						color = "#9C9C9C";
+					} else if (d.cpu_util_percent < 0.02) {
+						color = "#FFFF00";
+					} else if (d.cpu_util_percent >= 0.02 && d.cpu_util_percent < 0.07) {
+						color = "#00FF00";
+					} else {
+						color = "#FF0000";
+					}
+					return color;
+				});
+
+				cell.append("svg:text").attr("x", function(d) {
+					return d.dx / 2;
+				}).attr("y", function(d) {
+					return d.dy / 2;
+				}).attr("dy", ".35em").attr("text-anchor", "middle").text(function(d) {
+					return d.resource_id;
+				}).style("opacity", function(d) {
+					d.w = this.getComputedTextLength();
+					return d.dx > d.w ? 1 : 0;
+				});
+
+				d3.select(window).on("click", function() {
+					zoom(root);
+				});
+
+				d3.select("select").on("change", function() {
+					treemap.value(this.value == "size" ? size : count).nodes(root);
+					zoom(node);
+				});
+			});
+
+			function size(d) {
+				return d.size;
+			}
+
+			function count(d) {
+				return 1;
+			}
+
+			function zoom(d) {
+				var kx = w / d.dx, ky = h / d.dy;
+				x.domain([d.x, d.x + d.dx]);
+				y.domain([d.y, d.y + d.dy]);
+
+				var t = svg.selectAll("g.cell").transition().duration(d3.event.altKey ? 7500 : 750).attr("transform", function(d) {
+					return "translate(" + x(d.x) + "," + y(d.y) + ")";
+				});
+
+				t.select("rect").attr("width", function(d) {
+					return kx * d.dx - 1;
+				}).attr("height", function(d) {
+					return ky * d.dy - 1;
+				})
+
+				t.select("text").attr("x", function(d) {
+					return kx * d.dx / 2;
+				}).attr("y", function(d) {
+					return ky * d.dy / 2;
+				}).style("opacity", function(d) {
+					return kx * d.dx > d.w ? 1 : 0;
+				});
+
+				node = d;
+				d3.event.stopPropagation();
+			}
+
+		</script>
+
+	</body>
 </html>
