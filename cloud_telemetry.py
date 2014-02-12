@@ -17,5 +17,13 @@ def cpu_util():
     
     return json.dumps({'response' : 'echo', 'timestamp' : timestamp, 'resource_id' : resource_id})
 
+@app.route('/add_alarm',  methods=['POST'])
+def add_alarm():
+    resource = request.args.get('resource')
+    operation = request.args.get('operation')
+    threshold = request.args.get('threshold')
+
+    return json.dumps({'response' : 'echo', 'resource' : resource, 'threshold' : threshold, 'operation' : operation})
+
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=9090)
