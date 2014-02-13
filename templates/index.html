@@ -13,6 +13,7 @@
 
 		<script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
 		<script src="{{ url_for('static', filename='js/bootstrap.js') }}"></script>
+		<script src="{{ url_for('static', filename='js/bootbox.js') }}"></script>
 		<script src="{{ url_for('static', filename='js/moment-2.4.0.js') }}"></script>
 		<script src="{{ url_for('static', filename='js/bootstrap-datetimepicker.js') }}" charset="UTF-8"></script>
 		<script src="{{ url_for('static', filename='js/d3.js') }}"></script>
@@ -70,17 +71,17 @@
 							<br>
 							<label for="dtp_input1" >Início</label>
 							<div class="input-group date" id="datetimepicker1">
-								<input class="form-control" type="text">
-								<span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+								<input class="form-control" type="text" id="data_hora1" data-format="DD/MM/YYYY HH:mm">
+								<span id="selc_dh1" class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
 							</div>
 							<label for="dtp_input2" >Fim</label>
 							<div class="input-group date" id="datetimepicker2">
-								<input class="form-control" type="text">
-								<span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+								<input class="form-control" type="text" id="data_hora2" data-format="DD/MM/YYYY HH:mm">
+								<span id="selc_dh2" class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
 							</div>
 							<br>
 							<div align="center">
-								<button type="button" class="btn btn-primary" >
+								<button type="button" class="btn btn-primary" id="aplicarConf">
 									Aplicar
 								</button>
 							</div>
@@ -118,16 +119,7 @@
 		
 															<!-- SCRIPTS -->
 		
-		<script>
-			$('#datetimepicker1').datetimepicker({
-				pick12HourFormat : true
-			});
-			$('#datetimepicker2').datetimepicker({
-				pick12HourFormat : true
-			});
-		
-		</script>
-		
+		<script src="{{ url_for('static', filename='js/scriptsUI/menuconfig.js') }}"></script>
 		<script src="{{ url_for('static', filename='js/scriptsUI/treemap.js') }}"></script>
 	
 	</body>
