@@ -1,10 +1,11 @@
 from flask import Flask, render_template, request
-#from data_collector import DataCollector
+
+#from ceilometer_client import CeilometerClient
 
 import json
 
 app = Flask(__name__)
-#collector = DataCollector()
+#ceilometer = CeilometerClient()
 
 @app.route('/')
 def home(name=None):
@@ -16,6 +17,7 @@ def cpu_util():
     timestamp_end = request.args.get('timestamp_end', None)
     resource_id = request.args.get('resource_id', None)
     
+    #return ceilometer.get_cpu_util()
     return json.dumps({'response' : 'echo', 'timestamp_begin' : timestamp_begin, 'timestamp_end' : timestamp_end, 'resource_id' : resource_id})
 
 @app.route('/add_alarm',  methods=['POST'])
