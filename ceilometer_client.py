@@ -1,16 +1,22 @@
 from ceilometerclient import client
 
+from keystone_client import KeystoneClient
+
 import json
 
-class DataCollector:
+API_VERSION = '2'
+OS_USERNAME = 'admin'
+OS_PASSWORD = 'pass'
+OS_TENANT_NAME = 'demo'
+OS_AUTH_URL = 'http://localhost:5000/v2.0'
+
+class CeilometerClient:
 
     def __init__(self):
-        try: 
-            self.ceilometer = client.get_client('2', os_username='admin', os_password='pass', os_tenant_name='demo', os_auth_url='http://localhost:5000/v2.0')
-        except:
-            print 'could not get Ceilometer client'
+        self.ceilometer = client.get_client(API_VERSION, os_username=OS_USERNAME, os_password=OS_PASSWORD, os_tenant_name=OS_TENANT_NAME, os_auth_url=OS_AUTH_URL)
+        self.keystone = KeystoneClient(OS_USERNAME, OS_PASSWORD, OS_AUTH_URL)
 
-    def get_cpu_util_data(self, timestamp_begin=None, timestamp_end=None, resource_id=None):
+    def get_cpu_util(self, timestamp_begin=None, timestamp_end=None, resource_id=None):
         query = []
 
         if any([timestamp_begin, timestamp_end, resource_id]):
@@ -27,7 +33,7 @@ class DataCollector:
 
         ret = []
         for d in data:
-            ret.append(json.dumps({ 'resource_id' : d.resource_id, 'timestamp' : d.timestamp, 'cpu_util_percent' : d.counter_volume }))
+            ret.append(json.dumps({ 'resource_id' : d.resource_id, 'timestamp' : d.timestamp, 'cpu_util_percent' : d.counter_volume, 'project_id' : d.project_id, 'project_name' : self.keystone.projects.get(d.project_id) }))
     
         return json.dumps(ret)
 

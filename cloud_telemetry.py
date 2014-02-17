@@ -12,10 +12,11 @@ def home(name=None):
 
 @app.route('/cpu_util')  
 def cpu_util():
-    timestamp = request.args.get('timestamp', None)
+    timestamp_begin = request.args.get('timestamp_begin', None)
+    timestamp_end = request.args.get('timestamp_end', None)
     resource_id = request.args.get('resource_id', None)
     
-    return json.dumps({'response' : 'echo', 'timestamp' : timestamp, 'resource_id' : resource_id})
+    return json.dumps({'response' : 'echo', 'timestamp_begin' : timestamp_begin, 'timestamp_end' : timestamp_end, 'resource_id' : resource_id})
 
 @app.route('/add_alarm',  methods=['POST'])
 def add_alarm():
