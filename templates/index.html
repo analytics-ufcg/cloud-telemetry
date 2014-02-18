@@ -33,7 +33,11 @@
 					</button>
 					<a class="navbar-brand" href="#">Project name</a>
 				</div>
-				<div class="navbar-collapse collapse"></div>
+				<div class="navbar-collapse collapse">
+					<ul class="nav navbar-nav navbar-right">
+            			<li><a href="#" onclick="addAlarme();"><span class="glyphicon glyphicon-cog"></span>Configurações de Alarmes</a></li>
+          			</ul>
+      			</div>
 			</div>
 		</div>
 
@@ -99,19 +103,23 @@
 				<div class="col-md-10  main">
 					<!--abas para escolha -->
 					<ul class="nav nav-tabs nav-justified">
-						<li class="active">
-							<a href="">Visão Geral</a>
-						</li>
-						<li>
-							<a href="">Recomendações</a>
-						</li>
-						<li>
-							<a href="">Histórico</a>
-						</li>
-					</ul>
+			            <li >
+			              <a href="" id="bt_vg" onclick="show_graph();" data-toggle="tab">Visão Geral</a>
+			            </li>
+			            <li>
+			              <a href="" id="bt_rec" onclick="show_recomendacoes();" data-toggle="tab">Recomendações</a>
+			            </li>
+			            <li>
+			              <a href="" id="bt_hist" onclick="show_hist();" data-toggle="tab">Histórico</a>
+			            </li>
+            		</ul>
 
-					<div id="chart_div" style="width: 1000px; height: 800px;"></div>
-
+					<div id="chart_div" class="row" style="width: 1000px; height: 800px; display:none;">
+            		</div>
+          			<div id="rec_div" class="row" style="display:none;">
+            		<p>Recomendacoes</p></div>
+          			<div id="hist_div" class="row" style="display:none;">
+            		<p>Historico</p></div>
 				</div><!-- fim div col-md-10 main -->
 			</div>
 		</div>

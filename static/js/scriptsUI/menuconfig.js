@@ -43,3 +43,69 @@ $('#aplicarConf').click(function() {
 	}
 	
 });
+
+/* Habilitar div selecionada de acordo com a aba selecionada*/
+function show_graph(){
+    $("#hist_div").hide();
+    $("#rec_div").hide();
+    $("#chart_div").show();
+
+    var $thisLi = $("#bt_vg").parent('li');
+    var $ul = $thisLi.parent('ul');
+
+    if (!$thisLi.hasClass('active'))
+    {
+        $ul.find('li.active').removeClass('active');
+        $thisLi.addClass('active');
+    }
+}
+
+function show_recomendacoes(){
+    $("#chart_div").hide();
+    $("#hist_div").hide();
+    $("#rec_div").show();
+
+    var $thisLi = $("#bt_rec").parent('li');
+    var $ul = $thisLi.parent('ul');
+
+    if (!$thisLi.hasClass('active'))
+    {
+        $ul.find('li.active').removeClass('active');
+        $thisLi.addClass('active');
+    }
+}
+
+function show_hist(){
+    $("#chart_div").hide();
+    $("#rec_div").hide();
+    $("#hist_div").show();
+
+    var $thisLi = $("#bt_hist").parent('li');
+    var $ul = $thisLi.parent('ul');
+
+    if (!$thisLi.hasClass('active'))
+    {
+        $ul.find('li.active').removeClass('active');
+        $thisLi.addClass('active');
+    }
+}
+/*Funcação necessária para que a aba selecionada fique active devido a um reload do bootstrap3*/
+$(function(){
+  $("#myTab a:last").tab('show');
+    }); 
+
+function addAlarme(){
+	bootbox.dialog({
+	  message: 'Nome do alarme:<input type="text" name="first_name"></input><br> <div class="btn-group"><button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">Tipo <span class="caret"></span></button><ul class="dropdown-menu" role="menu"><li><a href="#">cpu</a></li></ul></div>',
+	  title: "Adição de Alarmes",
+	  buttons: {
+	    main: {
+	      label: "Adicionar",
+	      className: "btn-primary",
+	      callback: function() {
+	        console.log("Hi "+ $('#first_name').val());
+	      }
+	    }
+	  }
+	});
+}
