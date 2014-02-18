@@ -1,10 +1,7 @@
-import threading
+import sys, time
 
-class LocalDBThread(threading.Thread):
+def db_worker():
+    while True:
+        sys.stdout.write('({}) foo\n'.format(time.ctime()))
+        time.sleep(1)
 
-    def __init__(self):
-        threading.Thread.__init__(self)
-    
-    def run(self):
-        pass
-    

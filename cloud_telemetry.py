@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request
 
 #from ceilometer_client import CeilometerClient
+#from local_db_worker import db_worker
 
 import json
 
@@ -28,5 +29,13 @@ def add_alarm():
 
     return json.dumps({'response' : 'echo', 'resource' : resource, 'threshold' : threshold, 'operation' : operation})
 
+
 if __name__ == '__main__':
+#    import threading
+
+#    worker = threading.Thread(target=db_worker)
+#    worker.daemon = True
+#    worker.start()
+    
     app.run(host='0.0.0.0', port=9090)
+
