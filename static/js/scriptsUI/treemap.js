@@ -1,4 +1,4 @@
-var w = 1000 , h = 800, x = d3.scale.linear().range([0, w]), y = d3.scale.linear().range([0, h]), color = d3.scale.category20c(), root, node;
+var w = $('#chart_div').width(), h = $(window).height() - (($(window).height()) * 0.2), x = d3.scale.linear().range([0, w]), y = d3.scale.linear().range([0, h]), color = d3.scale.category20c(), root, node;
 
 var treemap = d3.layout.treemap().round(false).size([w, h]).sticky(true).value(function(d) {
 	return d.size;
@@ -15,10 +15,12 @@ d3.json("static/ceilometer_dados.json", function(data) {
 	var cell = svg.selectAll("g").data(nodes).enter().append("svg:g").attr("class", "cell").attr("transform", function(d) {
 		return "translate(" + d.x + "," + d.y + ")";
 	}).on("click", function(d) {
-		return zoom(node == d.parent ? root : d.parent);
-	});
+	 return zoom(node == d.parent ? root : d.parent);
+	 });
 
-	cell.append("svg:rect").attr("width", function(d) {
+	cell.append("svg:rect").attr("id", function(d) {
+		return d.resource_id;
+	}).attr("width", function(d) {
 		return d.dx - 1;
 	}).attr("height", function(d) {
 		return d.dy - 1;
@@ -46,14 +48,14 @@ d3.json("static/ceilometer_dados.json", function(data) {
 		return d.dx > d.w ? 1 : 0;
 	});
 
-	d3.select(window).on("click", function() {
-		zoom(root);
-	});
-
-	d3.select("select").on("change", function() {
-		treemap.value(this.value == "size" ? size : count).nodes(root);
-		zoom(node);
-	});
+	// d3.select(window).on("click", function() {
+	// zoom(root);
+	// });
+	//
+	// d3.select("select").on("change", function() {
+	// treemap.value(this.value == "size" ? size : count).nodes(root);
+	// zoom(node);
+	// });
 });
 
 function size(d) {
