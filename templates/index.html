@@ -124,7 +124,10 @@
 						</li>
 					</ul>
 
-					<div id="chart_div" class="row"></div>
+					<div id="chart_div" class="row">
+						<div id = "buble_chart" class="col-md-6"></div>
+						<div  id = "grafico" class="col-md-6"></div>
+					</div>
 					<div id="rec_div" class="row" style="display:none;">
 						<p>
 							Recomendacoes
@@ -143,7 +146,15 @@
 
 		<script src="{{ url_for('static', filename='js/scriptsUI/menuconfig.js') }}"></script>
 		<script src="{{ url_for('static', filename='js/scriptsUI/treemap.js') }}"></script>
+<<<<<<< HEAD
+		<script>
+			$("g").dblclick(function() {
+				alert("The paragraph was double-clicked.");
+			});
+		</script>
+=======
 		<script src="{{ url_for('static', filename='js/scriptsUI/alarms.js') }}"></script>
+>>>>>>> ab60677912234e0fbc0658b0be35cb9ce7cf4c77
 
 	</body>
 </html>
