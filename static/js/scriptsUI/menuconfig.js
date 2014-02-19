@@ -89,9 +89,10 @@ $('#aplicarConf').click(function() {
 		console.log(url_requisicao);
 	}
 
-	$.get(url_requisicao, function(data) {
-		dados = JSON.parse(data);
-		console.log(url_requisicao);
+	$.getJSON(url_requisicao, function(data,stat,xhr) {
+		//dados = JSON.parse(data);
+		console.log(data);
+                console.log(stat);
 	});
 });
 
