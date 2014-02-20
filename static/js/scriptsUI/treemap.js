@@ -1,6 +1,6 @@
 var w = $('#buble_chart').width(), h = $(window).height() - (($(window).height()) * 0.2), x = d3.scale.linear().range([0, w]), y = d3.scale.linear().range([0, h]), color = d3.scale.category20c(), root, node;
 
-var r = h,
+var r = h/2,
     x = d3.scale.linear().range([0, r]),
     y = d3.scale.linear().range([0, r]),
     node,
@@ -8,7 +8,7 @@ var r = h,
 
 var pack = d3.layout.pack()
     .size([r, r])
-    .value(function(d) { return d.size; })
+    .value(function(d) { return d.size; });
 
 var vis = d3.select("body").insert("svg:svg", "h2")
     .attr("width", w)
@@ -28,6 +28,14 @@ d3.json("static/ceilometer_dados.json", function(data) {
       .attr("cx", function(d) { return d.x; })
       .attr("cy", function(d) { return d.y; })
       .attr("r", function(d) { return d.r; })
+      .attr("fill",function(d){ if(d.cpu_util_percent==0){
+      								return "#CDCDC1";
+      							}else if(d.cpu_util_percent<=0.95){
+      								return "#32CD32";
+      							}else{
+      								return "#FF3030";
+      							}
+      })
       .on("click", function(d) { return zoom(node == d ? root : d); });
 
   vis.selectAll("text")
