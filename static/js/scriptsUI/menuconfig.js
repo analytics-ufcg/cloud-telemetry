@@ -18,7 +18,7 @@ $('.input-group-addon').click(function() {
 });
 
 /*Funcao para converter dia e mês*/
-function formattedDate(date) {
+function formattedDate(date, verificador) {
 	var d = new Date(date || Date.now()), month = '' + (d.getMonth()), day = '' + d.getDate(), year = d.getFullYear();
 	hour = '' + (d.getHours());
 	minuto = '' + (d.getMinutes());
@@ -31,7 +31,11 @@ function formattedDate(date) {
 	if (minuto.length < 2)
 		minuto = '0' + minuto;
 
-	return [year, month, day].join('-') + "T" + hour + ":" + minuto + ":00";
+	if ( verificador = "") {
+		return [year, month+1, day].join('-') + "T" + hour + ":" + minuto + ":00";
+	} else {
+		return [year, month, day].join('-') + "T" + hour + ":" + minuto + ":00";
+	}
 }
 
 
@@ -63,31 +67,31 @@ $('#aplicarConf').click(function() {
 	if (out == "ultima_hora") {
 		var ontem = new Date(now - (1000 * 60 * 60 * 1));
 		ontem.setTime(ontem.getTime() + ontem.getTimezoneOffset());
-		url_requisicao += "timestamp_begin=" + formattedDate(ontem);
-		url_requisicao += "&timestamp_end=" + formattedDate(now);
+		url_requisicao += "timestamp_begin=" + formattedDate(ontem,"");
+		url_requisicao += "&timestamp_end=" + formattedDate(now,"");
 		console.log(url_requisicao);
 	} else if (out == "ultimo_dia") {
 		var ontem = new Date(now - (1000 * 60 * 60 * 24 * 1));
 		ontem.setTime(ontem.getTime() + ontem.getTimezoneOffset());
-		url_requisicao += "timestamp_begin=" + formattedDate(ontem);
-		url_requisicao += "&timestamp_end=" + formattedDate(now);
+		url_requisicao += "timestamp_begin=" + formattedDate(ontem,"");
+		url_requisicao += "&timestamp_end=" + formattedDate(now,"");
 		console.log(url_requisicao);
 	} else if (out == "ultima_semana") {
 		var ontem = new Date(now - (1000 * 60 * 60 * 24 * 7));
 		ontem.setTime(ontem.getTime() + ontem.getTimezoneOffset());
-		url_requisicao += "timestamp_begin=" + formattedDate(ontem);
-		url_requisicao += "&timestamp_end=" + formattedDate(now);
+		url_requisicao += "timestamp_begin=" + formattedDate(ontem,"");
+		url_requisicao += "&timestamp_end=" + formattedDate(now,"");
 		console.log(url_requisicao);
 	} else if (out == "ultimo_mes") {
 		var ontem = new Date(now - (1000 * 60 * 60 * 24 * 30));
 		ontem.setTime(ontem.getTime() + ontem.getTimezoneOffset());
-		url_requisicao += "timestamp_begin=" + formattedDate(ontem);
-		url_requisicao += "&timestamp_end=" + formattedDate(now);
+		url_requisicao += "timestamp_begin=" + formattedDate(ontem,"");
+		url_requisicao += "&timestamp_end=" + formattedDate(now,"");
 		console.log(url_requisicao);
 	} else {
-		url_requisicao += "timestamp_begin=" + $('#data_hora1').val().replace("/","-").replace("/","-").replace(" ","T") + ":00";
-        url_requisicao += "&timestamp_end=" + $('#data_hora2').val().replace("/","-").replace("/","-").replace(" ","T") + ":00";
-        console.log(url_requisicao);
+		url_requisicao += "timestamp_begin=" + formattedDate(dt1,"data1");
+		url_requisicao += "&timestamp_end=" + formattedDate(dt2,"data2");
+		console.log(url_requisicao);
 	}
 
 	$.ajax({
