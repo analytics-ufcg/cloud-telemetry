@@ -1,6 +1,6 @@
 var w = $('#buble_chart').width(), h = $(window).height() - (($(window).height()) * 0.2), x = d3.scale.linear().range([0, w]), y = d3.scale.linear().range([0, h]), color = d3.scale.category20c(), root, node;
 
-var r = h/2,
+var r = w>h ? h:w,
     x = d3.scale.linear().range([0, r]),
     y = d3.scale.linear().range([0, r]),
     node,
@@ -37,6 +37,10 @@ d3.json("static/ceilometer_dados.json", function(data) {
       							}
       })
       .on("click", function(d) { return zoom(node == d ? root : d); });
+      
+      $("circle").dblclick(function(d) {
+				alert(d.resource_id);
+		});
 
   vis.selectAll("text")
       .data(nodes)
@@ -51,6 +55,14 @@ d3.json("static/ceilometer_dados.json", function(data) {
 
   d3.select(window).on("click", function() { zoom(root); });
 });
+
+
+function filter(projet, resource_id){
+	var result = {};
+	for(var cell in dados){
+		alert(cell);
+	}
+}
 
 function zoom(d, i) {
   var k = r / d.r / 2;
