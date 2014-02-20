@@ -89,12 +89,11 @@ $('#aplicarConf').click(function() {
 		console.log(url_requisicao);
 	}
 
-	$.getJSON(url_requisicao, function(data,stat,xhr) {
-		//dados = JSON.parse(data);
-		console.log(data);
-                console.log(stat);
+	dados = $.getJSON(url_requisicao, function(data,stat,xhr) {
 	});
 });
+console.log("json");
+console.log(dados);
 
 /* Habilitar div selecionada de acordo com a aba selecionada*/
 function show_graph() {
