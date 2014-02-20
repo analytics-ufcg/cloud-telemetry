@@ -1,12 +1,12 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, make_response
 
-from ceilometer_client import CeilometerClient
+#from ceilometer_client import CeilometerClient
 #from local_db_worker import db_worker
 
 import json
 
 app = Flask(__name__)
-ceilometer = CeilometerClient()
+#ceilometer = CeilometerClient()
 
 @app.route('/')
 def home(name=None):
@@ -18,8 +18,11 @@ def cpu_util():
     timestamp_end = request.args.get('timestamp_end', None)
     resource_id = request.args.get('resource_id', None)
     
-    return ceilometer.get_cpu_util(timestamp_begin,timestamp_end,resource_id)
-    #return json.dumps({'response' : 'echo', 'timestamp_begin' : timestamp_begin, 'timestamp_end' : timestamp_end, 'resource_id' : resource_id})
+    #resp = make_response(ceilometer.get_cpu_util(timestamp_begin,timestamp_end,resource_id))
+    #resp.headers['Access-Control-Allow-Origin'] = "*" 
+
+    #return resp
+    return json.dumps({'response' : 'echo', 'timestamp_begin' : timestamp_begin, 'timestamp_end' : timestamp_end, 'resource_id' : resource_id})
 
 @app.route('/add_alarm',  methods=['POST'])
 def add_alarm():
