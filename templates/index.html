@@ -148,8 +148,10 @@
 		<script src="{{ url_for('static', filename='js/scriptsUI/treemap.js') }}"></script>
 		<script src="{{ url_for('static', filename='js/scriptsUI/alarms.js') }}"></script>
 		<script>
-			$("g").dblclick(function() {
-				alert("The paragraph was double-clicked.");
+			d3.json("{{ url_for('static',filename='teste_req.json')}}", function(error, data) {
+				data.forEach(function(d) {
+					console.log(d);
+				});
 			});
 		</script>
 

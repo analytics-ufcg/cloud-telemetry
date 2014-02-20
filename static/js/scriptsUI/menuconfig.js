@@ -66,7 +66,8 @@ $('#aplicarConf').click(function() {
 	var now = new Date();
 	now.setTime(now.getTime() + now.getTimezoneOffset());
 	/*url de requisicao do json http://150.165.80.194:9090/*/
-	var url_requisicao = "http://150.165.80.194:9090/cpu_util?";
+	var ip_server = "http://150.165.15.4:9090";
+	var url_requisicao = ip_server + "/cpu_util?";
 	if (out == "ultima_hora") {
 		var ontem = new Date(now - (1000 * 60 * 60 * 1));
 		ontem.setTime(ontem.getTime() + ontem.getTimezoneOffset());
@@ -103,16 +104,15 @@ $('#aplicarConf').click(function() {
 		dataType : 'json',
 		success : function(data) {
 			dados = data;
+			console.log(dados);
 		},
-		error : function() {
+		error : function(data) {
 			console.log("error");
+			console.log(data);
 		}
 	});
 
 });
-
-console.log("json");
-console.log(dados);
 
 /* Habilitar div selecionada de acordo com a aba selecionada*/
 function show_graph() {
