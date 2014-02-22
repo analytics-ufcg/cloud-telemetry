@@ -36,7 +36,7 @@
 				<div class="navbar-collapse collapse">
 					<ul class="nav navbar-nav navbar-right">
 						<li class="dropdown">
-							<a href="#" class="dropdown-toggle" data-toggle="dropdown"> <span class="glyphicon glyphicon-cog"></span> Configurações de Alarme<b class="caret"></b></a>
+							<a href="#" class="dropdown-toggle" data-toggle="dropdown"> <span class="glyphicon glyphicon-cog"></span> Seleção de intervalo <b class="caret"></b></a>
 							<ul class="dropdown-menu">
 								<li>
 									<a href="#" onclick="addAlarme();"><span class="glyphicon glyphicon-plus-sign"></span>Adicionar Alarme</a>
@@ -113,7 +113,7 @@
 				<div class="col-md-10  main">
 					<!--abas para escolha -->
 					<ul class="nav nav-tabs nav-justified">
-						<li >
+						<li class="active">
 							<a href="" id="bt_vg" onclick="show_graph();" data-toggle="tab">Visão Geral</a>
 						</li>
 						<li>
@@ -125,8 +125,44 @@
 					</ul>
 
 					<div id="chart_div" class="row">
-						<div id = "buble_chart" class="col-md-6"></div>
-						<div  id = "grafico" class="col-md-6"></div>
+						<br>
+						<br>
+						<div class="col-md-2">
+							<div class="panel panel-primary">
+								<div class="panel-heading">
+									<h3 class="panel-title">Projetos</h3>
+								</div>
+								<div class="panel-body btn-group-vertical">
+									<strong>Projeto demo</strong>
+									<div class="radio">
+										<label>
+											<input type="radio" name="defaultVM" id="vm1" value="vm1">
+											VM1 </label>
+									</div>
+									<div class="radio">
+										<label>
+											<input type="radio" name="defaultVM" id="vm2" value="vm2">
+											VM2 </label>
+									</div>
+									<div class="radio">
+										<label>
+											<input type="radio" name="defaultVM" id="vm3" value="vm3">
+											VM3 </label>
+									</div>
+								</div>
+								<div class="panel-body">
+									<strong>Projeto Admin</strong>
+									<p>
+										Não há VMs
+									</p>
+								</div>
+							</div>
+						</div>
+						<div class="col-md-10 col-md-offset-2" id="graph_line">
+							<center>
+								Selecione uma VM de um projeto e um período de Tempo
+							</center>
+						</div>
 					</div>
 					<div id="rec_div" class="row" style="display:none;">
 						<p>
@@ -147,13 +183,6 @@
 		<script src="{{ url_for('static', filename='js/scriptsUI/menuconfig.js') }}"></script>
 		<script src="{{ url_for('static', filename='js/scriptsUI/treemap.js') }}"></script>
 		<script src="{{ url_for('static', filename='js/scriptsUI/alarms.js') }}"></script>
-		<script>
-			d3.json("{{ url_for('static',filename='teste_req.json')}}", function(error, data) {
-				data.forEach(function(d) {
-					console.log(d);
-				});
-			});
-		</script>
 
 	</body>
 </html>

@@ -1,4 +1,7 @@
+var ip_server = "http://150.165.15.4:9090";
 var dados = {};
+var tempo = [];
+var cpu_util = [];
 
 /* Habilitando seletores de data/hora */
 $('#datetimepicker1').datetimepicker({
@@ -19,14 +22,9 @@ $('.input-group-addon').click(function() {
 
 /*Funcao para converter dia e mês*/
 function formattedDate(date, verificador) {
-	var d = new Date(date || Date.now()), 
-	month = '' + (d.getMonth()+1), 
-	day = '' + d.getDate(), 
-	year = ''+d.getFullYear(),
-	hour = '' + (d.getHours()),
-	minuto = '' + (d.getMinutes());
-	if(verificador == 1){
-		month = ''+d.getMonth();
+	var d = new Date(date || Date.now()), month = '' + (d.getMonth() + 1), day = '' + d.getDate(), year = '' + d.getFullYear(), hour = '' + (d.getHours()), minuto = '' + (d.getMinutes());
+	if (verificador == 1) {
+		month = '' + d.getMonth();
 	}
 	if (month.length < 2)
 		month = '0' + month;
@@ -48,7 +46,8 @@ $('#aplicarConf').click(function() {
 	var dt1 = new Date(dh1[2], dh1[1], dh1[0], dh1[3], dh1[4]);
 	var dh2 = $('#data_hora2').val().replace("/", " ").replace("/", " ").replace(":", " ").split(" ");
 	var dt2 = new Date(dh2[2], dh2[1], dh2[0], dh2[3], dh2[4]);
-
+	var vm = $("input[name='defaultVM']:checked").val();
+	console.log(vm);
 	/*Verificações antes de realizar requisição*/
 	var html_m = '<h2>Atenção!</h2><br />';
 	/*Nenhum Campo selecionado*/
@@ -63,48 +62,82 @@ $('#aplicarConf').click(function() {
 		bootbox.alert(html_m);
 	}
 
+	if ( vm == undefined) {
+		html_m += '<h4>Nenhuma VM selecionada </h4>';
+		bootbox.alert(html_m);
+	}
+
 	var now = new Date();
 	now.setTime(now.getTime() + now.getTimezoneOffset());
 	/*url de requisicao do json http://150.165.80.194:9090/*/
-	var ip_server = "http://150.165.15.4:9090";
-	var url_requisicao = ip_server + "/cpu_util?";
+	var url_requisicao_bubble = ip_server + "/projects";
+	var url_requisicao_vm = ip_server + "/cpu_util?";
 	if (out == "ultima_hora") {
 		var ontem = new Date(now - (1000 * 60 * 60 * 1));
 		ontem.setTime(ontem.getTime() + ontem.getTimezoneOffset());
-		url_requisicao += "timestamp_begin=" + formattedDate(ontem,0);
-		url_requisicao += "&timestamp_end=" + formattedDate(now,0);
-		console.log(url_requisicao);
+		url_requisicao_vm += "timestamp_begin=" + formattedDate(ontem, 0);
+		url_requisicao_vm += "&timestamp_end=" + formattedDate(now, 0);
 	} else if (out == "ultimo_dia") {
 		var ontem = new Date(now - (1000 * 60 * 60 * 24 * 1));
 		ontem.setTime(ontem.getTime() + ontem.getTimezoneOffset());
-		url_requisicao += "timestamp_begin=" + formattedDate(ontem,0);
-		url_requisicao += "&timestamp_end=" + formattedDate(now,0);
-		console.log(url_requisicao);
+		url_requisicao_vm += "timestamp_begin=" + formattedDate(ontem, 0);
+		url_requisicao_vm += "&timestamp_end=" + formattedDate(now, 0);
 	} else if (out == "ultima_semana") {
 		var ontem = new Date(now - (1000 * 60 * 60 * 24 * 7));
 		ontem.setTime(ontem.getTime() + ontem.getTimezoneOffset());
-		url_requisicao += "timestamp_begin=" + formattedDate(ontem,0);
-		url_requisicao += "&timestamp_end=" + formattedDate(now,0);
-		console.log(url_requisicao);
+		url_requisicao_vm += "timestamp_begin=" + formattedDate(ontem, 0);
+		url_requisicao_vm += "&timestamp_end=" + formattedDate(now, 0);
 	} else if (out == "ultimo_mes") {
 		var ontem = new Date(now - (1000 * 60 * 60 * 24 * 30));
 		ontem.setTime(ontem.getTime() + ontem.getTimezoneOffset());
-		url_requisicao += "timestamp_begin=" + formattedDate(ontem,0);
-		url_requisicao += "&timestamp_end=" + formattedDate(now,0);
-		console.log(url_requisicao);
+		url_requisicao_vm += "timestamp_begin=" + formattedDate(ontem, 0);
+		url_requisicao_vm += "&timestamp_end=" + formattedDate(now, 0);
 	} else {
-		url_requisicao += "timestamp_begin=" + formattedDate(dt1,1);
-		url_requisicao += "&timestamp_end=" + formattedDate(dt2,1);
-		console.log(url_requisicao);
+		url_requisicao_vm += "timestamp_begin=" + formattedDate(dt1, 1);
+		url_requisicao_vm += "&timestamp_end=" + formattedDate(dt2, 1);
 	}
 
+	if (vm == "vm1") {
+		url_requisicao_vm += "&resource_id=" + "dab03c1c-79bd-4d3c-b362-add290d7863d";
+	} else if (vm == "vm2") {
+		url_requisicao_vm += "&resource_id=" + "0316578b-f8c0-42d0-8159-af33fd81bf5a";
+	} else if (vm == "vm3"){
+		url_requisicao_vm += "&resource_id=" + "b85bf69f-f3d3-41af-b13a-1465eb966e24";
+	} else{
+		console.log("vm n escolhida");
+	}
+	console.log(url_requisicao_vm);
+	/*Requisicao de Projetos
+	 $.ajax({
+	 url : url_requisicao_bubble,
+	 async : false,
+	 dataType : 'json',
+	 success : function(data) {
+	 dados = data;
+	 console.log(data);
+	 show_graph(url_requisicao_bubble);
+	 },
+	 error : function(data) {
+	 console.log("erro de requisicao");
+	 }
+	 });*/
+
+	/*Requisicao de VM*/
 	$.ajax({
-		url : url_requisicao,
+		url : url_requisicao_vm,
 		async : false,
 		dataType : 'json',
 		success : function(data) {
 			dados = data;
-			console.log(dados);
+			console.log(data);
+			var t1 = [];
+			var cpu = [];
+			$.each(dados,function(d){ 
+				t1.push(dados[d].timestamp);
+				cpu.push(dados[d].cpu_util_percent);
+			});
+			tempo = t1;
+			cpu_util = cpu;
 		},
 		error : function(data) {
 			console.log("error");
@@ -114,8 +147,11 @@ $('#aplicarConf').click(function() {
 
 });
 
+$('#vm1').click(function() {
+});
+
 /* Habilitar div selecionada de acordo com a aba selecionada*/
-function show_graph() {
+function show_graph(url) {
 	$("#hist_div").hide();
 	$("#rec_div").hide();
 	$("#chart_div").show();
@@ -126,6 +162,10 @@ function show_graph() {
 	if (!$thisLi.hasClass('active')) {
 		$ul.find('li.active').removeClass('active');
 		$thisLi.addClass('active');
+	}
+	var url_bubble = ip_server + "/projects";
+	if (url == url_bubble) {
+		//plot_bubble(url);
 	}
 }
 
