@@ -39,8 +39,7 @@ function formattedDate(date, verificador) {
 
 }
 
-
-$('#aplicarConf').click(function() {
+function plot() {
 	var out = $("input[name='defaultTime']:checked").val();
 	var dh1 = $('#data_hora1').val().replace("/", " ").replace("/", " ").replace(":", " ").split(" ");
 	var dt1 = new Date(dh1[2], dh1[1], dh1[0], dh1[3], dh1[4]);
@@ -62,7 +61,7 @@ $('#aplicarConf').click(function() {
 		bootbox.alert(html_m);
 	}
 
-	if ( vm == undefined) {
+	if (vm == undefined) {
 		html_m += '<h4>Nenhuma VM selecionada </h4>';
 		bootbox.alert(html_m);
 	}
@@ -101,9 +100,9 @@ $('#aplicarConf').click(function() {
 		url_requisicao_vm += "&resource_id=" + "dab03c1c-79bd-4d3c-b362-add290d7863d";
 	} else if (vm == "vm2") {
 		url_requisicao_vm += "&resource_id=" + "0316578b-f8c0-42d0-8159-af33fd81bf5a";
-	} else if (vm == "vm3"){
+	} else if (vm == "vm3") {
 		url_requisicao_vm += "&resource_id=" + "b85bf69f-f3d3-41af-b13a-1465eb966e24";
-	} else{
+	} else {
 		console.log("vm n escolhida");
 	}
 	console.log(url_requisicao_vm);
@@ -123,6 +122,8 @@ $('#aplicarConf').click(function() {
 	 });*/
 
 	/*Requisicao de VM*/
+
+
 	$.ajax({
 		url : url_requisicao_vm,
 		async : false,
@@ -132,23 +133,39 @@ $('#aplicarConf').click(function() {
 			console.log(data);
 			var t1 = [];
 			var cpu = [];
-			$.each(dados,function(d){ 
+			t1.push("x");
+			cpu.push("sample");
+			$.each(dados, function(d) {
 				t1.push(dados[d].timestamp);
 				cpu.push(dados[d].cpu_util_percent);
 			});
-			tempo = t1;
-			cpu_util = cpu;
+			
+			
+			var json = {
+				data : {
+					x : 'x',
+					columns : [t1, cpu_util]
+				},
+				axis : {
+					x : {
+						type : 'timeseries'
+					}
+				}
+			};
+			var chart = c3.generate(json);
+
 		},
 		error : function(data) {
 			console.log("error");
 			console.log(data);
 		}
-	});
+	}); 
 
-});
+};
 
 $('#vm1').click(function() {
 });
+
 
 /* Habilitar div selecionada de acordo com a aba selecionada*/
 function show_graph(url) {
