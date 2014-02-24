@@ -12,40 +12,10 @@
 		<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/c3.css') }}">
 		<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}">
 		<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/tomorrow.css') }}">
-		<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style1.css') }}">
 
-		<style type="text/css">
-			text {
-				font-size: 20px;
-				pointer-events: none;
-			}
-
-			text.parent {
-				fill: #1f77b4;
-			}
-
-			circle {
-				fill: #ccc;
-				stroke: #999;
-				pointer-events: all;
-			}
-
-			circle.parent {
-				fill: #1f77b4;
-				fill-opacity: .1;
-				stroke: steelblue;
-			}
-
-			circle.parent:hover {
-				stroke: #ff7f0e;
-				stroke-width: .5px;
-			}
-
-			circle.child {
-				pointer-events: none;
-			}
-
-		</style>
+		
+		
+		
 
 		<script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
 		<script src="{{ url_for('static', filename='js/bootstrap.js') }}"></script>
@@ -163,8 +133,36 @@
 					<div id="chart_div" class="row">
 						<br>
 						<br>
-						<div class="col-md-6" id="buble_chart">
-
+						<div class="col-md-2">
+							<div class="panel panel-primary">
+								<div class="panel-heading">
+									<h3 class="panel-title">Projetos</h3>
+								</div>
+								<div class="panel-body btn-group-vertical">
+									<strong>Projeto demo</strong>
+									<div class="radio">
+										<label>
+											<input type="radio" name="defaultVM" id="vm1" value="vm1">
+											VM1 </label>
+									</div>
+									<div class="radio">
+										<label>
+											<input type="radio" name="defaultVM" id="vm2" value="vm2">
+											VM2 </label>
+									</div>
+									<div class="radio">
+										<label>
+											<input type="radio" name="defaultVM" id="vm3" value="vm3">
+											VM3 </label>
+									</div>
+								</div>
+								<div class="panel-body">
+									<strong>Projeto Admin</strong>
+									<p>
+										Não há VMs
+									</p>
+								</div>
+							</div>
 						</div>
 						<div class="col-md-10 col-md-offset-2" id="chart">
 							<center>
@@ -187,13 +185,13 @@
 		</div>
 
 		<!-- SCRIPTS -->
+
 		<script src="{{ url_for('static', filename='js/jquery-1.11.0.min.js') }}"></script>
 		<script src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
 		<script src="{{ url_for('static', filename='js/highlight.pack.js') }}"></script>
 		<script src="{{ url_for('static', filename='js/d3.min.js') }}"></script>
 		<script src="{{ url_for('static', filename='js/c3.min.js') }}"></script>
 		<script src="{{ url_for('static', filename='js/timeseries.js') }}"></script>
-		<script src="{{ url_for('static', filename='js/scriptsUI/treemap.js') }}"></script>
 
 		<script src="{{ url_for('static', filename='js/scriptsUI/menuconfig.js') }}"></script>
 		<script src="{{ url_for('static', filename='js/scriptsUI/alarms.js') }}"></script>

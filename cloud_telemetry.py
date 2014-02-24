@@ -1,12 +1,12 @@
 from flask import Flask, render_template, request, make_response
 
-#from ceilometer_client import CeilometerClient
+from ceilometer_client import CeilometerClient
 #from local_db_worker import db_worker
 
 import json
 
 app = Flask(__name__)
-#ceilometer = CeilometerClient()
+ceilometer = CeilometerClient()
 
 @app.route('/')
 def home(name=None):

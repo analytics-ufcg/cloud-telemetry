@@ -2,7 +2,7 @@ var ip_server = "http://150.165.15.4:9090";
 var dados = {};
 var tempo = [];
 var cpu_util = [];
-var ID_VM = '';
+
 /* Habilitando seletores de data/hora */
 $('#datetimepicker1').datetimepicker({
 	pick12HourFormat : true
@@ -40,14 +40,13 @@ function formattedDate(date, verificador) {
 }
 
 function plot() {
-	ID_VM = 'dab03c1c-79bd-4d3c-b362-add290d7863d';
 	var out = $("input[name='defaultTime']:checked").val();
 	var dh1 = $('#data_hora1').val().replace("/", " ").replace("/", " ").replace(":", " ").split(" ");
 	var dt1 = new Date(dh1[2], dh1[1], dh1[0], dh1[3], dh1[4]);
 	var dh2 = $('#data_hora2').val().replace("/", " ").replace("/", " ").replace(":", " ").split(" ");
 	var dt2 = new Date(dh2[2], dh2[1], dh2[0], dh2[3], dh2[4]);
 	var vm = $("input[name='defaultVM']:checked").val();
-	console.log(ID_VM);
+	console.log(vm);
 	/*Verificações antes de realizar requisição*/
 	var html_m = '<h2>Atenção!</h2><br />';
 	/*Nenhum Campo selecionado*/
@@ -59,6 +58,11 @@ function plot() {
 	if (dt1.getTime() >= dt2.getTime()) {
 		html_m += '<h4>A data de início fornecida possui tempo maior ou igual à data fim.</h4><br />';
 		html_m += '<h4>Escolha outra data. Obrigado</h4>';
+		bootbox.alert(html_m);
+	}
+
+	if (vm == undefined) {
+		html_m += '<h4>Nenhuma VM selecionada </h4>';
 		bootbox.alert(html_m);
 	}
 
@@ -91,12 +95,16 @@ function plot() {
 		url_requisicao_vm += "timestamp_begin=" + formattedDate(dt1, 1);
 		url_requisicao_vm += "&timestamp_end=" + formattedDate(dt2, 1);
 	}
-	
-	
-	var id = $().
-	
-	url_requisicao_vm += "&resource_id=" +ID_VM;
-	
+
+	if (vm == "vm1") {
+		url_requisicao_vm += "&resource_id=" + "dab03c1c-79bd-4d3c-b362-add290d7863d";
+	} else if (vm == "vm2") {
+		url_requisicao_vm += "&resource_id=" + "0316578b-f8c0-42d0-8159-af33fd81bf5a";
+	} else if (vm == "vm3") {
+		url_requisicao_vm += "&resource_id=" + "b85bf69f-f3d3-41af-b13a-1465eb966e24";
+	} else {
+		console.log("vm n escolhida");
+	}
 	console.log(url_requisicao_vm);
 	/*Requisicao de Projetos
 	 $.ajax({
@@ -214,4 +222,3 @@ function show_hist() {
 $(function() {
 	$("#myTab a:last").tab('show');
 });
-
