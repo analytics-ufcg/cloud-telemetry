@@ -134,17 +134,21 @@ function plot() {
 			var t1 = [];
 			var cpu = [];
 			t1.push("x");
-			cpu.push("sample");
+			cpu.push("cpu_util_percent");
 			$.each(dados, function(d) {
-				t1.push(dados[d].timestamp);
+				t1.push(dados[d].timestamp.replace("T"," "));
 				cpu.push(dados[d].cpu_util_percent);
 			});
 			
-			
+
 			var json = {
 				data : {
 					x : 'x',
-					columns : [t1, cpu_util]
+					x_format : '%Y-%m-%d %H:%M:%S',
+					columns : [t1, cpu]
+				},
+				subchart:{
+					show: true
 				},
 				axis : {
 					x : {
