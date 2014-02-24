@@ -17,7 +17,6 @@ function addAlarme() {
 				label : "Adicionar",
 				className : "btn-primary",
 				callback : function() {
-					console.log("Hi " + $('#first_name').val());
 				}
 			}
 		}

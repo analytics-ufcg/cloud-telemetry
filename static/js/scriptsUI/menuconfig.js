@@ -3,10 +3,11 @@ var dados = {};
 var tempo = [];
 var cpu_util = [];
 
-/* Habilitando seletores de data/hora */
+/*Habilitando seletores de data/hora */
 $('#datetimepicker1').datetimepicker({
 	pick12HourFormat : true
 });
+
 $('#datetimepicker2').datetimepicker({
 	pick12HourFormat : true
 });
@@ -61,10 +62,10 @@ function plot() {
 		bootbox.alert(html_m);
 	}
 
-	if (vm == undefined) {
+	/*if (vm == undefined) {
 		html_m += '<h4>Nenhuma VM selecionada </h4>';
 		bootbox.alert(html_m);
-	}
+	}*/
 
 	var now = new Date();
 	now.setTime(now.getTime() + now.getTimezoneOffset());

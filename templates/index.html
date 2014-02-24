@@ -5,18 +5,6 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<title>Cloud Telemetry</title>
 
-		<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
-		<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/bootstrap-theme.css') }}">
-		<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/dashboard.css') }}">
-		<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/bootstrap-datetimepicker.min.css') }}">
-		<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/c3.css') }}">
-		<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}">
-		<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/tomorrow.css') }}">
-
-		
-		
-		
-
 		<script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
 		<script src="{{ url_for('static', filename='js/bootstrap.js') }}"></script>
 		<script src="{{ url_for('static', filename='js/bootbox.js') }}"></script>
@@ -24,6 +12,16 @@
 		<script src="{{ url_for('static', filename='js/bootstrap-datetimepicker.js') }}" charset="UTF-8"></script>
 		<script src="{{ url_for('static', filename='js/d3.js') }}"></script>
 		<script src="{{ url_for('static', filename='js/d3.layout.js') }}"></script>
+
+		<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
+		<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/bootstrap-theme.css') }}">
+		<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/dashboard.css') }}">
+		<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/bootstrap-datetimepicker.min.css') }}">
+		<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/c3.css') }}">
+		<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}">
+		<!--link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/tomorrow.css') }}"-->
+
+
 
 	</head>
 
@@ -37,12 +35,12 @@
 						<span class="icon-bar"> </span>
 						<span class="icon-bar"> </span>
 					</button>
-					<a class="navbar-brand" href="#">Project name</a>
+					<a class="navbar-brand" href="#">Telemetria Visual</a>
 				</div>
 				<div class="navbar-collapse collapse">
 					<ul class="nav navbar-nav navbar-right">
 						<li class="dropdown">
-							<a href="#" class="dropdown-toggle" data-toggle="dropdown"> <span class="glyphicon glyphicon-cog"></span> Seleção de intervalo <b class="caret"></b></a>
+							<a href="#" class="dropdown-toggle" data-toggle="dropdown"> <span class="glyphicon glyphicon-cog"></span> Configurações de Alarme <b class="caret"></b></a>
 							<ul class="dropdown-menu">
 								<li>
 									<a href="#" onclick="addAlarme();"><span class="glyphicon glyphicon-plus-sign"></span>Adicionar Alarme</a>
@@ -62,7 +60,7 @@
 				<div class="col-md-2 col-md-offset-10 sidebar">
 					<div class="panel panel-primary">
 						<div class="panel-heading">
-							<h3 class="panel-title">Configurações de Alarmes</h3>
+							<h3 class="panel-title">Seleção de Tempo</h3>
 						</div>
 						<div class="panel-body">
 
@@ -109,12 +107,12 @@
 
 					</div>
 
-					<ul class="list-group">
-						<li class="list-group-item alert alert-warning">
-							<span class="badge">12</span>
-							<span class="glyphicon glyphicon-warning-sign"></span>Notificações
-						</li>
-					</ul>
+					<!--<ul class="list-group">
+					<li class="list-group-item alert alert-warning">
+					<span class="badge">12</span>
+					<span class="glyphicon glyphicon-warning-sign"></span>Notificações
+					</li>
+					</ul>-->
 				</div>
 				<div class="col-md-10  main">
 					<!--abas para escolha -->
@@ -185,11 +183,8 @@
 		</div>
 
 		<!-- SCRIPTS -->
-
-		<script src="{{ url_for('static', filename='js/jquery-1.11.0.min.js') }}"></script>
-		<script src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
+		<!-- Não adicionar bibliotecas do jqquery e nem do javascript, adicione apenas os .js necessários verifique duplicações!!! -->
 		<script src="{{ url_for('static', filename='js/highlight.pack.js') }}"></script>
-		<script src="{{ url_for('static', filename='js/d3.min.js') }}"></script>
 		<script src="{{ url_for('static', filename='js/c3.min.js') }}"></script>
 		<script src="{{ url_for('static', filename='js/timeseries.js') }}"></script>
 
