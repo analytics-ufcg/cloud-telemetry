@@ -8,10 +8,6 @@ import json
 app = Flask(__name__)
 ceilometer = CeilometerClient()
 
-@app.route('/')
-def home(name=None):
-    return render_template('index.html', name=name)
-
 @app.route('/projects')
 def projects():
     resp = make_response(ceilometer.get_projects_with_cpu_util())
