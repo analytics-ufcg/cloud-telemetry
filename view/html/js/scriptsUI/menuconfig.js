@@ -97,15 +97,17 @@ function plot() {
 		url_requisicao_vm += "&timestamp_end=" + formattedDate(dt2, 1);
 	}
 
-	if (vm == "vm1") {
+	url_requisicao_vm += "&resource_id=" + $("input[name='defaultVM']:checked").val();
+
+	/*if (vm == "vm1") {
 		url_requisicao_vm += "&resource_id=" + "dab03c1c-79bd-4d3c-b362-add290d7863d";
 	} else if (vm == "vm2") {
 		url_requisicao_vm += "&resource_id=" + "0316578b-f8c0-42d0-8159-af33fd81bf5a";
 	} else if (vm == "vm3") {
-		url_requisicao_vm += "&resource_id=" + "b85bf69f-f3d3-41af-b13a-1465eb966e24";
+		
 	} else {
 		console.log("vm n escolhida");
-	}
+	}*/
 	console.log(url_requisicao_vm);
 	/*Requisicao de Projetos
 	 $.ajax({
