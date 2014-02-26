@@ -143,7 +143,6 @@ function plot() {
 				cpu.push(dados[d].cpu_util_percent);
 			});
 			
-
 			var json = {
 				data : {
 					x : 'x',
