@@ -137,10 +137,10 @@ function plot() {
 			var t1 = [];
 			var cpu = [];
 			t1.push("x");
-			cpu.push("cpu_util_percent");
+			cpu.push("utilização de cpu");
 			$.each(dados, function(d) {
 				t1.push(dados[d].timestamp.replace("T"," "));
-				cpu.push(dados[d].cpu_util_percent);
+				cpu.push((dados[d].cpu_util_percent*100).toFixed(2));
 			});
 			
 			var json = {
@@ -154,7 +154,11 @@ function plot() {
 				},
 				axis : {
 					x : {
+						label: 'Tempo',
 						type : 'timeseries'
+					},
+					y : {
+						label: '(%) '
 					}
 				}
 			};

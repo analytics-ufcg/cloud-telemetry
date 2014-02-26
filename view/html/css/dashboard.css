@@ -55,6 +55,9 @@ body {
   background-color: #428bca;
 }
 
+.navbar-custom {
+    margin: -10px auto;
+}
 
 /*
  * Main content
