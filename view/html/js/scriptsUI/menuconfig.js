@@ -1,4 +1,5 @@
 var ip_server = "http://150.165.15.4:9090";
+//150.165.80.194
 var dados = {};
 var tempo = [];
 var cpu_util = [];
@@ -63,9 +64,9 @@ function plot() {
 	}
 
 	/*if (vm == undefined) {
-		html_m += '<h4>Nenhuma VM selecionada </h4>';
-		bootbox.alert(html_m);
-	}*/
+	 html_m += '<h4>Nenhuma VM selecionada </h4>';
+	 bootbox.alert(html_m);
+	 }*/
 
 	var now = new Date();
 	now.setTime(now.getTime() + now.getTimezoneOffset());
@@ -100,33 +101,15 @@ function plot() {
 	url_requisicao_vm += "&resource_id=" + $("input[name='defaultVM']:checked").val();
 
 	/*if (vm == "vm1") {
-		url_requisicao_vm += "&resource_id=" + "dab03c1c-79bd-4d3c-b362-add290d7863d";
-	} else if (vm == "vm2") {
-		url_requisicao_vm += "&resource_id=" + "0316578b-f8c0-42d0-8159-af33fd81bf5a";
-	} else if (vm == "vm3") {
-		
-	} else {
-		console.log("vm n escolhida");
-	}*/
+	 url_requisicao_vm += "&resource_id=" + "dab03c1c-79bd-4d3c-b362-add290d7863d";
+	 } else if (vm == "vm2") {
+	 url_requisicao_vm += "&resource_id=" + "0316578b-f8c0-42d0-8159-af33fd81bf5a";
+	 } else if (vm == "vm3") {
+
+	 } else {
+	 console.log("vm n escolhida");
+	 }*/
 	console.log(url_requisicao_vm);
-	/*Requisicao de Projetos
-	 $.ajax({
-	 url : url_requisicao_bubble,
-	 async : false,
-	 dataType : 'json',
-	 success : function(data) {
-	 dados = data;
-	 console.log(data);
-	 show_graph(url_requisicao_bubble);
-	 },
-	 error : function(data) {
-	 console.log("erro de requisicao");
-	 }
-	 });*/
-
-	/*Requisicao de VM*/
-
-
 	$.ajax({
 		url : url_requisicao_vm,
 		async : false,
@@ -134,48 +117,55 @@ function plot() {
 		success : function(data) {
 			dados = data;
 			console.log(data);
-			var t1 = [];
-			var cpu = [];
-			t1.push("x");
-			cpu.push("utilização de cpu");
-			$.each(dados, function(d) {
-				t1.push(dados[d].timestamp.replace("T"," "));
-				cpu.push((dados[d].cpu_util_percent*100).toFixed(2));
-			});
-			
-			var json = {
-				data : {
-					x : 'x',
-					x_format : '%Y-%m-%d %H:%M:%S',
-					columns : [t1, cpu]
-				},
-				subchart:{
-					show: true
-				},
-				axis : {
-					x : {
-						label: 'Tempo',
-						type : 'timeseries'
-					},
-					y : {
-						label: '(%) '
-					}
-				}
-			};
-			var chart = c3.generate(json);
+			if (dados.length === 0) {
+				$('#chart').empty().queue(function(exec) {
+					$('#chart').html('<p><h3>Período de tempo não consta nos dados, selecione outro período.</h3><p>');
+					exec();
+				});
+			} else {
+				var t1 = [];
+				var cpu = [];
+				t1.push("x");
+				cpu.push("utilização de cpu");
+				$.each(dados, function(d) {
+					t1.push(dados[d].timestamp.replace("T", " "));
+					cpu.push((dados[d].cpu_util_percent * 100).toFixed(2));
+				});
 
+				var json = {
+					data : {
+						x : 'x',
+						x_format : '%Y-%m-%d %H:%M:%S',
+						columns : [t1, cpu]
+					},
+					subchart : {
+						show : true
+					},
+					axis : {
+						x : {
+							label : 'Tempo',
+							type : 'timeseries'
+						},
+						y : {
+							label : '(%) '
+						}
+					}
+				};
+				var chart = c3.generate(json);
+			}
 		},
 		error : function(data) {
+			show_plot = false;
+			$('#chart').empty().queue(function(exec) {
+				$('#chart').html('<p><h3>Período de tempo não consta nos dados, selecione outro período.</h3><p>');
+				exec();
+			});
 			console.log("error");
 			console.log(data);
 		}
-	}); 
+	});
 
 };
-
-$('#vm1').click(function() {
-});
-
 
 /* Habilitar div selecionada de acordo com a aba selecionada*/
 function show_graph(url) {
