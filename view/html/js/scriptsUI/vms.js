@@ -25,14 +25,3 @@ $.ajax({
 		console.log(data);
 	}
 });
-
-$('<div id="painel_projetos" class="panel panel-primary">'+'</div>').appendTo('#menu_vm');
-
-/*
- * 
- * 
- * 
- * <!--<div class="panel-heading">
-									<h3 class="panel-title">Projetos</h3>
-								</div>-->
- */

@@ -164,21 +164,18 @@
 		<script>
 			$('<div id="painel_projetos" class="panel panel-primary">' + '</div>').appendTo('#menu_vm');
 			$('<div class="panel-heading">' + '<h3 class="panel-title">Projetos</h3>' + '</div>').appendTo('#painel_projetos');
+			//Mudancas serão necessárias para aparecer o nome das VMs
 			var cont = 1;
 			$.each(projects_name, function(k, v) {
 				var projeto = projects_name[k];
 				var vms = json_vm[projeto];
 				var add_vm = '';
 				$.each(vms, function(i) {
-					//<div class="radio"><label><input type="radio" name="defaultVM" id="vm1" value="vm1">                  VM  1     </label></div>
 					add_vm += '<div class="radio"><label><input type="radio" name="defaultVM" ' + 'value=' + vms[i].toString() + '>VM' + cont + '</label></div>';
 					cont += 1;
 				});
 				$('<div class="panel-body">' + '<strong> Projeto ' + projeto + ' <strong>' + add_vm + '</div>').appendTo('#painel_projetos');
-				console.log(json_vm[projeto]);
-
 			});
-
 		</script>
 
 	</body>
