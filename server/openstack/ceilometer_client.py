@@ -32,7 +32,7 @@ class CeilometerClient:
     def set_alarm(self, name, meter, threshold, operator, period, evaluation_period):
         try:
             alarm = self.ceilometer.alarms.create(name=name, meter_name=meter, threshold=threshold, comparison_operator=operator, period=period, evaluation_periods=evaluation_period, alarm_actions='log://')
-            return alarm is None
+            return alarm
         except:
-            return False
+            return None
       

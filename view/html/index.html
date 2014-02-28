@@ -10,8 +10,9 @@
 		<script src="js/bootbox.js"></script>
 		<script src="js/moment-2.4.0.js"></script>
 		<script src="js/bootstrap-datetimepicker.js" charset="UTF-8"></script>
-		<script src="js/d3.js"></script>
+		<script src="js/d3.min.js"></script>
 		<script src="js/d3.layout.js"></script>
+		<script src="js/scriptsUI/vms.js"></script>
 
 		<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
 		<link rel="stylesheet" type="text/css" href="css/bootstrap-theme.css">
@@ -25,14 +26,9 @@
 	<body>
 		<div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
 			<div class="container-fluid">
-				<div class="navbar-header">
-					<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-						<span class="sr-only">Toggle navigation</span>
-						<span class="icon-bar"> </span>
-						<span class="icon-bar"> </span>
-						<span class="icon-bar"> </span>
-					</button>
-					<a class="navbar-brand" href="#">Cloud Telemetry</a>
+				<div class="navbar-header navbar-custom">
+
+					<a class="navbar-brand" href="#" ><h3>Cloud Telemetry</h3></a>
 				</div>
 				<div class="navbar-collapse collapse">
 					<ul class="nav navbar-nav navbar-right">
@@ -111,6 +107,13 @@
 					<span class="glyphicon glyphicon-warning-sign"></span>Notificações
 					</li>
 					</ul>-->
+					<div id="alarm_fail" class="alert alert-danger" data-alerts="alerts" style="display:none">
+						
+					</div>
+					<div id="alarm_ok" class="alert alert-success" data-alerts="alerts" style="display:none">
+						
+					</div>
+
 				</div>
 				<div class="col-md-10  main">
 					<!--abas para escolha -->
@@ -118,55 +121,25 @@
 						<li class="active">
 							<a href="" id="bt_vg" onclick="show_graph();" data-toggle="tab">Visão Geral</a>
 						</li>
-						<!-- <li>
-							<a href="" id="bt_rec" onclick="show_recomendacoes();" data-toggle="tab">Recomendações</a>
+						<!--<li>
+						<a href="" id="bt_rec" onclick="show_recomendacoes();" data-toggle="tab">Recomendações</a>
 						</li>
 						<li>
-							<a href="" id="bt_hist" onclick="show_hist();" data-toggle="tab">Histórico</a>
-						</li> -->
+						<a href="" id="bt_hist" onclick="show_hist();" data-toggle="tab">Histórico</a>
+						</li>-->
 					</ul>
 
 					<div id="chart_div" class="row">
 						<br>
 						<br>
-						<div class="col-md-2">
-							<div class="panel panel-primary">
-								<div class="panel-heading">
-									<h3 class="panel-title">Projetos</h3>
-								</div>
-								<div class="panel-body btn-group-vertical">
-									<strong>Projeto demo</strong>
-									<div class="radio">
-										<label>
-											<input type="radio" name="defaultVM" id="vm1" value="vm1">
-											VM1 </label>
-									</div>
-									<div class="radio">
-										<label>
-											<input type="radio" name="defaultVM" id="vm2" value="vm2">
-											VM2 </label>
-									</div>
-									<div class="radio">
-										<label>
-											<input type="radio" name="defaultVM" id="vm3" value="vm3">
-											VM3 </label>
-									</div>
-								</div>
-								<div class="panel-body">
-									<strong>Projeto Admin</strong>
-									<p>
-										Não há VMs
-									</p>
-								</div>
-							</div>
-						</div>
+						<div id="menu_vm" class="col-md-2"></div>
 						<div class="col-md-10 col-md-offset-2" id="chart">
 							<center>
 								Selecione uma VM de um projeto e um período de Tempo
 							</center>
 						</div>
 					</div>
-					<!-- <div id="rec_div" class="row" style="display:none;">
+					<div id="rec_div" class="row" style="display:none;">
 						<p>
 							Recomendacoes
 						</p>
@@ -175,7 +148,7 @@
 						<p>
 							Historico
 						</p>
-					</div> -->
+					</div>
 				</div><!-- fim div col-md-10 main -->
 			</div>
 		</div>
@@ -188,6 +161,22 @@
 
 		<script src="js/scriptsUI/menuconfig.js"></script>
 		<script src="js/scriptsUI/alarms.js"></script>
+		<script>
+			$('<div id="painel_projetos" class="panel panel-primary">' + '</div>').appendTo('#menu_vm');
+			$('<div class="panel-heading">' + '<h3 class="panel-title">Projetos</h3>' + '</div>').appendTo('#painel_projetos');
+			//Mudancas serão necessárias para aparecer o nome das VMs
+			var cont = 1;
+			$.each(projects_name, function(k, v) {
+				var projeto = projects_name[k];
+				var vms = json_vm[projeto];
+				var add_vm = '';
+				$.each(vms, function(i) {
+					add_vm += '<div class="radio"><label><input type="radio" name="defaultVM" ' + 'value=' + vms[i].toString() + '>VM' + cont + '</label></div>';
+					cont += 1;
+				});
+				$('<div class="panel-body">' + '<strong> Projeto ' + projeto + ' <strong>' + add_vm + '</div>').appendTo('#painel_projetos');
+			});
+		</script>
 
 	</body>
 </html>
