@@ -3,6 +3,7 @@ var ip_server = "http://150.165.15.4:9090";
 var dados = {};
 var tempo = [];
 var cpu_util = [];
+var ultimo_acesso ;
 
 /*Habilitando seletores de data/hora */
 $('#datetimepicker1').datetimepicker({
