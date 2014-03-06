@@ -3,7 +3,7 @@ var ip_server = "http://150.165.15.4:9090";
 var dados = {};
 var tempo = [];
 var cpu_util = [];
-var ultimo_acesso ;
+var ultimo_acesso;
 
 /*Habilitando seletores de data/hora */
 $('#datetimepicker1').datetimepicker({
@@ -98,7 +98,7 @@ function plot() {
 		url_requisicao_vm += "timestamp_begin=" + formattedDate(dt1, 1);
 		url_requisicao_vm += "&timestamp_end=" + formattedDate(dt2, 1);
 	}
-
+	var resource_vm = $("input[name='defaultVM']:checked").val();
 	url_requisicao_vm += "&resource_id=" + $("input[name='defaultVM']:checked").val();
 
 	/*if (vm == "vm1") {
@@ -119,10 +119,17 @@ function plot() {
 			dados = data;
 			console.log(data);
 			if (dados.length === 0) {
-				$('#chart').empty().queue(function(exec) {
-					$('#chart').html('<p><h3>Período de tempo não consta nos dados, selecione outro período.</h3><p>');
-					exec();
-				});
+				if (resource_vm == undefined) {
+					$('#chart').empty().queue(function(exec) {
+						$('#chart').html('<p><h3>Selecione uma vm</h3><p>');
+						exec();
+					});
+				} else {
+					$('#chart').empty().queue(function(exec) {
+						$('#chart').html('<p><h3>Período de tempo não consta nos dados, selecione outro período.</h3><p>');
+						exec();
+					});
+				}
 			} else {
 				var t1 = [];
 				var cpu = [];
@@ -169,11 +176,11 @@ function plot() {
 };
 
 /* Habilitar div selecionada de acordo com a aba selecionada*/
-function show_graph(url) {
+function show_graph() {
 	$("#hist_div").hide();
 	$("#rec_div").hide();
 	$("#chart_div").show();
-
+	$("#panel_selection_time").show();
 	var $thisLi = $("#bt_vg").parent('li');
 	var $ul = $thisLi.parent('ul');
 
@@ -181,15 +188,12 @@ function show_graph(url) {
 		$ul.find('li.active').removeClass('active');
 		$thisLi.addClass('active');
 	}
-	var url_bubble = ip_server + "/projects";
-	if (url == url_bubble) {
-		//plot_bubble(url);
-	}
 }
 
 function show_recomendacoes() {
 	$("#chart_div").hide();
 	$("#hist_div").hide();
+	$("#panel_selection_time").show();
 	$("#rec_div").show();
 
 	var $thisLi = $("#bt_rec").parent('li');
@@ -204,6 +208,7 @@ function show_recomendacoes() {
 function show_hist() {
 	$("#chart_div").hide();
 	$("#rec_div").hide();
+	$("#panel_selection_time").hide();
 	$("#hist_div").show();
 
 	var $thisLi = $("#bt_hist").parent('li');

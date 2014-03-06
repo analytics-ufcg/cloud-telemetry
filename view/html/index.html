@@ -51,7 +51,7 @@
 		<div class="container-fluid">
 			<div class="row-fluid">
 				<div class="col-md-2 col-md-offset-10 sidebar">
-					<div class="panel panel-primary">
+					<div id="panel_selection_time" class="panel panel-primary">
 						<div class="panel-heading">
 							<h3 class="panel-title">Seleção de Tempo</h3>
 						</div>
@@ -101,12 +101,12 @@
 
 					</div>
 
-					<!--<ul class="list-group">
+					<ul onclick="show_hist();" class="list-group">
 					<li class="list-group-item alert alert-warning">
 					<span class="badge">12</span>
-					<span class="glyphicon glyphicon-warning-sign"></span>Notificações
+					<span  class="glyphicon glyphicon-warning-sign"></span>Notificações
 					</li>
-					</ul>-->
+					</ul>
 					<div id="alarm_fail" class="alert alert-danger" data-alerts="alerts" style="display:none">
 						
 					</div>
@@ -121,12 +121,12 @@
 						<li class="active">
 							<a href="" id="bt_vg" onclick="show_graph();" data-toggle="tab">Visão Geral</a>
 						</li>
-						<!--<li>
+						<li>
 						<a href="" id="bt_rec" onclick="show_recomendacoes();" data-toggle="tab">Recomendações</a>
 						</li>
 						<li>
 						<a href="" id="bt_hist" onclick="show_hist();" data-toggle="tab">Histórico</a>
-						</li>-->
+						</li>
 					</ul>
 
 					<div id="chart_div" class="row">
