@@ -2,22 +2,12 @@ import subprocess
 import csv
 import json
 
-script="Rscript generate_recommendation.R"
-data_csv = "dados.csv"
-data_json = "./testes/ceilometer_Fev01.json"
-flavors = "flavors.csv"
-
-
-
-
 def create_csv(file_input, data_csv):
-    input = open(file_input)
     output = open(data_csv, "w")
-    data = json.load(input)
+    data = json.load(file_input)
     output.write("VM,Cores,CPU_UTIL\n")
     for instance in data:
         output.write(instance["resource_id"] + "," +str(instance["resource_metadata"]["flavor.vcpus"]) + "," + str(instance["counter_volume"])+"\n")
-    input.close()
     output.close()
 
 def comunica_com_r(scriptR, dado):
@@ -45,11 +35,16 @@ def data_to_dic(dadoJson, dadoCSV, scriptR, flavors):
     return gera_retorno(flavors)
 
 
-print data_to_dic(data_json, data_csv, script, flavors)
+def recomenda_flavor(dado):
     
-    
-    
+    script="Rscript generate_recommendation.R"
+    data_csv = "dados.csv"
+    data_json = dado
+    flavors = "flavors.csv"
+    return data_to_dic(data_json, data_csv, script, flavors)   
 
+
+    
 
 
     
