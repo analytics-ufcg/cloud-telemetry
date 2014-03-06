@@ -10,7 +10,14 @@ data_handler = DataHandler()
 
 @app.route('/projects')
 def projects():
-    resp = make_response(data_handler.get_projects())
+    resp = make_response(data_handler.projects())
+    resp.headers['Access-Control-Allow-Origin'] = "*" 
+
+    return resp
+
+@app.route('/projects/instances')
+def project_instances():
+    resp = make_response(data_handler.projects_with_instances_and_cpu_util())
     resp.headers['Access-Control-Allow-Origin'] = "*" 
 
     return resp
@@ -21,7 +28,7 @@ def cpu_util():
     timestamp_end = request.args.get('timestamp_end', None)
     resource_id = request.args.get('resource_id', None)
     
-    resp = make_response(data_handler.get_cpu_util_from(timestamp_begin, timestamp_end, resource_id))
+    resp = make_response(data_handler.cpu_util_from(timestamp_begin, timestamp_end, resource_id))
     resp.headers['Access-Control-Allow-Origin'] = "*" 
 
     return resp

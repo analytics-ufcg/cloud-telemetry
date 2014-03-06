@@ -8,10 +8,10 @@ class CeilometerClient:
     def __init__(self):
         self.ceilometer = client.get_client(env.CEILOMETER_API_VERSION, os_username=env.OS_USERNAME, os_password=env.OS_PASSWORD, os_tenant_name=env.OS_TENANT_NAME, os_auth_url=env.OS_AUTH_URL)
 
-    def get_cpu_util(self, timestamp_begin=None, timestamp_end=None, resource_id=None):
+    def get_cpu_util(self, timestamp_begin=None, timestamp_end=None, resource_id=None, project_id=None):
         query = []
 
-        if any([timestamp_begin, timestamp_end, resource_id]):
+        if any([timestamp_begin, timestamp_end, resource_id, project_id]):
             if timestamp_begin:
                 query.append({'field':'timestamp', 'op':'gt', 'value':timestamp_begin})
         
@@ -20,6 +20,9 @@ class CeilometerClient:
 
             if resource_id:
                 query.append({'field':'resource_id', 'op':'eq', 'value':resource_id})
+
+            if project_id:
+                query.append({'field':'project_id', 'op':'eq', 'value':project_id})
 
         data = self.ceilometer.samples.list('cpu_util', query)
 
