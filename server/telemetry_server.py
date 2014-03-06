@@ -1,16 +1,23 @@
 from flask import Flask, render_template, request, make_response
 
-from ceilometer_client import CeilometerClient
+from telemetry_data import DataHandler
 #from local_db_worker import db_worker
 
 import json
 
 app = Flask(__name__)
-ceilometer = CeilometerClient()
+data_handler = DataHandler()
 
 @app.route('/projects')
 def projects():
-    resp = make_response(ceilometer.get_projects_with_cpu_util())
+    resp = make_response(data_handler.projects())
+    resp.headers['Access-Control-Allow-Origin'] = "*" 
+
+    return resp
+
+@app.route('/projects/instances')
+def project_instances():
+    resp = make_response(data_handler.projects_with_instances_and_cpu_util())
     resp.headers['Access-Control-Allow-Origin'] = "*" 
 
     return resp
@@ -21,11 +28,10 @@ def cpu_util():
     timestamp_end = request.args.get('timestamp_end', None)
     resource_id = request.args.get('resource_id', None)
     
-    resp = make_response(ceilometer.get_cpu_util(timestamp_begin,timestamp_end,resource_id))
+    resp = make_response(data_handler.cpu_util_from(timestamp_begin, timestamp_end, resource_id))
     resp.headers['Access-Control-Allow-Origin'] = "*" 
 
     return resp
-    #return json.dumps({'response' : 'echo', 'timestamp_begin' : timestamp_begin, 'timestamp_end' : timestamp_end, 'resource_id' : resource_id})
 
 @app.route('/add_alarm',  methods=['POST'])
 def add_alarm():
@@ -35,8 +41,6 @@ def add_alarm():
     threshold = request.args.get('threshold')
     period = request.args.get('period')
 
-    #resp = make_response(json.dumps({'resource' : resource, 'threshold' : threshold, 'operation' : operation}))
-    
     alarm = ceilometer.set_alarm(name, resource, threshold, operator, period, 1)
     
     if alarm:
