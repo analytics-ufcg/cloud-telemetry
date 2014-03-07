@@ -49,7 +49,6 @@ function plot() {
 	var dh2 = $('#data_hora2').val().replace("/", " ").replace("/", " ").replace(":", " ").split(" ");
 	var dt2 = new Date(dh2[2], dh2[1], dh2[0], dh2[3], dh2[4]);
 	var vm = $("input[name='defaultVM']:checked").val();
-	console.log(vm);
 	/*Verificações antes de realizar requisição*/
 	var html_m = '<h2>Atenção!</h2><br />';
 	/*Nenhum Campo selecionado*/
@@ -101,15 +100,6 @@ function plot() {
 	var resource_vm = $("input[name='defaultVM']:checked").val();
 	url_requisicao_vm += "&resource_id=" + $("input[name='defaultVM']:checked").val();
 
-	/*if (vm == "vm1") {
-	 url_requisicao_vm += "&resource_id=" + "dab03c1c-79bd-4d3c-b362-add290d7863d";
-	 } else if (vm == "vm2") {
-	 url_requisicao_vm += "&resource_id=" + "0316578b-f8c0-42d0-8159-af33fd81bf5a";
-	 } else if (vm == "vm3") {
-
-	 } else {
-	 console.log("vm n escolhida");
-	 }*/
 	console.log(url_requisicao_vm);
 	$.ajax({
 		url : url_requisicao_vm,
@@ -179,6 +169,8 @@ function plot() {
 function show_graph() {
 	$("#hist_div").hide();
 	$("#rec_div").hide();
+	$("#gerar_rec").hide();
+	$("#aplicarConf").show();
 	$("#chart_div").show();
 	$("#panel_selection_time").show();
 	var $thisLi = $("#bt_vg").parent('li');
@@ -193,8 +185,12 @@ function show_graph() {
 function show_recomendacoes() {
 	$("#chart_div").hide();
 	$("#hist_div").hide();
+	$("#aplicarConf").hide(); //esconde o botão aplicar
+	$("#gerar_rec").show();
 	$("#panel_selection_time").show();
+	
 	$("#rec_div").show();
+	
 
 	var $thisLi = $("#bt_rec").parent('li');
 	var $ul = $thisLi.parent('ul');
@@ -208,6 +204,7 @@ function show_recomendacoes() {
 function show_hist() {
 	$("#chart_div").hide();
 	$("#rec_div").hide();
+	$("#gerar_rec").hide();
 	$("#panel_selection_time").hide();
 	$("#hist_div").show();
 

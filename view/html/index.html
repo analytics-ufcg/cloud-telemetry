@@ -96,6 +96,9 @@
 								<button type="button" class="btn btn-primary" id="aplicarConf" onclick="plot()">
 									Aplicar
 								</button>
+								<button type"button" class="btn btn-primary" id="gerar_rec" style="display:none;" onclick="gera_recomendacao()">
+									Recomendar
+								</button>
 							</div>
 						</div>
 
@@ -140,9 +143,9 @@
 						</div>
 					</div>
 					<div id="rec_div" class="row" style="display:none;">
-						<p>
-							Recomendacoes
-						</p>
+						<div class="col-md-12" id="recomendacoes_geradas">
+							
+						</div>
 					</div>
 					<div id="hist_div" class="row" style="display:none;">
 						<p>
@@ -161,6 +164,7 @@
 
 		<script src="js/scriptsUI/menuconfig.js"></script>
 		<script src="js/scriptsUI/alarms.js"></script>
+		<script src="js/scriptsUI/recomenda.js"></script>
 		<script>
 			$('<div id="painel_projetos" class="panel panel-primary">' + '</div>').appendTo('#menu_vm');
 			$('<div class="panel-heading">' + '<h3 class="panel-title">Projetos</h3>' + '</div>').appendTo('#painel_projetos');
