@@ -4,6 +4,10 @@ from openstack.nova_client import NovaClient
 from mysql_util import get_latest_cpu_util_from_database
 import json
 
+import sys
+sys.path.append('../dataCpu/recomendacao_flavors/')
+import recomendacao
+
 class DataHandler:
 
     def __init__(self):
@@ -16,6 +20,11 @@ class DataHandler:
 
     def cpu_util_from(self, timestamp_begin=None, timestamp_end=None, resource_id=None):
         return json.dumps(self.ceilometer.get_cpu_util(timestamp_begin, timestamp_end, resource_id))
+
+    def cpu_util_flavors(self, timestamp_begin=None, timestamp_end=None):
+        data = self.ceilometer.get_cpu_util_flavors(timestamp_begin, timestamp_end)
+        ret = recomendacao.recomenda_flavor(data)
+        return str(ret)
 
     def projects_with_instances_and_cpu_util(self):
         projects = self.keystone.tenants
