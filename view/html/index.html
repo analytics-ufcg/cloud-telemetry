@@ -102,16 +102,16 @@
 					</div>
 
 					<ul onclick="show_hist();" class="list-group">
-					<li class="list-group-item alert alert-warning">
-					<span class="badge">12</span>
-					<span  class="glyphicon glyphicon-warning-sign"></span>Notificações
-					</li>
+						<li class="list-group-item alert alert-warning">
+							<span class="badge">12</span>
+							<span  class="glyphicon glyphicon-warning-sign"></span>Notificações
+						</li>
 					</ul>
 					<div id="alarm_fail" class="alert alert-danger" data-alerts="alerts" style="display:none">
-						
+
 					</div>
 					<div id="alarm_ok" class="alert alert-success" data-alerts="alerts" style="display:none">
-						
+
 					</div>
 
 				</div>
@@ -122,10 +122,10 @@
 							<a href="" id="bt_vg" onclick="show_graph();" data-toggle="tab">Visão Geral</a>
 						</li>
 						<li>
-						<a href="" id="bt_rec" onclick="show_recomendacoes();" data-toggle="tab">Recomendações</a>
+							<a href="" id="bt_rec" onclick="show_recomendacoes();" data-toggle="tab">Recomendações</a>
 						</li>
 						<li>
-						<a href="" id="bt_hist" onclick="show_hist();" data-toggle="tab">Histórico</a>
+							<a href="" id="bt_hist" onclick="show_hist();" data-toggle="tab">Histórico</a>
 						</li>
 					</ul>
 
@@ -170,11 +170,13 @@
 				var projeto = projects_name[k];
 				var vms = json_vm[projeto];
 				var add_vm = '';
-				$.each(vms, function(i) {
-					add_vm += '<div class="radio"><label><input type="radio" name="defaultVM" ' + 'value=' + vms[i].toString() + '>VM' + cont + '</label></div>';
-					cont += 1;
-				});
-				$('<div class="panel-body">' + '<strong> Projeto ' + projeto + ' <strong>' + add_vm + '</div>').appendTo('#painel_projetos');
+				if (vms.length > 0) {
+					$.each(vms, function(i) {
+						add_vm += '<div class="radio"><label><input type="radio" name="defaultVM" ' + 'value=' + vms[i].toString() + '>VM' + cont + '</label></div>';
+						cont += 1;
+					});
+					$('<div class="panel-body">' + '<strong> Projeto ' + projeto + ' <strong>' + add_vm + '</div>').appendTo('#painel_projetos');
+				}
 			});
 		</script>
 
