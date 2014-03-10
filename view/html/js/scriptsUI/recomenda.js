@@ -3,6 +3,8 @@ var recomendacoes;
 /*Funcao para realizar requisicao de recomendacoes*/
 
 function gera_recomendacao(){
+	$("#gerar_rec").text("Carregando..").addClass("disabled");
+	
 	var out = $("input[name='defaultTime']:checked").val();
 	var dh1 = $('#data_hora1').val().replace("/", " ").replace("/", " ").replace(":", " ").split(" ");
 	var dt1 = new Date(dh1[2], dh1[1], dh1[0], dh1[3], dh1[4]);
@@ -73,7 +75,7 @@ function gera_recomendacao(){
 	//criacao da tabela de maneira dinamica na div recomendacoes_geradas
 	
 	
-	var tabela_rec = '<table class="table table-bordered"><thead><tr><th>Sugestão</th><th>Perda</th><th>Violações</th></tr></thead><tbody><tr>';
+	var tabela_rec = '<table class="table table-condensed"><thead><tr><th>Sugestão</th><th>Perda</th><th>Violações</th> </tr></thead><tbody>';
 	var rows;
 	$.each(recomendacoes,function(k,v){
 		rows = '<th>'+k+'</th><th>'+recomendacoes[k][0]+'</th><th>'+recomendacoes[k][1]+'</th>';
@@ -83,7 +85,9 @@ function gera_recomendacao(){
 	tabela_rec += '</tbdody></table>';
 	$(tabela_rec).appendTo('#recomendacoes_geradas');
 	
-	
+	$('<br><br><h5> <b>Sugestão </b> : Neste campo está descrito o número ideal de cores que as instâncias devem possuir de acordo com a recomendação.</h5>').appendTo('#info_rec');
+	$('<h5> <b>Perda</b>: Neste campo está descrito o somatório da quantidade de CPU não utilizada para todas as instâncias em relação ao número de cores para cada dado disponível.</h5> ').appendTo('#info_rec');
+	$('<h5><b>Violações</b>: Neste campo está descrito o número de vezes em que há sobrecarga nas máquinas, considerando o uso das instâncias da sugestão indicada.</h5>').appendTo('#info_rec');
 	//$().appendTo("#recomendacoes_geradas");
 	//
 	
@@ -92,6 +96,6 @@ function gera_recomendacao(){
 						exec();
 					});*/
 	
-	
+	$("#gerar_rec").text("Recomendar").removeClass("disabled");
 	
 }
