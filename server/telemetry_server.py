@@ -43,7 +43,6 @@ def cpu_util_flavors():
 
     return resp
 
-
 @app.route('/add_alarm',  methods=['POST'])
 def add_alarm():
     name = request.args.get('name')
