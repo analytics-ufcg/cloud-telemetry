@@ -43,6 +43,16 @@ def cpu_util_flavors():
 
     return resp
 
+@app.route('/alarms_history')
+def alarms_history():
+    timestamp_begin = request.args.get('timestamp_begin', None)
+    timestamp_end = request.args.get('timestamp_end', None)
+
+    resp = make_response(data_handler.alarms_history(timestamp_begin, timestamp_end))
+    resp.headers['Access-Control-Allow-Origin'] = "*"
+
+    return resp
+
 @app.route('/add_alarm',  methods=['POST'])
 def add_alarm():
     name = request.args.get('name')

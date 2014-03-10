@@ -3,4 +3,5 @@ venv/
 *.pyc
 .project
 .pydevproject
-
+*.csv
+*.swp

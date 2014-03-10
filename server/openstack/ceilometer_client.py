@@ -60,4 +60,23 @@ class CeilometerClient:
             return alarm
         except:
             return None
-      
+
+    def get_alarms_history(self, timestamp_begin=None, timestamp_end=None):
+        query = []
+        
+        if any([timestamp_begin, timestamp_end]):
+            if timestamp_begin:
+                query.append({'field':'timestamp', 'op':'gt', 'value':timestamp_begin})
+
+            if timestamp_end:
+                query.append({'field':'timestamp', 'op':'lt', 'value':timestamp_end})
+
+        alarms = self.ceilometer.alarms.list(query)
+
+        ret = []
+        for alarm in alarms:
+            ret.append({ 'alarm_id':alarm.alarm_id, 'history':[event.__dict__['_info'] for event in self.ceilometer.alarms.get_history(alarm.alarm_id)] })
+
+        return ret
+
+

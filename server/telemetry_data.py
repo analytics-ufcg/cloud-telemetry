@@ -9,23 +9,23 @@ import analytics.recommendations
 class DataHandler:
 
     def __init__(self):
-        self.ceilometer = CeilometerClient()
-        self.keystone = KeystoneClient()
+        self.__ceilometer = CeilometerClient()
+        self.__keystone = KeystoneClient()
         self.__nova = NovaClient()
 
     def projects(self):
-        return json.dumps(self.keystone.projects)
+        return json.dumps(self.__keystone.projects)
 
     def cpu_util_from(self, timestamp_begin=None, timestamp_end=None, resource_id=None):
-        return json.dumps(self.ceilometer.get_cpu_util(timestamp_begin, timestamp_end, resource_id))
+        return json.dumps(self.__ceilometer.get_cpu_util(timestamp_begin, timestamp_end, resource_id))
 
     def cpu_util_flavors(self, timestamp_begin=None, timestamp_end=None):
-        data = self.ceilometer.get_cpu_util_flavors(timestamp_begin, timestamp_end)
+        data = self.__ceilometer.get_cpu_util_flavors(timestamp_begin, timestamp_end)
         ret = analytics.recommendations.recomenda_flavor(data)
         return json.dumps(ret)
 
     def projects_with_instances_and_cpu_util(self):
-        projects = self.keystone.tenants
+        projects = self.__keystone.tenants
 
         ret = { 'name' : 'cloud', 'children' : [] }
 
@@ -41,4 +41,7 @@ class DataHandler:
             ret['children'].append(proj)
 
         return json.dumps(ret)
+
+    def alarms_history(self, timestamp_begin=None, timestamp_end=None):
+        return json.dumps(self.__ceilometer.get_alarms_history(timestamp_begin, timestamp_end))
 
