@@ -4,10 +4,9 @@ import json
 
 def create_csv(file_input, data_csv):
     output = open(data_csv, "w")
-    data = json.load(file_input)
     output.write("VM,Cores,CPU_UTIL\n")
-    for instance in data:
-        output.write(instance["resource_id"] + "," +str(instance["resource_metadata"]["flavor.vcpus"]) + "," + str(instance["counter_volume"])+"\n")
+    for instance in file_input:
+        output.write(instance["VM"] + "," + str(instance["Cores"]) + "," + str(instance["CPU_UTIL"])+"\n")
     output.close()
 
 def comunica_com_r(scriptR, dado):
@@ -16,8 +15,10 @@ def comunica_com_r(scriptR, dado):
         if (processo.poll() == 0):
             break
         elif (processo.poll() == 1):
-            print "Requisio nao concluida"
+            print "Requisicao nao concluida"
+            break
 
+    
 def gera_retorno(dado):
     dic = {}
     input = open(dado)
@@ -37,14 +38,13 @@ def data_to_dic(dadoJson, dadoCSV, scriptR, flavors):
 
 def recomenda_flavor(dado):
     
-    script="Rscript generate_recommendation.R"
+    script="Rscript ../dataCpu/recomendacao_flavors/generate_recommendation.R"
     data_csv = "dados.csv"
     data_json = dado
     flavors = "flavors.csv"
     return data_to_dic(data_json, data_csv, script, flavors)   
 
 
-    
 
 
     
