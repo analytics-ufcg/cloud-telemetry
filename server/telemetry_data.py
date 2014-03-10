@@ -24,8 +24,7 @@ class DataHandler:
     def cpu_util_flavors(self, timestamp_begin=None, timestamp_end=None):
         data = self.ceilometer.get_cpu_util_flavors(timestamp_begin, timestamp_end)
         ret = recomendacao.recomenda_flavor(data)
-        return str(ret)
-
+        return json.dumps(ret)
     def projects_with_instances_and_cpu_util(self):
         projects = self.keystone.tenants
 
