@@ -2,9 +2,11 @@ var recomendacoes;
 
 /*Funcao para realizar requisicao de recomendacoes*/
 
-function gera_recomendacao(){
-	$("#gerar_rec").text("Carregando..").addClass("disabled");
-	
+function gera_recomendacao() {
+	$('#recomendacoes_geradas').empty();
+	$('<div id="load_rec" style="display:none">	<center><img src="images/ajax-loader.gif"></img> </center> 	</div>').appendTo("#recomendacoes_geradas");
+	$("#load_rec").show();
+
 	var out = $("input[name='defaultTime']:checked").val();
 	var dh1 = $('#data_hora1').val().replace("/", " ").replace("/", " ").replace(":", " ").split(" ");
 	var dt1 = new Date(dh1[2], dh1[1], dh1[0], dh1[3], dh1[4]);
@@ -49,22 +51,25 @@ function gera_recomendacao(){
 		ontem.setTime(ontem.getTime() + ontem.getTimezoneOffset());
 		url_recomenda += "?timestamp_begin=" + formattedDate(ontem, 0);
 		url_recomenda += "&timestamp_end=" + formattedDate(now, 0);
-	} else if ($('#data_hora1').val().length == 0 || $('#data_hora2').val().length == 0){
+	} else if ($('#data_hora1').val().length == 0 || $('#data_hora2').val().length == 0) {
 		url_recomenda = ip_server + "/cpu_util_flavors";
-	}else{
+	} else {
 		url_recomenda += "?timestamp_begin=" + formattedDate(dt1, 1);
-		url_recomenda += "&timestamp_end=" + formattedDate(dt2, 1);	
+		url_recomenda += "&timestamp_end=" + formattedDate(dt2, 1);
 	}
 
 	console.log(url_recomenda);
-	$('#recomendacoes_geradas').empty();
+	
 	//requisicao
+	
 	$.ajax({
 		url : url_recomenda,
 		async : false,
 		dataType : 'json',
 		success : function(data) {
-			recomendacoes = data;			console.log(data);
+			$("#load_rec").hide();
+			recomendacoes = data;
+			console.log(data);
 
 		},
 		error : function(data) {
@@ -73,29 +78,15 @@ function gera_recomendacao(){
 	});
 
 	//criacao da tabela de maneira dinamica na div recomendacoes_geradas
-	
-	
+
 	var tabela_rec = '<table class="table table-condensed"><thead><tr><th>Sugestão</th><th>Perda</th><th>Violações</th> </tr></thead><tbody>';
 	var rows;
-	$.each(recomendacoes,function(k,v){
-		rows = '<th>'+k+'</th><th>'+recomendacoes[k][0]+'</th><th>'+recomendacoes[k][1]+'</th>';
+	$.each(recomendacoes, function(k, v) {
+		rows = '<th>' + k + '</th><th>' + recomendacoes[k][0] + '</th><th>' + recomendacoes[k][1] + '</th>';
 		tabela_rec += rows;
 	});
-	
+
 	tabela_rec += '</tbdody></table>';
 	$(tabela_rec).appendTo('#recomendacoes_geradas');
-	
-	$('<br><br><h5> <b>Sugestão </b> : Neste campo está descrito o número ideal de cores que as instâncias devem possuir de acordo com a recomendação.</h5>').appendTo('#info_rec');
-	$('<h5> <b>Perda</b>: Neste campo está descrito o somatório da quantidade de CPU não utilizada para todas as instâncias em relação ao número de cores para cada dado disponível.</h5> ').appendTo('#info_rec');
-	$('<h5><b>Violações</b>: Neste campo está descrito o número de vezes em que há sobrecarga nas máquinas, considerando o uso das instâncias da sugestão indicada.</h5>').appendTo('#info_rec');
-	//$().appendTo("#recomendacoes_geradas");
-	//
-	
-	/* .queue(function(exec) {
-						$('#chart').html('<p><h3>Período de tempo não consta nos dados, selecione outro período.</h3><p>');
-						exec();
-					});*/
-	
-	$("#gerar_rec").text("Recomendar").removeClass("disabled");
-	
+
 }

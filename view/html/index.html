@@ -143,9 +143,11 @@
 						</div>
 					</div>
 					<div id="rec_div" class="row" style="display:none;">
-						<div class="col-md-6" id="recomendacoes_geradas">
-						</div>
+						<div class="col-md-6" id="recomendacoes_geradas"></div>
 						<div class="col-md-6" id="info_rec">
+							<h5><b>Sugestão </b> : Neste campo está descrito o número ideal de cores que as instâncias devem possuir de acordo com a recomendação.</h5>
+							<h5><b>Perda</b>: Neste campo está descrito o somatório da quantidade de CPU não utilizada para todas as instâncias em relação ao número de cores para cada dado disponível.</h5>
+							<h5><b>Violações</b>: Neste campo está descrito o número de vezes em que há sobrecarga nas máquinas, considerando o uso das instâncias da sugestão indicada.</h5>
 						</div>
 					</div>
 					<div id="hist_div" class="row" style="display:none;">
@@ -183,6 +185,7 @@
 					$('<div class="panel-body">' + '<strong> Projeto ' + projeto + ' <strong>' + add_vm + '</div>').appendTo('#painel_projetos');
 				}
 			});
+			//$('#recomendacoes_geradas').html("<br><br><br><center><img src='images/ajax-loader.gif'></img></center>");
 		</script>
 
 	</body>
