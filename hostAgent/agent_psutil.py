@@ -14,10 +14,10 @@ class AgentPsutil:
             virtualMemory = []
             disk = []
 
-            cpu = self.hostData.get_cpu_percent(interval, percpu))
+            cpu = self.hostData.get_cpu_percent(interval, percpu)
             virtualMemory.append(self.hostData.get_virtual_memory())
             disk.append(self.hostData.get_disk_usage(path))
 
-            bd_agent.saveData(cpu, virtualMemory, disk)
+            bd_agent.save_data(cpu, virtualMemory, disk)
 
             time.sleep(300)
