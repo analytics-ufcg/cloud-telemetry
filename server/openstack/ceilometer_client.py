@@ -75,7 +75,7 @@ class CeilometerClient:
 
         ret = []
         for alarm in alarms:
-            ret.append({ 'alarm_id':alarm.alarm_id, 'history':[event.__dict__['_info'] for event in self.ceilometer.alarms.get_history(alarm.alarm_id, query)] })
+            ret.append({ 'alarm_name':alarm.name, 'alarm_id':alarm.alarm_id, 'history':[event.__dict__['_info'] for event in self.ceilometer.alarms.get_history(alarm.alarm_id, query)] })
 
         return ret
 
