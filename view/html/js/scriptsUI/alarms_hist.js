@@ -48,17 +48,41 @@ if (acesso_inicial != null) {
 	});
 }
 
+function formatDetail(detail, type) {
+	var json = JSON.parse(detail);
+	var rule = "";
+	var state = "";
+	if (type == "creation") {
+		if (json.hasOwnProperty("rule")) {
+			rule = "rule parameters<br>";
+			$.each(json.rule, function(k, v) {
+				if (k !== 'query') {
+					rule += "   " + k + '=' + v;
+				}
+			});
+		}
+		return rule;
+	} else {
+		if (json.hasOwnProperty("state")) {
+			state = "current state = " + json.state;
+		}
+		
+		return state;
+	}
+}
+
 var tabela_historico = '<table class="table table-bordered"><thead><tr> <th>timestamp</th> <th>alarm_name</th> <th>type</th> <th>detail</th> </tr></thead> <tbody>';
 $.each(historico, function(k, v) {
-	var array_h = historico[k].history.reverse();
+	var array_h = historico[k].history;
 	var nome = historico[k].alarm_name;
 	$.each(array_h, function(k2, v2) {
-		var row_hist = '<tr> <th>' + array_h[k2].timestamp + '</th> <th>' + nome + '</th> <th>' + array_h[k2].type + '</th> <th>' + array_h[k2].detail + '</th></tr>';
+		var row_hist = '<tr> <th>' + array_h[k2].timestamp + '</th> <th>' + nome + '</th> <th>' + array_h[k2].type + '</th> <th>' + formatDetail(array_h[k2].detail, array_h[k2].type) + '</th></tr>';
+		console.log(formatDetail(array_h[k2].detail));
 		tabela_historico += row_hist;
 	});
 });
 tabela_historico += '</tbody></table>';
-$(tabela_historico).appendTo("#hist_div"); 
+$(tabela_historico).appendTo("#hist_div");
 
 $.each(historico, function(k, v) {
 	var array_h = historico[k].history.reverse();
