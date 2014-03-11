@@ -71,11 +71,11 @@ class CeilometerClient:
             if timestamp_end:
                 query.append({'field':'timestamp', 'op':'lt', 'value':timestamp_end})
 
-        alarms = self.ceilometer.alarms.list(query)
+        alarms = self.ceilometer.alarms.list()
 
         ret = []
         for alarm in alarms:
-            ret.append({ 'alarm_id':alarm.alarm_id, 'history':[event.__dict__['_info'] for event in self.ceilometer.alarms.get_history(alarm.alarm_id)] })
+            ret.append({ 'alarm_id':alarm.alarm_id, 'history':[event.__dict__['_info'] for event in self.ceilometer.alarms.get_history(alarm.alarm_id, query)] })
 
         return ret
 
