@@ -12,6 +12,7 @@
 		<script src="js/bootstrap-datetimepicker.js" charset="UTF-8"></script>
 		<script src="js/d3.min.js"></script>
 		<script src="js/d3.layout.js"></script>
+		<script src="js/scriptsUI/menuconfig.js"></script>
 		<script src="js/scriptsUI/vms.js"></script>
 		<script src="js/scriptsUI/lastaccess.js"></script>
 		<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
@@ -23,7 +24,7 @@
 		<!--link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/tomorrow.css') }}"-->
 	</head>
 
-	<body onload="checkCokie('cookie_acesso');">
+	<body>
 		<div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
 			<div class="container-fluid">
 				<div class="navbar-header navbar-custom">
@@ -105,8 +106,8 @@
 					</div>
 
 					<ul onclick="show_hist();" class="list-group">
-						<li class="list-group-item alert alert-warning">
-							<span class="badge">12</span>
+						<li id="notificacoes" class="list-group-item alert alert-warning">
+							<!--<span id="num_notificacoes" class="badge" value=10>12</span>-->
 							<span  class="glyphicon glyphicon-warning-sign"></span>Notificações
 						</li>
 					</ul>
@@ -143,7 +144,9 @@
 						</div>
 					</div>
 					<div id="rec_div" class="row" style="display:none;">
-						<div class="col-md-6" id="recomendacoes_geradas"></div>
+						<div class="col-md-6" id="recomendacoes_geradas">
+							<p></p><h4> Selecione um período de Tempo para ver as Recomendações.</h4></p>
+						</div>
 						<div class="col-md-6" id="info_rec">
 							<h5><b>Sugestão </b> : Neste campo está descrito o número ideal de cores que as instâncias devem possuir de acordo com a recomendação.</h5>
 							<h5><b>Perda</b>: Neste campo está descrito o somatório da quantidade de CPU não utilizada para todas as instâncias em relação ao número de cores para cada dado disponível.</h5>
@@ -151,9 +154,6 @@
 						</div>
 					</div>
 					<div id="hist_div" class="row" style="display:none;">
-						<p>
-							Historico
-						</p>
 					</div>
 				</div><!-- fim div col-md-10 main -->
 			</div>
@@ -165,7 +165,8 @@
 		<script src="js/c3.min.js"></script>
 		<script src="js/timeseries.js"></script>
 
-		<script src="js/scriptsUI/menuconfig.js"></script>
+		
+		<script src="js/scriptsUI/alarms_hist.js"></script>
 		<script src="js/scriptsUI/alarms.js"></script>
 		<script src="js/scriptsUI/recomenda.js"></script>
 		<script>
@@ -185,7 +186,6 @@
 					$('<div class="panel-body">' + '<strong> Projeto ' + projeto + ' <strong>' + add_vm + '</div>').appendTo('#painel_projetos');
 				}
 			});
-			//$('#recomendacoes_geradas').html("<br><br><br><center><img src='images/ajax-loader.gif'></img></center>");
 		</script>
 
 	</body>

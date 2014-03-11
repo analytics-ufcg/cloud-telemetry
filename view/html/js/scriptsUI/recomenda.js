@@ -4,7 +4,7 @@ var recomendacoes;
 
 function gera_recomendacao() {
 	$('#recomendacoes_geradas').empty();
-	$('<div id="load_rec" style="display:none">	<center><img src="images/ajax-loader.gif"></img> </center> 	</div>').appendTo("#recomendacoes_geradas");
+	$('<div id="load_rec" style="display:none">	<br><br><center><img src="images/ajax-loader.gif"></img> </center> 	</div>').appendTo("#recomendacoes_geradas");
 	$("#load_rec").show();
 
 	var out = $("input[name='defaultTime']:checked").val();
@@ -79,10 +79,10 @@ function gera_recomendacao() {
 
 	//criacao da tabela de maneira dinamica na div recomendacoes_geradas
 
-	var tabela_rec = '<table class="table table-condensed"><thead><tr><th>Sugestão</th><th>Perda</th><th>Violações</th> </tr></thead><tbody>';
+	var tabela_rec = '<table class="table table-bordered"><thead><tr><th>Sugestão</th><th>Perda</th><th>Violações</th> </tr></thead><tbody>';
 	var rows;
 	$.each(recomendacoes, function(k, v) {
-		rows = '<th>' + k + '</th><th>' + recomendacoes[k][0] + '</th><th>' + recomendacoes[k][1] + '</th>';
+		rows = '<tr><th>' + k + '</th><th>' + recomendacoes[k][0] + '</th><th>' + recomendacoes[k][1] + '</th></tr>';
 		tabela_rec += rows;
 	});
 
