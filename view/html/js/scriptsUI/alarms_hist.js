@@ -1,3 +1,4 @@
+console.log(ip_server)
 var url_alarm_hist = ip_server + "/alarms_history";
 var historico;
 var acesso_inicial = lerCookie('cookie_acesso');
