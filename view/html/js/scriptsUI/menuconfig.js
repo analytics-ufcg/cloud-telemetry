@@ -185,12 +185,12 @@ function show_graph() {
 function show_recomendacoes() {
 	$("#chart_div").hide();
 	$("#hist_div").hide();
-	$("#aplicarConf").hide(); //esconde o botão aplicar
+	$("#aplicarConf").hide();
+	//esconde o botão aplicar
 	$("#gerar_rec").show();
 	$("#panel_selection_time").show();
-	
+
 	$("#rec_div").show();
-	
 
 	var $thisLi = $("#bt_rec").parent('li');
 	var $ul = $thisLi.parent('ul');
@@ -215,6 +215,64 @@ function show_hist() {
 		$ul.find('li.active').removeClass('active');
 		$thisLi.addClass('active');
 	}
+}
+
+function show_rec_flavor() {
+	$("#rec_div_upgrade").hide();
+	$("#rec_div_flavors").show();
+
+	var $thisLi = $("#bt_rec_flavors").parent('li');
+	var $ul = $thisLi.parent('ul');
+
+	if (!$thisLi.hasClass('active')) {
+		$ul.find('li.active').removeClass('active');
+		$thisLi.addClass('active');
+	}
+}
+
+function show_rec_upgrade() {
+	$("#rec_div_flavors").hide();
+	$("#rec_div_upgrade").show();
+
+	var $thisLi = $("#bt_rec_upgrade").parent('li');
+	var $ul = $thisLi.parent('ul');
+
+	if (!$thisLi.hasClass('active')) {
+		$ul.find('li.active').removeClass('active');
+		$thisLi.addClass('active');
+	}
+}
+
+function show_projects() {
+	$("#chart").empty();
+	$("#menu_host").hide();
+	$("#menu_vm").show();
+
+	var $thisLi = $("#bt_projects").parent('li');
+	var $ul = $thisLi.parent('ul');
+
+	if (!$thisLi.hasClass('active')) {
+		$ul.find('li.active').removeClass('active');
+		$thisLi.addClass('active');
+	}
+	
+	$('<center> selecione uma VM de um projeto e um período de Tempo </center>').appendTo("#chart");
+}
+
+function show_host() {
+	$("#chart").empty();
+	$("#menu_vm").hide();
+	$("#menu_host").show();
+
+	var $thisLi = $("#bt_host").parent('li');
+	var $ul = $thisLi.parent('ul');
+
+	if (!$thisLi.hasClass('active')) {
+		$ul.find('li.active').removeClass('active');
+		$thisLi.addClass('active');
+	}
+
+	$('<center> selecione um Host e um período de Tempo </center>').appendTo("#chart");
 }
 
 /*Funcação necessária para que a aba selecionada fique active devido a um reload do bootstrap3*/

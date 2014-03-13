@@ -1,6 +1,7 @@
 var url_alarm_hist = ip_server + "/alarms_history";
 var historico;
 var acesso_inicial = lerCookie('cookie_acesso');
+var num_notificacoes = 0;
 if (acesso_inicial != null) {
 	checkCokie('cookie_acesso');
 	var atual = formattedDate(new Date(), 0);
@@ -38,8 +39,8 @@ if (acesso_inicial != null) {
 			$.each(historico, function(k, v) {
 				num += historico[k].history.length;
 			});
+			num_notificacoes = num;
 			$("#notificacoes").append('<span class="badge">' + num + '</span>');
-			//hist_div
 
 		},
 		error : function(data) {
@@ -71,22 +72,19 @@ function formatDetail(detail, type) {
 	}
 }
 
-var tabela_historico = '<table class="table table-bordered"><thead><tr> <th>timestamp</th> <th>alarm_name</th> <th>type</th> <th>detail</th> </tr></thead> <tbody>';
+var tabela_historico = '<table id="table_hist" class="table table-bordered"><thead><tr> <th>timestamp</th> <th>alarm_name</th> <th>type</th> <th>detail</th> </tr></thead> <tbody>';
 $.each(historico, function(k, v) {
 	var array_h = historico[k].history;
 	var nome = historico[k].alarm_name;
 	$.each(array_h, function(k2, v2) {
 		var row_hist = '<tr> <th>' + array_h[k2].timestamp + '</th> <th>' + nome + '</th> <th>' + array_h[k2].type + '</th> <th>' + formatDetail(array_h[k2].detail, array_h[k2].type) + '</th></tr>';
-		console.log(formatDetail(array_h[k2].detail));
+		console.log(row_hist);
 		tabela_historico += row_hist;
 	});
 });
 tabela_historico += '</tbody></table>';
-$(tabela_historico).appendTo("#hist_div");
-
-$.each(historico, function(k, v) {
-	var array_h = historico[k].history.reverse();
-	$.each(array_h, function(k2, v2) {
-		console.log(array_h[k2].timestamp);
-	});
-});
+if(num_notificacoes > 0){
+$(tabela_historico).appendTo("#hist_info");
+}else{
+$('<br><br><center><h4> Não houve disparo de alarmes até o momento </h4></center>').appendTo("#hist_info");	
+}
