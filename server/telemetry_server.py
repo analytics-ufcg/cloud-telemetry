@@ -3,10 +3,12 @@ from flask import Flask, render_template, request, make_response
 from telemetry_data import DataHandler
 #from local_db_worker import db_worker
 
-import json
+import json, requests
 
 app = Flask(__name__)
 data_handler = DataHandler()
+
+HOSTS = ['150.165.15.4']
 
 @app.route('/projects')
 def projects():
@@ -22,6 +24,31 @@ def project_instances():
 
     return resp
 
+@app.route('/hosts_cpu_util')
+def hosts_cpu_util():
+    timestamp_begin = request.args.get('timestamp_begin', None)
+    timestamp_end = request.args.get('timestamp_end', None)
+
+    data = []
+    for host in HOSTS:
+        url = "http://%s:6556/host_cpu" % host
+        if timestamp_begin:
+            url += "?timestamp_begin=%s" % timestamp_begin
+        
+            if timestamp_end:
+                url += "&timestamp_end=%s" % timestamp_end
+
+        r = requests.get(url)
+        if r.status_code == 200:
+            data.append(r.json())
+        else:
+            print 'Unknown host'
+
+    resp = make_response(data)    
+    resp.headers['Access-Control-Allow-Origin'] = "*" 
+
+    return resp
+    
 @app.route('/cpu_util')  
 def cpu_util():
     timestamp_begin = request.args.get('timestamp_begin', None)
@@ -80,6 +107,7 @@ if __name__ == '__main__':
 #    worker = threading.Thread(target=db_worker)
 #    worker.daemon = True
 #    worker.start()
-    
+
+    app.debug = True 
     app.run(host='0.0.0.0', port=9090)
 
