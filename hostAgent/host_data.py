@@ -3,7 +3,7 @@ import psutil
 class HostData:
 
 
-    def get_cpu_percent(self, interval, percpu=False):
+    def get_cpu_percent(self, interval, percpu):
         return psutil.cpu_percent(interval, percpu)
 
     def get_virtual_memory(self):
@@ -16,7 +16,7 @@ class HostData:
         return memory
 
 
-    def get_disk_usage(self, path='/'):
+    def get_disk_usage(self, path):
         disk = {}
 
         disk["total"] = psutil.disk_usage(path).total/1024
