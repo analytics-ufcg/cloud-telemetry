@@ -24,6 +24,16 @@ def project_instances():
 
     return resp
 
+@app.route('/hosts')
+def hosts():
+    data = {'name':'hosts','children':[]}
+    for h in HOSTS:
+        host = {'ip':h}
+        data['children'].append(host)
+    resp = make_response(json.dumps(data))
+    resp.headers['Access-Control-Allow-Origin'] = "*"
+    return resp
+
 @app.route('/hosts_cpu_util')
 def hosts_cpu_util():
     timestamp_begin = request.args.get('timestamp_begin', None)

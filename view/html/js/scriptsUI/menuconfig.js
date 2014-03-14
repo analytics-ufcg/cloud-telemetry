@@ -96,10 +96,10 @@ function plot() {
 		complemento += "&timestamp_end=" + formattedDate(dt2, 1);
 	}
 	var resource_vm = $("input[name='defaultVM']:checked").val();
-	url_requisicao_vm +=  complemento + "&resource_id=" + $("input[name='defaultVM']:checked").val();
-	
+	url_requisicao_vm += complemento + "&resource_id=" + $("input[name='defaultVM']:checked").val();
+
 	url_requisicao_host += complemento;
-	var  resource_host = $("input[name='deafultHost']:checked").val();
+	var resource_host = $("input[name='deafultHost']:checked").val();
 	console.log(url_requisicao_vm);
 	if (!show_hosts) {
 		$.ajax({
@@ -236,6 +236,7 @@ function plot() {
 
 /* Habilitar div selecionada de acordo com a aba selecionada*/
 function show_graph() {
+	$("#hist_info").empty();
 	$("#hist_div").hide();
 	$("#rec_div").hide();
 	$("#gerar_rec").hide();
@@ -252,6 +253,7 @@ function show_graph() {
 }
 
 function show_recomendacoes() {
+	$("#hist_info").empty();
 	$("#chart_div").hide();
 	$("#hist_div").hide();
 	$("#aplicarConf").hide();
@@ -271,6 +273,7 @@ function show_recomendacoes() {
 }
 
 function show_hist() {
+	$("#hist_info").empty();
 	$("#chart_div").hide();
 	$("#rec_div").hide();
 	$("#gerar_rec").hide();
@@ -284,6 +287,8 @@ function show_hist() {
 		$ul.find('li.active').removeClass('active');
 		$thisLi.addClass('active');
 	}
+	//chamada para atualizar o historico
+	getAlarmHistoryTime();
 }
 
 function show_rec_flavor() {

@@ -145,7 +145,9 @@
 						<div id="menu_host" class="col-md-2"></div>
 						<div id="menu_vm" class="col-md-2" style="display:none"></div>
 						<div class="col-md-10 col-md-offset-2" id="chart">
-							<center> selecione um Host e um período de Tempo </center>
+							<center>
+								selecione um Host e um período de Tempo
+							</center>
 						</div>
 					</div>
 					<div id="rec_div" class="row" style="display:none;">
@@ -210,12 +212,17 @@
 					$('<div class="panel-body">' + '<strong> Projeto ' + projeto + ' <strong>' + add_vm + '</div>').appendTo('#painel_projetos');
 				}
 			});
+
+			$('<div id="painel_hosts" class="panel panel-primary">' + '</div>').appendTo('#menu_host');
+			$('<div class="panel-heading">' + '<h3 class="panel-title">Hosts</h3>' + '</div>').appendTo('#painel_hosts');
+			var add_host = '';
+			$.each(hosts_ip, function(k2, v2) {
+				add_host += '<div class="radio"><label><input type="radio" name="defaultVM" ' + 'value=' + hosts_ip[k2] + '>' + hosts_ip[k2] + '</label></div>';
+			});
+			$('<div class="panel-body">' + '<strong> Hosts </strong>' + add_host + '</div>').appendTo('#painel_hosts');
 			
 			
-			$('<div id="painel_hosts" class="panel panel-primary">'+'</div>').appendTo('#menu_host');
-			$('<div class="panel-heading">'+'<h3 class="panel-title">Hosts</h3>'+'</div>').appendTo('#painel_hosts');
-			$('<div class="panel-body">'+'<strong> Hosts </strong>'+ '<div class="radio"><label><input type="radio" name="deafultHost" value="truta">truta (150.165.15.4)</label></div>'+'</div>').appendTo('#painel_hosts');
-		</script>
+	</script>
 
 	</body>
 </html>
