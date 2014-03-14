@@ -4,7 +4,7 @@ var retorno_alarm;
 var html_addalarm = '<div class="row"><div class="col-lg-8">Nome do alarme:<input type="text" id="name_alarm" name="alarm_name"></input></div>';
 //criacao de dropdown com os recursos
 html_addalarm += '<div class="col-lg-4"><span>Recurso</span><select id="myRecursos" class="selectpicker show-tick" data-live-search="true" data-size="auto" data-width="160px";>';
-html_addalarm += '<option value="" label=""></option><option value="cpu" label="cpu">cpu</option></select></div></div>';
+html_addalarm += '<option value="" label=""></option><option value="cpu_util" label="cpu_util">cpu_util</option></select></div></div>';
 //valor de threshold
 html_addalarm += '<div class="row"><div class="col-lg-8">Threshold<input type="text" id="parametro" name="param_val"></input></div>';
 //criacao de dropdown para escolhar do operador
