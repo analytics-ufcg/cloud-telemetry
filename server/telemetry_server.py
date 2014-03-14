@@ -107,6 +107,15 @@ def alarm():
     print request.data
     return "ok"
 
+@app.route('/host_metrics')
+def metrics():
+    project = request.args.get('project')
+    resp = make_response(data_handler.host_metrics(project))
+    resp.headers['Access-Control-Allow-Origin'] = "*"
+
+    return resp
+
+
 if __name__ == '__main__':
 #    import threading
 
@@ -115,5 +124,5 @@ if __name__ == '__main__':
 #    worker.start()
 
     app.debug = True 
-    app.run(host='0.0.0.0', port=9090)
+    app.run(host='0.0.0.0', port=1090)
 

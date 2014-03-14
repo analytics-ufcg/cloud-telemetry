@@ -48,3 +48,5 @@ class DataHandler:
     def add_alarm(self, name, resource, threshold, operator, period, ev_period):
         return self.__ceilometer.set_alarm(name, resource, threshold, operator, period, 1)
 
+    def host_metrics(self, project):
+        return self.__nova.metrics(project)
