@@ -14,7 +14,7 @@ def store_host_data(interval=1, percpu=False, path='/'):
 
         db.save_data_db(cpu, memory, disk)
 
-        time.sleep(10)
+        time.sleep(60)
 
 
 def get_cpu_percent(interval, percpu):
