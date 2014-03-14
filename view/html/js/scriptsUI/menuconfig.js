@@ -4,6 +4,7 @@ var dados = {};
 var tempo = [];
 var cpu_util = [];
 var ultimo_acesso;
+var show_hosts = true;
 
 /*Habilitando seletores de data/hora */
 $('#datetimepicker1').datetimepicker({
@@ -63,105 +64,173 @@ function plot() {
 		bootbox.alert(html_m);
 	}
 
-	/*if (vm == undefined) {
-	 html_m += '<h4>Nenhuma VM selecionada </h4>';
-	 bootbox.alert(html_m);
-	 }*/
-
 	var now = new Date();
 	now.setTime(now.getTime() + now.getTimezoneOffset());
 	/*url de requisicao do json http://150.165.80.194:9090/*/
 	var url_requisicao_bubble = ip_server + "/projects";
-	var url_requisicao_vm = ip_server + "/cpu_util?";
+	var url_requisicao_vm = ip_server + "/cpu_util";
+	var url_requisicao_host = ip_server + "/hosts_cpu_util";
+	var complemento = "";
 	if (out == "ultima_hora") {
 		var ontem = new Date(now - (1000 * 60 * 60 * 1));
 		ontem.setTime(ontem.getTime() + ontem.getTimezoneOffset());
-		url_requisicao_vm += "timestamp_begin=" + formattedDate(ontem, 0);
-		url_requisicao_vm += "&timestamp_end=" + formattedDate(now, 0);
+		complemento += "?timestamp_begin=" + formattedDate(ontem, 0);
+		complemento += "&timestamp_end=" + formattedDate(now, 0);
 	} else if (out == "ultimo_dia") {
 		var ontem = new Date(now - (1000 * 60 * 60 * 24 * 1));
 		ontem.setTime(ontem.getTime() + ontem.getTimezoneOffset());
-		url_requisicao_vm += "timestamp_begin=" + formattedDate(ontem, 0);
-		url_requisicao_vm += "&timestamp_end=" + formattedDate(now, 0);
+		complemento += "?timestamp_begin=" + formattedDate(ontem, 0);
+		complemento += "&timestamp_end=" + formattedDate(now, 0);
 	} else if (out == "ultima_semana") {
 		var ontem = new Date(now - (1000 * 60 * 60 * 24 * 7));
 		ontem.setTime(ontem.getTime() + ontem.getTimezoneOffset());
-		url_requisicao_vm += "timestamp_begin=" + formattedDate(ontem, 0);
-		url_requisicao_vm += "&timestamp_end=" + formattedDate(now, 0);
+		complemento += "?timestamp_begin=" + formattedDate(ontem, 0);
+		complemento += "&timestamp_end=" + formattedDate(now, 0);
 	} else if (out == "ultimo_mes") {
 		var ontem = new Date(now - (1000 * 60 * 60 * 24 * 30));
 		ontem.setTime(ontem.getTime() + ontem.getTimezoneOffset());
-		url_requisicao_vm += "timestamp_begin=" + formattedDate(ontem, 0);
-		url_requisicao_vm += "&timestamp_end=" + formattedDate(now, 0);
+		complemento += "?timestamp_begin=" + formattedDate(ontem, 0);
+		complemento += "&timestamp_end=" + formattedDate(now, 0);
 	} else {
-		url_requisicao_vm += "timestamp_begin=" + formattedDate(dt1, 1);
-		url_requisicao_vm += "&timestamp_end=" + formattedDate(dt2, 1);
+		complemento += "?timestamp_begin=" + formattedDate(dt1, 1);
+		complemento += "&timestamp_end=" + formattedDate(dt2, 1);
 	}
 	var resource_vm = $("input[name='defaultVM']:checked").val();
-	url_requisicao_vm += "&resource_id=" + $("input[name='defaultVM']:checked").val();
-
+	url_requisicao_vm +=  complemento + "&resource_id=" + $("input[name='defaultVM']:checked").val();
+	
+	url_requisicao_host += complemento;
+	var  resource_host = $("input[name='deafultHost']:checked").val();
 	console.log(url_requisicao_vm);
-	$.ajax({
-		url : url_requisicao_vm,
-		async : false,
-		dataType : 'json',
-		success : function(data) {
-			dados = data;
-			console.log(data);
-			if (dados.length === 0) {
-				if (resource_vm == undefined) {
-					$('#chart').empty().queue(function(exec) {
-						$('#chart').html('<p><h3>Selecione uma vm</h3><p>');
-						exec();
-					});
-				} else {
-					$('#chart').empty().queue(function(exec) {
-						$('#chart').html('<p><h3>Período de tempo não consta nos dados, selecione outro período.</h3><p>');
-						exec();
-					});
-				}
-			} else {
-				var t1 = [];
-				var cpu = [];
-				t1.push("x");
-				cpu.push("utilização de cpu");
-				$.each(dados, function(d) {
-					t1.push(dados[d].timestamp.replace("T", " "));
-					cpu.push((dados[d].cpu_util_percent * 100).toFixed(2));
-				});
-
-				var json = {
-					data : {
-						x : 'x',
-						x_format : '%Y-%m-%d %H:%M:%S',
-						columns : [t1, cpu]
-					},
-					subchart : {
-						show : true
-					},
-					axis : {
-						x : {
-							label : 'Tempo',
-							type : 'timeseries'
-						},
-						y : {
-							label : '(%) '
-						}
+	if (!show_hosts) {
+		$.ajax({
+			url : url_requisicao_vm,
+			async : false,
+			dataType : 'json',
+			success : function(data) {
+				dados = data;
+				console.log(data);
+				if (dados.length === 0) {
+					if (resource_vm == undefined) {
+						$('#chart').empty().queue(function(exec) {
+							$('#chart').html('<p><h3>Selecione uma vm</h3><p>');
+							exec();
+						});
+					} else {
+						$('#chart').empty().queue(function(exec) {
+							$('#chart').html('<p><h3>Período de tempo não consta nos dados, selecione outro período.</h3><p>');
+							exec();
+						});
 					}
-				};
-				var chart = c3.generate(json);
+				} else {
+					var t1 = [];
+					var cpu = [];
+					t1.push("x");
+					cpu.push("utilização de cpu");
+					$.each(dados, function(d) {
+						t1.push(dados[d].timestamp.replace("T", " "));
+						cpu.push((dados[d].cpu_util_percent * 100).toFixed(2));
+					});
+
+					var json = {
+						data : {
+							x : 'x',
+							x_format : '%Y-%m-%d %H:%M:%S',
+							columns : [t1, cpu]
+						},
+						subchart : {
+							show : true
+						},
+						axis : {
+							x : {
+								label : 'Tempo',
+								type : 'timeseries'
+							},
+							y : {
+								label : '(%) '
+							}
+						}
+					};
+					var chart = c3.generate(json);
+				}
+			},
+			error : function(data) {
+				show_plot = false;
+				$('#chart').empty().queue(function(exec) {
+					$('#chart').html('<p><h3>Período de tempo não consta nos dados, selecione outro período.</h3><p>');
+					exec();
+				});
+				console.log("error");
+				console.log(data);
 			}
-		},
-		error : function(data) {
-			show_plot = false;
-			$('#chart').empty().queue(function(exec) {
-				$('#chart').html('<p><h3>Período de tempo não consta nos dados, selecione outro período.</h3><p>');
-				exec();
-			});
-			console.log("error");
-			console.log(data);
-		}
-	});
+		});
+
+	} else {
+		$.ajax({
+			url : url_requisicao_host,
+			async : false,
+			dataType : 'json',
+			success : function(data) {
+				dados = data;
+				console.log(data);
+				if (dados.length === 0) {
+					if (resource_host == undefined) {
+						$('#chart').empty().queue(function(exec) {
+							$('#chart').html('<p><h3>Selecione um projeto</h3><p>');
+							exec();
+						});
+					} else {
+						$('#chart').empty().queue(function(exec) {
+							$('#chart').html('<p><h3>Período de tempo não consta nos dados, selecione outro período.</h3><p>');
+							exec();
+						});
+					}
+				} else {
+					var t1 = [];
+					var cpu = [];
+					t1.push("x");
+					console.log(url_requisicao_host);
+					cpu.push("utilização de cpu");
+					var dt = dados[0].data;
+					$.each(dt, function(d) {
+						t1.push(dt[d].timestamp.replace("T", " "));
+						cpu.push((dt[d].data).toFixed(2));
+					});
+					console.log(t1);
+					console.log(cpu);
+					var json = {
+						data : {
+							x : 'x',
+							x_format : '%Y-%m-%d %H:%M:%S',
+							columns : [t1, cpu]
+						},
+						subchart : {
+							show : true
+						},
+						axis : {
+							x : {
+								label : 'Tempo',
+								type : 'timeseries'
+							},
+							y : {
+								label : '(%) '
+							}
+						}
+					};
+					var chart = c3.generate(json);
+				}
+			},
+			error : function(data) {
+				show_plot = false;
+				$('#chart').empty().queue(function(exec) {
+					$('#chart').html('<p><h3>Período de tempo não consta nos dados, selecione outro período.</h3><p>');
+					exec();
+				});
+				console.log("error");
+				console.log(data);
+			}
+		});
+
+	}
 
 };
 
@@ -244,6 +313,7 @@ function show_rec_upgrade() {
 }
 
 function show_projects() {
+	show_hosts = false;
 	$("#chart").empty();
 	$("#menu_host").hide();
 	$("#menu_vm").show();
@@ -255,11 +325,12 @@ function show_projects() {
 		$ul.find('li.active').removeClass('active');
 		$thisLi.addClass('active');
 	}
-	
+
 	$('<center> selecione uma VM de um projeto e um período de Tempo </center>').appendTo("#chart");
 }
 
 function show_host() {
+	show_hosts = true;
 	$("#chart").empty();
 	$("#menu_vm").hide();
 	$("#menu_host").show();
