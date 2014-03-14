@@ -36,4 +36,5 @@ class NovaClient:
             dic['Em uso'] = [int(usado[3]), int(usado[4])]
             dic['Percentual'] = [round(float(usado[3])/int(total[3]),3), round(float(usado[4])/int(total[4]),3)] 
             dic_dos_hosts[host] = (dic)
+            arquivo.close()
         return json.dumps(dic_dos_hosts)    
