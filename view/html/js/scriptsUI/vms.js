@@ -3,7 +3,7 @@ var projects_name = [];
 var json_vm = {};
 
 $.ajax({
-	url : "http://150.165.15.4:9090/projects/instances",
+	url : (ip_server + "/projects/instances"),
 	async : false,
 	dataType : 'json',
 	success : function(data) {
