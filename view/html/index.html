@@ -134,26 +134,51 @@
 					</ul>
 
 					<div id="chart_div" class="row">
-						<br>
-						<br>
-						<div id="menu_vm" class="col-md-2"></div>
+						<ul class="nav nav-pills nav-justified">
+							<li class="active">
+								<a href="#" id="bt_host" onclick="show_host()">Hosts</a>
+							</li>
+							<li class="">
+								<a href="#" id="bt_projects" onclick="show_projects();">Projects</a>
+							</li>
+						</ul>
+						<div id="menu_host" class="col-md-2"></div>
+						<div id="menu_vm" class="col-md-2" style="display:none"></div>
 						<div class="col-md-10 col-md-offset-2" id="chart">
-							<center>
-								Selecione uma VM de um projeto e um período de Tempo
-							</center>
+							<center> selecione um Host e um período de Tempo </center>
 						</div>
 					</div>
 					<div id="rec_div" class="row" style="display:none;">
-						<div class="col-md-6" id="recomendacoes_geradas">
-							<p></p><h4> Selecione um período de Tempo para ver as Recomendações.</h4></p>
+						<ul class="nav nav-pills nav-justified">
+							<li class="active">
+								<a href="#" id="bt_rec_upgrade" onclick="show_rec_upgrade()">Upgrades</a>
+							</li>
+							<li class="">
+								<a href="#" id="bt_rec_flavors" onclick="show_rec_flavor();">Flavors</a>
+							</li>
+						</ul>
+						<!-- Div para mostrar recomendacoes de flavors -->
+						<div id="rec_div_flavors" style="display:none;">
+							<div class="col-md-6" id="recomendacoes_geradas">
+								<p></p><h4> Selecione um período de Tempo para ver as Recomendações.</h4></p>
+							</div>
+							<div class="col-md-6" id="info_rec">
+								<h5><b>Sugestão </b> : Neste campo está descrito o número ideal de cores que as instâncias devem possuir de acordo com a recomendação.</h5>
+								<h5><b>Perda</b>: Neste campo está descrito o somatório da quantidade de CPU não utilizada para todas as instâncias em relação ao número de cores para cada dado disponível.</h5>
+								<h5><b>Violações</b>: Neste campo está descrito o número de vezes em que há sobrecarga nas máquinas, considerando o uso das instâncias da sugestão indicada.</h5>
+							</div>
 						</div>
-						<div class="col-md-6" id="info_rec">
-							<h5><b>Sugestão </b> : Neste campo está descrito o número ideal de cores que as instâncias devem possuir de acordo com a recomendação.</h5>
-							<h5><b>Perda</b>: Neste campo está descrito o somatório da quantidade de CPU não utilizada para todas as instâncias em relação ao número de cores para cada dado disponível.</h5>
-							<h5><b>Violações</b>: Neste campo está descrito o número de vezes em que há sobrecarga nas máquinas, considerando o uso das instâncias da sugestão indicada.</h5>
+						<!-- Div para mostrar recomendacoes de upgrades -->
+						<div id="rec_div_upgrade">
+							<div>
+								<p>
+									Recomendacoes upgrades
+								</p>
+							</div>
 						</div>
 					</div>
 					<div id="hist_div" class="row" style="display:none;">
+						<div id="hist_info"class="col-md-12 col-lg-12"></div>
 					</div>
 				</div><!-- fim div col-md-10 main -->
 			</div>
@@ -165,7 +190,6 @@
 		<script src="js/c3.min.js"></script>
 		<script src="js/timeseries.js"></script>
 
-		
 		<script src="js/scriptsUI/alarms_hist.js"></script>
 		<script src="js/scriptsUI/alarms.js"></script>
 		<script src="js/scriptsUI/recomenda.js"></script>
@@ -186,6 +210,11 @@
 					$('<div class="panel-body">' + '<strong> Projeto ' + projeto + ' <strong>' + add_vm + '</div>').appendTo('#painel_projetos');
 				}
 			});
+			
+			
+			$('<div id="painel_hosts" class="panel panel-primary">'+'</div>').appendTo('#menu_host');
+			$('<div class="panel-heading">'+'<h3 class="panel-title">Hosts</h3>'+'</div>').appendTo('#painel_hosts');
+			$('<div class="panel-body">'+'<strong> Hosts </strong>'+ '<div class="radio"><label><input type="radio" name="deafultHost" value="truta">truta (150.165.15.4)</label></div>'+'</div>').appendTo('#painel_hosts');
 		</script>
 
 	</body>

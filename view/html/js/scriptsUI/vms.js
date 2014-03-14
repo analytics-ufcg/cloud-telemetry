@@ -3,7 +3,7 @@ var projects_name = [];
 var json_vm = {};
 
 $.ajax({
-	url : "http://analytics.lsd.ufcg.edu.br/telemetry/projects/instances",
+	url : (ip_server + "/projects/instances"),
 	async : false,
 	dataType : 'json',
 	success : function(data) {

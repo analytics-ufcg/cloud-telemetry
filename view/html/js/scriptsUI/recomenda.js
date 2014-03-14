@@ -3,8 +3,9 @@ var recomendacoes;
 /*Funcao para realizar requisicao de recomendacoes*/
 
 function gera_recomendacao() {
+	console.log("recomendação");
 	$('#recomendacoes_geradas').empty();
-	$('<div id="load_rec" style="display:none">	<br><br><center><img src="images/ajax-loader.gif"></img> </center> 	</div>').appendTo("#recomendacoes_geradas");
+	$('<div id="load_rec" style="display:none">	<br><br><center><img src="images/ajax-loader.gif"></img> <br> <h4>Realizando recomendação.. Por favor aguarde.</h4></center></div>').appendTo("#recomendacoes_geradas");
 	$("#load_rec").show();
 
 	var out = $("input[name='defaultTime']:checked").val();

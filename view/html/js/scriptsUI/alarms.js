@@ -30,7 +30,7 @@ function addAlarme() {
 					var operador = $('#myOp').find(":selected").val();
 					var parametro = $('#parametro').val();
 
-					var url_alarm = "http://analytics.lsd.ufcg.edu.br/telemetry/add_alarm?";
+					var url_alarm = ip_server + "/add_alarm?";
 					url_alarm += "name=" + nome;
 					url_alarm += "&resource=" + recurso;
 					url_alarm += "&operator=" + operador;

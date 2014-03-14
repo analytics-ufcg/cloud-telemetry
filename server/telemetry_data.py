@@ -45,3 +45,6 @@ class DataHandler:
     def alarms_history(self, timestamp_begin=None, timestamp_end=None):
         return json.dumps(self.__ceilometer.get_alarms_history(timestamp_begin, timestamp_end))
 
+    def add_alarm(self, name, resource, threshold, operator, period, ev_period):
+        return self.__ceilometer.set_alarm(name, resource, threshold, operator, period, 1)
+
