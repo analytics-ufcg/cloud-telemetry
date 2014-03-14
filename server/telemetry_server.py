@@ -88,7 +88,7 @@ def add_alarm():
     threshold = request.args.get('threshold')
     period = request.args.get('period')
 
-    alarm = ceilometer.set_alarm(name, resource, threshold, operator, period, 1)
+    alarm = data_handler.add_alarm(name, resource, threshold, operator, period, 1)
     
     if alarm:
         resp = make_response(json.dumps({'alarm_id' : alarm.alarm_id}))
@@ -99,7 +99,10 @@ def add_alarm():
 
     return resp
     
-
+@app.route('/alarm', methods=['POST'])
+def alarm():
+    print request.data
+    return "ok"
 
 if __name__ == '__main__':
 #    import threading
