@@ -40,9 +40,7 @@ def hosts_cpu_util():
 
         r = requests.get(url)
         if r.status_code == 200:
-            dic = r.json()
-            dic['host_address'] = host
-            data.append(dic)
+            data.append(r.json())
         else:
             print 'Unknown host'
 
