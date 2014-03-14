@@ -44,7 +44,7 @@ def hosts_cpu_util():
         else:
             print 'Unknown host'
 
-    resp = make_response(data)    
+    resp = make_response(json.dumps(data))    
     resp.headers['Access-Control-Allow-Origin'] = "*" 
 
     return resp
