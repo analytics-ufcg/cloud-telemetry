@@ -1,4 +1,4 @@
-var ip_server = "http://150.165.15.4:9090";
+var ip_server = "http://150.165.15.4:2700";
 //150.165.80.194
 var dados = {};
 var tempo = [];
@@ -191,32 +191,39 @@ function plot() {
 					console.log(url_requisicao_host);
 					cpu.push("utilização de cpu");
 					var dt = dados[0].data;
-					$.each(dt, function(d) {
-						t1.push(dt[d].timestamp.replace("T", " "));
-						cpu.push((dt[d].data).toFixed(2));
-					});
-					console.log(t1);
-					console.log(cpu);
-					var json = {
-						data : {
-							x : 'x',
-							x_format : '%Y-%m-%d %H:%M:%S',
-							columns : [t1, cpu]
-						},
-						subchart : {
-							show : true
-						},
-						axis : {
-							x : {
-								label : 'Tempo',
-								type : 'timeseries'
+
+					if (dt == null) {
+						console.log("null");
+						$('#chart').html('<p><h3>Período de tempo não consta nos dados, selecione outro período.</h3><p>');
+					} else {
+
+						$.each(dt, function(d) {
+							t1.push(dt[d].timestamp.replace("T", " "));
+							cpu.push((dt[d].data).toFixed(2));
+						});
+						console.log(t1);
+						console.log(cpu);
+						var json = {
+							data : {
+								x : 'x',
+								x_format : '%Y-%m-%d %H:%M:%S',
+								columns : [t1, cpu]
 							},
-							y : {
-								label : '(%) '
+							subchart : {
+								show : true
+							},
+							axis : {
+								x : {
+									label : 'Tempo',
+									type : 'timeseries'
+								},
+								y : {
+									label : '(%) '
+								}
 							}
-						}
-					};
-					var chart = c3.generate(json);
+						};
+						var chart = c3.generate(json);
+					}
 				}
 			},
 			error : function(data) {
@@ -270,6 +277,8 @@ function show_recomendacoes() {
 		$ul.find('li.active').removeClass('active');
 		$thisLi.addClass('active');
 	}
+
+	show_rec_upgrade();
 }
 
 function show_hist() {
@@ -315,6 +324,8 @@ function show_rec_upgrade() {
 		$ul.find('li.active').removeClass('active');
 		$thisLi.addClass('active');
 	}
+	$("#recomendacoes_up").empty();
+	medidas_de_host();
 }
 
 function show_projects() {

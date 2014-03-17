@@ -9,7 +9,10 @@ function getAlarmHistoryTime() {
 	// Executar requisicao de acordo com
 	if (acesso_inicial != null) {
 		checkCokie('cookie_acesso');
-		var atual = formattedDate(new Date(), 0);
+		var data = new Date();
+		/* Modificacao devido à diferença de 3h para o BD do Ceilometer*/
+		data.setHours(data.getHours()+4);
+		var atual = formattedDate(data, 0);
 		var url_alarm_hist_time = url_alarm_hist + '?timestamp_begin=' + acesso_inicial + '&timestamp_end=' + atual;
 		console.log(url_alarm_hist_time);
 		$.ajax({
@@ -107,15 +110,17 @@ function tabelaHist(historico_ord,notificacoes) {
 	console.log(historico_ord);
 	var tabela_historico = '<table id="table_hist" class="table table-bordered"><thead><tr> <th>timestamp</th> <th>alarm_name</th> <th>type</th> <th>detail</th> </tr></thead> <tbody>';
 	var array_h = historico_ord;
+	var num_notf = 0;
 	$.each(array_h, function(k2, v2) {
-		console.log();
+		num_notf += 1;
 		var nome = array_h[k2].alarm_name;
 		var row_hist = '<tr> <th>' + array_h[k2].timestamp + '</th> <th>' + nome + '</th> <th>' + array_h[k2].type + '</th> <th>' + formatDetail(array_h[k2].detail, array_h[k2].type) + '</th></tr>';
 		console.log(row_hist);
 		tabela_historico += row_hist;
 	});
+	
 	tabela_historico += '</tbody></table>';
-	if (notificacoes > 0) {
+	if (notificacoes > 0 || num_notf > 0) {
 		$(tabela_historico).appendTo("#hist_info");
 	} else {
 		$('<br><br><center><h4> Não houve disparo de alarmes até o momento </h4></center>').appendTo("#hist_info");
