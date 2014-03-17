@@ -40,12 +40,12 @@ function medidas_de_host() {
 
     //criacao da tabela de maneira dinamica na div metricas_de_host
 
-    var tabela_met = '<table class="table table-bordered"><thead><tr><th>Host</th><th>Total de CPU</th><th>CPU Utilizada</th><th>Memoria Total</th><th>Memoria Utilizada</th><th>Percentual de CPU</th> <th>Percentual de memoria</th></tr></thead><tbody>';
+    var tabela_met = '<table class="table table-bordered"><thead><tr><th>Host</th><th>Total de CPU</th><th>CPU Utilizada</th><th>Memoria Total</th><th>Memoria Utilizada</th><th>Disco Total</th><th>Disco Utilizado</th><th>Percentual de CPU</th> <th>Percentual de Memoria</th><th>Percentual de Disco</th></tr></thead><tbody>';
     var rows;
     $.each(medidas, function(k, v) {
     	console.log(medidas[k]);
         rows = '<tr><th>' + k + '</th><th>' + medidas[k]["Total"][0] + '</th><th>' + medidas[k]["Em uso"][0];  
-        rows += '</th><th>'+ medidas[k]["Total"][1] + '</th><th>' + medidas[k]["Em uso"][1] + '</th><th>'+ medidas[k]["Percentual"][0] + '</th><th>'+ medidas[k]["Percentual"][1] +'</th></tr>';
+        rows += '</th><th>'+ medidas[k]["Total"][1] + '</th><th>' + medidas[k]["Em uso"][1]+'</th><th>'+ medidas[k]["Total"][2] + '</th><th>' + medidas[k]["Em uso"][2] + '</th><th>'+ medidas[k]["Percentual"][0] + '</th><th>'+ medidas[k]["Percentual"][1] + '</th><th>'+medidas[k]["Percentual"][2]+ '</th></tr>';
         tabela_met += rows;
     });
 
