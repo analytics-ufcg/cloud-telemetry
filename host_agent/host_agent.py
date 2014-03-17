@@ -24,8 +24,9 @@ def get_virtual_memory():
     memory = {}
 
     memory["total"] = psutil.virtual_memory().total/1024
-    memory["available"] = psutil.virtual_memory().available/1024
+    memory["used"] = psutil.virtual_memory().used/1024
     memory["free"] = psutil.virtual_memory().free/1024
+    memory["percent"] = psutil.virtual_memory().percent
 
     return memory
 
