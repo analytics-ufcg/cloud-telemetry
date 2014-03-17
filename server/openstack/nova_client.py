@@ -32,9 +32,9 @@ class NovaClient:
             total = linhas[0].split('|')
             usado = linhas[1].split('|')
             dic =  {'Total':[], 'Em uso':[], 'Percentual': []}
-            dic['Total'] = [int(total[3]), int(total[4])]
-            dic['Em uso'] = [int(usado[3]), int(usado[4])]
-            dic['Percentual'] = [round(float(usado[3])/int(total[3]),3), round(float(usado[4])/int(total[4]),3)] 
+            dic['Total'] = [int(total[3]), int(total[4]), int(total[5])]
+            dic['Em uso'] = [int(usado[3]), int(usado[4]), int(usado[5])]
+            dic['Percentual'] = [round(float(usado[3])/int(total[3]),3), round(float(usado[4])/int(total[4]),3),round(float(usado[5])/int(total[5]),3) ] 
             dic_dos_hosts[host] = (dic)
             arquivo.close()
         return json.dumps(dic_dos_hosts)    
