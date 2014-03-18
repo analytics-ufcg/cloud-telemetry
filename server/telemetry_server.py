@@ -104,8 +104,8 @@ def add_alarm():
     
 @app.route('/alarm', methods=['POST'])
 def alarm():
-    print request.data
-    return "ok"
+    data_handler.alarm_email(request.data)
+    return 'passou'
 
 if __name__ == '__main__':
 #    import threading
