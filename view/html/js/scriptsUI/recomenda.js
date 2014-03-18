@@ -62,10 +62,10 @@ function gera_recomendacao() {
 	console.log(url_recomenda);
 	
 	//requisicao
-	
+	//mudar parametro async para "true" para ver se não trava o browser
 	$.ajax({
 		url : url_recomenda,
-		async : false,
+		async : true, 
 		dataType : 'json',
 		success : function(data) {
 			$("#load_rec").hide();
