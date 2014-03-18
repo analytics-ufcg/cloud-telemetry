@@ -211,16 +211,22 @@
 					$('<div class="panel-body">' + '<strong> Projeto ' + projeto + ' <strong>' + add_vm + '</div>').appendTo('#painel_projetos');
 				}
 			});
-
+			
+			$('<div id="painel_metrica" class="panel panel-primary"></div>').appendTo('#menu_host');
+			$('<div class="panel-heading"> <h3 class="panel-title">Metricas</h3></div>').appendTo("#painel_metrica");
+			var metricas = '<div class="radio"><label><input type="radio" name="defaultMetric" value=cpu>CPU</label></div>';
+			metricas += '<div class="radio"><label><input type="radio" name="defaultMetric" value=disco>Disco</label></div>';
+			metricas += '<div class="radio"><label><input type="radio" name="defaultMetric" value=memoria>Memória</label></div>'
+			$('<div class="panel-body">'+metricas+'</div>').appendTo("#painel_metrica");
+			
+			
 			$('<div id="painel_hosts" class="panel panel-primary">' + '</div>').appendTo('#menu_host');
 			$('<div class="panel-heading">' + '<h3 class="panel-title">Hosts</h3>' + '</div>').appendTo('#painel_hosts');
 			var add_host = '';
 			$.each(hosts_ip, function(k2, v2) {
-				add_host += '<div class="radio"><label><input type="radio" name="defaultVM" ' + 'value=' + hosts_ip[k2] + '>' + hosts_ip[k2] + '</label></div>';
+				add_host += '<div class="radio"><label><input type="radio" name="deafultHost" ' + 'value=' + hosts_ip[k2] + '>' + hosts_ip[k2] + '</label></div>';
 			});
 			$('<div class="panel-body">' + '<strong> Hosts </strong>' + add_host + '</div>').appendTo('#painel_hosts');
-			
-			
 	</script>
 
 	</body>
