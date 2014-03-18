@@ -1,7 +1,7 @@
 var json_projects;
 var projects_name = [];
 var json_vm = {};
-
+var hosts_ip = [];
 $.ajax({
 	url : (ip_server + "/projects/instances"),
 	async : false,
@@ -25,3 +25,35 @@ $.ajax({
 		console.log(data);
 	}
 });
+
+$.ajax({
+	url : (ip_server + "/hosts"),
+	async : false,
+	dataType : 'json',
+	success : function(data) {
+		var ips = data.children;
+		$.each(ips, function(k, v) {
+			hosts_ip.push(ips[k].ip);
+		});
+	},
+	error : function(data) {
+
+	}
+});
+
+$.ajax({
+	url : (ip_server + "/alarms_history"),
+	async : false,
+	dataType : 'json',
+	success : function(data) {
+		var num = 0;
+		$.each(data, function(k, v) {
+			num += data[k].history.length;
+		});
+		console.log(num);
+		$("#notificacoes").append('<span class="badge">' + num + '</span>');
+	},
+	error : function(data) {
+
+	}
+}); 

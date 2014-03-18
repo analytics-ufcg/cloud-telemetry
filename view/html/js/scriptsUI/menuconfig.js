@@ -1,10 +1,11 @@
-var ip_server = "http://150.165.15.4:9090";
+var ip_server = "http://150.165.15.4:2700";
 //150.165.80.194
 var dados = {};
 var tempo = [];
 var cpu_util = [];
 var ultimo_acesso;
 var show_hosts = true;
+var teste;
 
 /*Habilitando seletores de data/hora */
 $('#datetimepicker1').datetimepicker({
@@ -69,7 +70,7 @@ function plot() {
 	/*url de requisicao do json http://150.165.80.194:9090/*/
 	var url_requisicao_bubble = ip_server + "/projects";
 	var url_requisicao_vm = ip_server + "/cpu_util";
-	var url_requisicao_host = ip_server + "/hosts_cpu_util";
+	var url_requisicao_host = ip_server;
 	var complemento = "";
 	if (out == "ultima_hora") {
 		var ontem = new Date(now - (1000 * 60 * 60 * 1));
@@ -96,10 +97,8 @@ function plot() {
 		complemento += "&timestamp_end=" + formattedDate(dt2, 1);
 	}
 	var resource_vm = $("input[name='defaultVM']:checked").val();
-	url_requisicao_vm +=  complemento + "&resource_id=" + $("input[name='defaultVM']:checked").val();
-	
-	url_requisicao_host += complemento;
-	var  resource_host = $("input[name='deafultHost']:checked").val();
+	url_requisicao_vm += complemento + "&resource_id=" + $("input[name='defaultVM']:checked").val();
+
 	console.log(url_requisicao_vm);
 	if (!show_hosts) {
 		$.ajax({
@@ -165,6 +164,17 @@ function plot() {
 		});
 
 	} else {
+		var resource_host = $("input[name='deafultHost']:checked").val();
+		console.log(resource_host === undefined);
+		var metric = $("input[name='defaultMetric']:checked").val();
+		if (metric == "memoria") {
+			url_requisicao_host += "/hosts_memory";
+		} else if (metric == "cpu") {
+			url_requisicao_host += "/hosts_cpu_util";
+		} else {
+			url_requisicao_host += "/hosts_disk";
+		}
+		url_requisicao_host += complemento;
 		$.ajax({
 			url : url_requisicao_host,
 			async : false,
@@ -172,51 +182,87 @@ function plot() {
 			success : function(data) {
 				dados = data;
 				console.log(data);
-				if (dados.length === 0) {
-					if (resource_host == undefined) {
-						$('#chart').empty().queue(function(exec) {
-							$('#chart').html('<p><h3>Selecione um projeto</h3><p>');
-							exec();
-						});
-					} else {
-						$('#chart').empty().queue(function(exec) {
-							$('#chart').html('<p><h3>Período de tempo não consta nos dados, selecione outro período.</h3><p>');
-							exec();
-						});
-					}
+
+				if (resource_host === undefined) {
+					$('#chart').empty().queue(function(exec) {
+						$('#chart').html('<p><h3>Selecione um Host</h3><p>');
+						exec();
+					});
+				} else if (dados.length === 0) {
+					$('#chart').empty().queue(function(exec) {
+						$('#chart').html('<p><h3>Período de tempo não consta nos dados, selecione outro período.</h3><p>');
+						exec();
+					});
+
+				} else if (metric === undefined) {
+					$('#chart').empty().queue(function(exec) {
+						$('#chart').html('<p><h3>Selecione uma métrica para ser avaliada.</h3><p>');
+						exec();
+					});
 				} else {
 					var t1 = [];
 					var cpu = [];
 					t1.push("x");
 					console.log(url_requisicao_host);
-					cpu.push("utilização de cpu");
 					var dt = dados[0].data;
-					$.each(dt, function(d) {
-						t1.push(dt[d].timestamp.replace("T", " "));
-						cpu.push((dt[d].data).toFixed(2));
-					});
-					console.log(t1);
-					console.log(cpu);
-					var json = {
-						data : {
-							x : 'x',
-							x_format : '%Y-%m-%d %H:%M:%S',
-							columns : [t1, cpu]
-						},
-						subchart : {
-							show : true
-						},
-						axis : {
-							x : {
-								label : 'Tempo',
-								type : 'timeseries'
-							},
-							y : {
-								label : '(%) '
-							}
+
+					if (dt == null) {
+						console.log("null");
+						$('#chart').html('<p><h3>Período de tempo não consta nos dados, selecione outro período.</h3><p>');
+					} else {
+
+						if (metric == "cpu") {
+							cpu.push("utilização de cpu");
+							$.each(dt, function(d) {
+								t1.push(dt[d].timestamp.replace("T", " "));
+								cpu.push((dt[d].data).toFixed(2));
+							});
+
+							/*
+							 * Verificar modificações necessárias de utilização de disco
+							 */
+						} else if (metric == "disco") {
+							$.each(dt, function(d) {
+								t1.push(dt[d].timestamp.replace("T", " "));
+								var json_disco = JSON.parse(dt[d].data);
+								cpu.push(json_disco[0].percent);
+							});
+							var limite = Math.max.apply(Math, cpu);
+							cpu.splice(0, 0, "utilização de disco");
+							//memora host
+						} else if (metric == "memoria") {
+							$.each(dt, function(d) {
+								t1.push(dt[d].timestamp.replace("T", " "));
+								var json_memory = JSON.parse(dt[d].data);
+								cpu.push(json_memory[0].percent);
+							});
+							var limite = Math.max.apply(Math, cpu);
+							cpu.splice(0, 0, "utilização de memória");
+						} else {
+							console.log(" metrica nao existe");
 						}
-					};
-					var chart = c3.generate(json);
+						var json = {
+							data : {
+								x : 'x',
+								x_format : '%Y-%m-%d %H:%M:%S',
+								columns : [t1, cpu]
+							},
+							subchart : {
+								show : true
+							},
+							axis : {
+								x : {
+									label : 'Tempo',
+									type : 'timeseries'
+								},
+								y : {
+									label : '(%) '
+								}
+							}
+						};
+						var chart = c3.generate(json);
+
+					}
 				}
 			},
 			error : function(data) {
@@ -236,6 +282,7 @@ function plot() {
 
 /* Habilitar div selecionada de acordo com a aba selecionada*/
 function show_graph() {
+	$("#hist_info").empty();
 	$("#hist_div").hide();
 	$("#rec_div").hide();
 	$("#gerar_rec").hide();
@@ -252,6 +299,7 @@ function show_graph() {
 }
 
 function show_recomendacoes() {
+	$("#hist_info").empty();
 	$("#chart_div").hide();
 	$("#hist_div").hide();
 	$("#aplicarConf").hide();
@@ -268,9 +316,12 @@ function show_recomendacoes() {
 		$ul.find('li.active').removeClass('active');
 		$thisLi.addClass('active');
 	}
+
+	show_rec_upgrade();
 }
 
 function show_hist() {
+	$("#hist_info").empty();
 	$("#chart_div").hide();
 	$("#rec_div").hide();
 	$("#gerar_rec").hide();
@@ -284,6 +335,8 @@ function show_hist() {
 		$ul.find('li.active').removeClass('active');
 		$thisLi.addClass('active');
 	}
+	//chamada para atualizar o historico
+	getAlarmHistoryTime();
 }
 
 function show_rec_flavor() {
@@ -310,6 +363,8 @@ function show_rec_upgrade() {
 		$ul.find('li.active').removeClass('active');
 		$thisLi.addClass('active');
 	}
+	$("#recomendacoes_up").empty();
+	medidas_de_host();
 }
 
 function show_projects() {

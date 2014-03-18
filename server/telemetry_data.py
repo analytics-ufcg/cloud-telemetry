@@ -79,3 +79,6 @@ class DataHandler:
                         'Email disparado pelo alarme!!!', 
                         'cloudtelemetry@gmail.com',
                         '4n4lyt1cs')
+
+    def host_metrics(self, project):
+        return self.__nova.metrics(project)

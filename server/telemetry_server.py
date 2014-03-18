@@ -24,6 +24,16 @@ def project_instances():
 
     return resp
 
+@app.route('/hosts')
+def hosts():
+    data = {'name':'hosts','children':[]}
+    for h in HOSTS:
+        host = {'ip':h}
+        data['children'].append(host)
+    resp = make_response(json.dumps(data))
+    resp.headers['Access-Control-Allow-Origin'] = "*"
+    return resp
+
 @app.route('/hosts_cpu_util')
 def hosts_cpu_util():
     timestamp_begin = request.args.get('timestamp_begin', None)
@@ -51,7 +61,64 @@ def hosts_cpu_util():
     resp.headers['Access-Control-Allow-Origin'] = "*" 
 
     return resp
-    
+
+@app.route('/hosts_memory')
+def hosts_memory():
+    timestamp_begin = request.args.get('timestamp_begin', None)
+    timestamp_end = request.args.get('timestamp_end', None)
+
+    data = []
+    for host in HOSTS:
+        url = "http://%s:6556/host_memory" % host
+        if timestamp_begin:
+            url += "?timestamp_begin=%s" % timestamp_begin
+
+            if timestamp_end:
+                url += "&timestamp_end=%s" % timestamp_end
+
+        r = requests.get(url)
+        if r.status_code == 200:
+            dic = {}
+            dic['host_address'] = host
+            dic['data'] = r.json()
+            data.append(dic)
+        else:
+            print 'Unknown host'
+
+    resp = make_response(json.dumps(data))
+    resp.headers['Access-Control-Allow-Origin'] = "*"
+
+    return resp
+
+@app.route('/hosts_disk')
+def hosts_disk():
+    timestamp_begin = request.args.get('timestamp_begin', None)
+    timestamp_end = request.args.get('timestamp_end', None)
+
+    data = []
+    for host in HOSTS:
+        url = "http://%s:6556/host_disk" % host
+        if timestamp_begin:
+            url += "?timestamp_begin=%s" % timestamp_begin
+
+            if timestamp_end:
+                url += "&timestamp_end=%s" % timestamp_end
+
+        r = requests.get(url)
+        if r.status_code == 200:
+            dic = {}
+            dic['host_address'] = host
+            dic['data'] = r.json()
+            data.append(dic)
+        else:
+            print 'Unknown host'
+
+    resp = make_response(json.dumps(data))
+    resp.headers['Access-Control-Allow-Origin'] = "*"
+
+    return resp
+
+
 @app.route('/cpu_util')  
 def cpu_util():
     timestamp_begin = request.args.get('timestamp_begin', None)
@@ -106,6 +173,15 @@ def add_alarm():
 def alarm():
     data_handler.alarm_email(request.data)
     return 'passou'
+
+@app.route('/host_metrics')
+def metrics():
+    project = request.args.get('project')
+    resp = make_response(data_handler.host_metrics(project))
+    resp.headers['Access-Control-Allow-Origin'] = "*"
+
+    return resp
+
 
 if __name__ == '__main__':
 #    import threading
