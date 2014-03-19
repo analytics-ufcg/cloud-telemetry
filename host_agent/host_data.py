@@ -14,7 +14,7 @@ class HostDataHandler:
     def save_data_db(self, cpu, memory, disk):
         cursor = self.con.cursor()
         try:
-            query = "INSERT INTO HOST VALUES('%s', %f, '%s', '%s')" % (datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'), cpu, json.dumps(memory), json.dumps(disk))
+            query = "INSERT INTO %s VALUES('%s', %f, '%s', '%s')" % (self.table, datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'), cpu, json.dumps(memory), json.dumps(disk))
             cursor.execute(query)
             self.con.commit()
             return "sucess"    
