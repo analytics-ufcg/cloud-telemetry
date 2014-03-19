@@ -79,3 +79,8 @@ footer hr {
 .section > div {
   padding-left: 26px;
 }
+input[type=text]
+{
+    height: 28px;
+    width: 100px;
+}

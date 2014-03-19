@@ -157,8 +157,9 @@ def add_alarm():
     operator = request.args.get('operator')
     threshold = request.args.get('threshold')
     period = request.args.get('period')
+    evalperiod = request.args.get('evalperiod')
 
-    alarm = data_handler.add_alarm(name, resource, threshold, operator, period, 1)
+    alarm = data_handler.add_alarm(name, resource, threshold, operator, period, evalperiod)
     
     if alarm:
         resp = make_response(json.dumps({'alarm_id' : alarm.alarm_id}))
