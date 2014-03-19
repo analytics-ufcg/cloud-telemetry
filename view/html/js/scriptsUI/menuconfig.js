@@ -127,7 +127,7 @@ function plot() {
 					cpu.push("utilização de cpu");
 					$.each(dados, function(d) {
 						t1.push(dados[d].timestamp.replace("T", " "));
-						cpu.push((dados[d].cpu_util_percent * 100).toFixed(2));
+						cpu.push((dados[d].cpu_util_percent).toFixed(2));
 					});
 
 					var json = {
