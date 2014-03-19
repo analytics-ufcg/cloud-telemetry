@@ -147,6 +147,14 @@ function plot() {
 							y : {
 								label : '(%) '
 							}
+						},
+						tooltip : {
+							format : {
+								title : function(d) {
+									return formattedDate(new Date(d.getTime())).replace("T", " - ");
+								},
+								value : d3.format(',')
+							}
 						}
 					};
 					var chart = c3.generate(json);
@@ -257,6 +265,14 @@ function plot() {
 								},
 								y : {
 									label : '(%) '
+								}
+							},
+							tooltip : {
+								format : {
+									title : function(d) {
+										return formattedDate(new Date(d.getTime())).replace("T", " - ");
+									},
+									value : d3.format(',')
 								}
 							}
 						};

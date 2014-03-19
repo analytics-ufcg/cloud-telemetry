@@ -60,12 +60,12 @@ function gera_recomendacao() {
 	}
 
 	console.log(url_recomenda);
-	
+
 	//requisicao
 	//mudar parametro async para "true" para ver se não trava o browser
 	$.ajax({
 		url : url_recomenda,
-		async : true, 
+		async : true,
 		dataType : 'json',
 		success : function(data) {
 			$("#load_rec").hide();
@@ -75,19 +75,20 @@ function gera_recomendacao() {
 		},
 		error : function(data) {
 			console.log("error");
+			$('<h3> Ocorreu um erro durante a requisição, porfavor tente novamente.</h3>').appendTo('#recomendacoes_geradas');
 		}
+	}).done(function(data) {
+		var tabela_rec = '<table class="table table-bordered"><thead><tr><th>Sugestão</th><th>Perda</th><th>Violações</th> </tr></thead><tbody>';
+		var rows;
+		$.each(recomendacoes, function(k, v) {
+			rows = '<tr><th>' + k + '</th><th>' + recomendacoes[k][0] + '</th><th>' + recomendacoes[k][1] + '</th></tr>';
+			tabela_rec += rows;
+		});
+
+		tabela_rec += '</tbdody></table>';
+		$(tabela_rec).appendTo('#recomendacoes_geradas');
 	});
 
 	//criacao da tabela de maneira dinamica na div recomendacoes_geradas
-
-	var tabela_rec = '<table class="table table-bordered"><thead><tr><th>Sugestão</th><th>Perda</th><th>Violações</th> </tr></thead><tbody>';
-	var rows;
-	$.each(recomendacoes, function(k, v) {
-		rows = '<tr><th>' + k + '</th><th>' + recomendacoes[k][0] + '</th><th>' + recomendacoes[k][1] + '</th></tr>';
-		tabela_rec += rows;
-	});
-
-	tabela_rec += '</tbdody></table>';
-	$(tabela_rec).appendTo('#recomendacoes_geradas');
 
 }
