@@ -171,8 +171,8 @@ def add_alarm():
     
 @app.route('/alarm', methods=['POST'])
 def alarm():
-    print request.data
-    return "ok"
+    data_handler.alarm_email(request.data)
+    return 'passou'
 
 @app.route('/host_metrics')
 def metrics():

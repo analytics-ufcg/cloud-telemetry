@@ -1,4 +1,4 @@
-import env
+import env, ast
 from keystone_client import KeystoneClient
 
 from ceilometerclient import client
@@ -66,4 +66,10 @@ class CeilometerClient:
 
         return ret
 
+    def get_alarm_userid(self, alarm_id):
+        alarm = str(self.ceilometer.alarms.get(alarm_id))[7:-1]
+        return ast.literal_eval(alarm)['user_id']
 
+    def get_alarm_projectid(self, alarm_id):
+        alarm = str(self.ceilometer.alarms.get(alarm_id))[7:-1]
+        return ast.literal_eval(alarm)['project_id']
