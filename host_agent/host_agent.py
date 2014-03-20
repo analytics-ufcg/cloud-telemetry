@@ -4,13 +4,13 @@ from host_data import HostDataHandler
 
 def store_host_data(interval=1, percpu=False):
     db = HostDataHandler()
+
     while True:
         memory = []
-        disk = []
             
         cpu = get_cpu_percent(interval, percpu)
         memory.append(get_virtual_memory())
-        disk.append(get_disk_usage())
+        disk = get_disk_usage()
 
         db.save_data_db(cpu, memory, disk)
 
@@ -31,17 +31,20 @@ def get_virtual_memory():
     return memory
 
 def get_disk_usage():
-    disk = {}
+    disks = []
     devices = len(psutil.disk_partitions())
 
     for i in range(devices):
+        disk_device_data = {}
         path = psutil.disk_partitions()[i].mountpoint
         
-        #disk["total"] = psutil.disk_usage(path).total/1024
-        #disk["used"] = psutil.disk_usage(path).used/1024
-        #disk["free"] = psutil.disk_usage(path).free/1024
-        disk["device"] = path
-        disk["percent"] = psutil.disk_usage(path).percent
+        #disk_device_data["total"] = psutil.disk_usage(path).total/1024
+        #disk_device_data["used"] = psutil.disk_usage(path).used/1024
+        #disk_device_data["free"] = psutil.disk_usage(path).free/1024
+        disk_device_data["device"] = path
+        disk_device_data["percent"] = psutil.disk_usage(path).percent
         
-    return disk
+        disks.append(disk_device_data)
+        
+    return disks
 

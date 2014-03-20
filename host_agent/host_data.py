@@ -59,7 +59,6 @@ class HostDataHandler:
 
     def close_db(self):
         try:
-            self.cursor.close()
             self.con.close()
         except:
             print 'Cant close connection'
