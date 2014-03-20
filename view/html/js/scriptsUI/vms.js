@@ -5,6 +5,7 @@ var hosts_ip = [];
 $.ajax({
 	url : (ip_server + "/projects/instances"),
 	async : false,
+	global : false,
 	dataType : 'json',
 	success : function(data) {
 		json_projects = data;
@@ -29,6 +30,7 @@ $.ajax({
 $.ajax({
 	url : (ip_server + "/hosts"),
 	async : false,
+	global : false,
 	dataType : 'json',
 	success : function(data) {
 		var ips = data.children;
@@ -41,19 +43,22 @@ $.ajax({
 	}
 });
 
-$.ajax({
-	url : (ip_server + "/alarms_history"),
-	async : false,
-	dataType : 'json',
-	success : function(data) {
-		var num = 0;
-		$.each(data, function(k, v) {
-			num += data[k].history.length;
-		});
-		console.log(num);
-		$("#notificacoes").append('<span class="badge">' + num + '</span>');
-	},
-	error : function(data) {
+function count_alarms() {
+	$.ajax({
+		url : (ip_server + "/alarms_history"),
+		async : false,
+		global : false,
+		dataType : 'json',
+		success : function(data) {
+			var num = 0;
+			$.each(data, function(k, v) {
+				num += data[k].history.length;
+			});
+			console.log(num);
+			$("#notificacoes").append('<span class="badge">' + num + '</span>');
+		},
+		error : function(data) {
 
-	}
-}); 
+		}
+	});
+}

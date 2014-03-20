@@ -24,7 +24,7 @@
 		<!--link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/tomorrow.css') }}"-->
 	</head>
 
-	<body>
+	<body onload="count_alarms();">
 		<div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
 			<div class="container-fluid">
 				<div class="navbar-header navbar-custom">
@@ -189,7 +189,7 @@
 		<script src="js/highlight.pack.js"></script>
 		<script src="js/c3.min.js"></script>
 		<script src="js/timeseries.js"></script>
-
+		<script src="js/datepicker.js"></script>
 		<script src="js/scriptsUI/alarms_hist.js"></script>
 		<script src="js/scriptsUI/alarms.js"></script>
 		<script src="js/scriptsUI/recomenda.js"></script>
