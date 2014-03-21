@@ -90,16 +90,16 @@ differentRec <- function(vectorOne, vectorTwo){
 #calcula o lose, violation de acordo com o limiar
 calcMetrics <- function(data, recommendation, limiar){
   flavours = "Core"
-  lose = 0
+  lose = vector()
   violation = 0
   for(i in 1:length(recommendation)){
     if(i==1){
       selection <- subset(data, CPU_UTIL < recommendation[i] - recommendation[i]*limiar)
-      lose = lose + sum(recommendation[i] - selection$CPU_UTIL)
+      lose[(length(lose)+1):(length(lose)+length(selection$CPU_UTIL))] = (recommendation[i] - selection$CPU_UTIL)/recommendation[i]
       flavours <- paste(flavours, recommendation[i], sep=":")
     }else{
       selection <- subset(data, CPU_UTIL < recommendation[i] - recommendation[i]*limiar & CPU_UTIL > recommendation[i-1] - recommendation[i-1]*limiar)
-      lose = lose + sum(recommendation[i] - selection$CPU_UTIL)
+      lose[(length(lose)+1):(length(lose)+length(selection$CPU_UTIL))] = (recommendation[i] - selection$CPU_UTIL)/recommendation[i]
       flavours <- paste(flavours, recommendation[i], sep=":")
     }
     
@@ -107,10 +107,29 @@ calcMetrics <- function(data, recommendation, limiar){
     
     if(i == length(recommendation)){
       selection <- subset(data, CPU_UTIL >= recommendation[i] - recommendation[i]*limiar)
-      violation = length(selection$CPU_UTIL)
+      violation = length(selection[,1])/length(data[,1])
     }
   }
+  
+  lose = lose * 100
+  violation = round(violation * 100, 2)
+  lose.temp = round(ic.m(lose), 2)
+  lose.temp = paste("{", lose.temp[1], ",",lose.temp[2], "}", sep="")
+  lose = paste(round(mean(lose), 2), lose.temp, sep = ":")
+  
   out <- data.frame(recommendation = flavours, lose = lose, violation = violation)
+}
+######################################################################################################
+
+
+#calcula intervalo de confianca para a media #########################################################
+ic.m <- function(x, conf = 0.95){
+    n <- length(x)
+    media <- mean(x)
+    variancia <- var(x)
+    quantis <- qt(c((1-conf)/2, 1 - (1-conf)/2), df = n-1)
+    ic <- media + quantis * sqrt(variancia/n)
+    return(ic)
 }
 ######################################################################################################
 

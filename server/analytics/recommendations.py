@@ -25,7 +25,7 @@ def gera_retorno(dado):
     input.readline()
     for linha in input.readlines():
         termos = linha.split(",")
-        dic[termos[0][6:-1]] = [round(float(termos[1]),2), termos[2][:-1]]
+        dic[termos[0][6:-1]] = [termos[1], termos[2][:-1]]
     input.close()
     return dic
 
