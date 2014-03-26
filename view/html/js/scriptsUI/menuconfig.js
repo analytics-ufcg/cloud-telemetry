@@ -183,6 +183,7 @@ function plot() {
 			url_requisicao_host += "/hosts_disk";
 		}
 		url_requisicao_host += complemento;
+		console.log(url_requisicao_host);
 		$.ajax({
 			url : url_requisicao_host,
 			async : false,
@@ -226,18 +227,69 @@ function plot() {
 								cpu.push((dt[d].data).toFixed(2));
 							});
 
-							/*
-							 * Verificar modificações necessárias de utilização de disco
-							 */
+							var json = {
+								data : {
+									x : 'x',
+									x_format : '%Y-%m-%d %H:%M:%S',
+									columns : [t1, cpu]
+
+								},
+								subchart : {
+									show : true
+								},
+								axis : {
+									x : {
+										label : 'Tempo',
+										type : 'timeseries'
+									},
+									y : {
+										label : '(%) '
+									}
+								},
+								tooltip : {
+									format : {
+										title : function(d) {
+											return formattedDate(new Date(d.getTime())).replace("T", " - ");
+										},
+										value : d3.format(',')
+									}
+								}
+							};
 						} else if (metric == "disco") {
-							$.each(dt, function(d) {
-								t1.push(dt[d].timestamp.replace("T", " "));
-								var json_disco = JSON.parse(dt[d].data);
-								cpu.push(json_disco[0].percent);
-							});
-							var limite = Math.max.apply(Math, cpu);
-							cpu.splice(0, 0, "utilização de disco");
-							//memora host
+
+							//particao1.splice(0, 0, "particao");
+						//	particao2.splice(0, 0, decodeURIComponent(res));
+						
+							var disco = getPartitions(dt);
+							console.log(disco);
+							var json = {
+								data : {
+									x : 'x',
+									x_format : '%Y-%m-%d %H:%M:%S',
+									columns : disco
+								},
+								subchart : {
+									show : true
+								},
+								axis : {
+									x : {
+										label : 'Tempo',
+										type : 'timeseries'
+									},
+									y : {
+										label : '(%) '
+									}
+								},
+								tooltip : {
+									format : {
+										title : function(d) {
+											return formattedDate(new Date(d.getTime())).replace("T", " - ");
+										},
+										value : d3.format(',')
+									}
+								}
+
+							};
 						} else if (metric == "memoria") {
 							$.each(dt, function(d) {
 								t1.push(dt[d].timestamp.replace("T", " "));
@@ -246,36 +298,37 @@ function plot() {
 							});
 							var limite = Math.max.apply(Math, cpu);
 							cpu.splice(0, 0, "utilização de memória");
+							var json = {
+								data : {
+									x : 'x',
+									x_format : '%Y-%m-%d %H:%M:%S',
+									columns : [t1, cpu]
+								},
+								subchart : {
+									show : true
+								},
+								axis : {
+									x : {
+										label : 'Tempo',
+										type : 'timeseries'
+									},
+									y : {
+										label : '(%) '
+									}
+								},
+								tooltip : {
+									format : {
+										title : function(d) {
+											return formattedDate(new Date(d.getTime())).replace("T", " - ");
+										},
+										value : d3.format(',')
+									}
+								}
+							};
 						} else {
 							console.log(" metrica nao existe");
 						}
-						var json = {
-							data : {
-								x : 'x',
-								x_format : '%Y-%m-%d %H:%M:%S',
-								columns : [t1, cpu]
-							},
-							subchart : {
-								show : true
-							},
-							axis : {
-								x : {
-									label : 'Tempo',
-									type : 'timeseries'
-								},
-								y : {
-									label : '(%) '
-								}
-							},
-							tooltip : {
-								format : {
-									title : function(d) {
-										return formattedDate(new Date(d.getTime())).replace("T", " - ");
-									},
-									value : d3.format(',')
-								}
-							}
-						};
+
 						var chart = c3.generate(json);
 
 					}
@@ -295,6 +348,35 @@ function plot() {
 	}
 
 };
+
+function getPartitions(json) {
+	array_tempo =[];
+	array_tempo.push("x");
+	var map_particoes = {};
+	var lista_particoes = [];
+	$.each(json, function(d) {
+		array_tempo.push(json[d].timestamp.replace("T", " "));
+		var json_disco = JSON.parse(json[d].data);
+		$.each(json_disco, function(k, v) {
+			var particao = json_disco[k];
+			var chave = particao.device.replace("/","\\");
+			if (!map_particoes.hasOwnProperty(chave)) {
+				map_particoes[chave] = [];
+				map_particoes[chave].push(chave);
+				map_particoes[chave].push(particao.percent);
+			} else {
+				map_particoes[chave].push(particao.percent);
+			}
+		});
+
+	});	
+	lista_particoes.push(array_tempo);
+	$.each(map_particoes,function(k,v){
+		lista_particoes.push(map_particoes[k]);
+	});
+	
+	return lista_particoes;
+}
 
 /* Habilitar div selecionada de acordo com a aba selecionada*/
 function show_graph() {
