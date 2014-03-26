@@ -14,7 +14,7 @@ def get_latest_cpu_util_from_database(resource_id=None, project_id=None, limit=N
 
         query = query + ' ORDER BY timestamp DESC'
         
-        if limit:
+        if limit >= 0:
             query = query + ' LIMIT %d' % limit
 
         cur = con.cursor()
