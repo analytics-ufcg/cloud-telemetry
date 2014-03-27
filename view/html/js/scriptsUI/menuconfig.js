@@ -311,7 +311,7 @@ function getPartitions(json) {
 		var json_disco = JSON.parse(json[d].data);
 		$.each(json_disco, function(k, v) {
 			var particao = json_disco[k];
-			var chave = particao.device.replace("/", "\\");
+			var chave = particao.device.replace("/", "\\ ");
 			if (!map_particoes.hasOwnProperty(chave)) {
 				map_particoes[chave] = [];
 				map_particoes[chave].push(chave);
