@@ -386,7 +386,7 @@ function show_graph() {
 	$("#gerar_rec").hide();
 	$("#aplicarConf").show();
 	$("#chart_div").show();
-	$("#panel_selection_time").show();
+	$("#panel_selection_time").show("slow");
 	var $thisLi = $("#bt_vg").parent('li');
 	var $ul = $thisLi.parent('ul');
 
@@ -403,7 +403,7 @@ function show_recomendacoes() {
 	$("#aplicarConf").hide();
 	//esconde o botão aplicar
 	$("#gerar_rec").show();
-	$("#panel_selection_time").show();
+	$("#panel_selection_time").show("slow");
 
 	$("#rec_div").show();
 
@@ -423,7 +423,7 @@ function show_hist() {
 	$("#chart_div").hide();
 	$("#rec_div").hide();
 	$("#gerar_rec").hide();
-	$("#panel_selection_time").hide();
+	$("#panel_selection_time").hide("slow");
 	$("#hist_div").show();
 
 	var $thisLi = $("#bt_hist").parent('li');
@@ -438,6 +438,7 @@ function show_hist() {
 }
 
 function show_rec_flavor() {
+	$("#panel_selection_time").show("slow");
 	$("#rec_div_upgrade").hide();
 	$("#rec_div_flavors").show();
 
@@ -451,6 +452,7 @@ function show_rec_flavor() {
 }
 
 function show_rec_upgrade() {
+	$("#panel_selection_time").hide("slow");
 	$("#rec_div_flavors").hide();
 	$("#rec_div_upgrade").show();
 
