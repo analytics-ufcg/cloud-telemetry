@@ -1,4 +1,4 @@
-var ip_server = "http://150.165.15.4:2700";
+var ip_server = "http://150.165.15.4:9090";
 //150.165.80.194
 var dados = {};
 var tempo = [];
@@ -301,6 +301,16 @@ function getMemory(json) {
 	return lista_particoes;
 }
 
+String.prototype.replaceAll = function(de, para){
+    var str = this;
+    var pos = str.indexOf(de);
+    while (pos > -1){
+		str = str.replace(de, para);
+		pos = str.indexOf(de);
+	}
+    return (str);
+};
+
 function getPartitions(json) {
 	array_tempo = [];
 	array_tempo.push("x");
@@ -311,7 +321,7 @@ function getPartitions(json) {
 		var json_disco = JSON.parse(json[d].data);
 		$.each(json_disco, function(k, v) {
 			var particao = json_disco[k];
-			var chave = particao.device.replace("/", "\\ ");
+			var chave = particao.device.replaceAll("/", "\\ ");
 			if (!map_particoes.hasOwnProperty(chave)) {
 				map_particoes[chave] = [];
 				map_particoes[chave].push(chave);
