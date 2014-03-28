@@ -4,6 +4,10 @@ function getAlarmHistoryTime() {
 	var historico;
 	var num_notificacoes = 0;
 	var acesso_inicial = lerCookie('cookie_acesso');
+
+	$('<div id="load_rec" style="display:none">	<br><br><center><img src="images/ajax-loader.gif"></img> <br> <h4> Realizando requisição... Isto pode levar alguns minutos. Por favor aguarde.</h4></center></div>').appendTo("#hist_info");
+	$("#load_rec").show();
+
 	$("#notificacoes").find('span').remove();
 	// Executar requisicao de acordo com
 	if (acesso_inicial != null) {
@@ -64,8 +68,11 @@ function formatDetail(detail, type) {
 
 function cookie_request(data) {
 	if (data === undefined) {
-		$('<br><br><center><h4> Não houve disparo de alarmes até o momento </h4></center>').appendTo("#hist_info");
-		$("#notificacoes").append('<span class="badge">' + 0 + '</span>');
+		$("#hist_info").empty().queue(function(exec) {
+			$('<br><br><center><h4> Não houve disparo de alarmes até o momento </h4></center>').appendTo("#hist_info");
+			$("#notificacoes").append('<span class="badge">' + 0 + '</span>');
+			exec();
+		});
 	} else {
 		var hist_sort = [];
 		var historico = data;
@@ -91,13 +98,21 @@ function cookie_request(data) {
 }
 
 function cookie_error(data) {
-	$('<br><br><center><h4> Ocorreu um erro durante a requisição, tente novamente. </h4></center>').appendTo("#hist_info");
+	$("#hist_info").empty().queue(function(exec) {
+		$('<br><br><center><h4> Ocorreu um erro durante a requisição, tente novamente. </h4></center>').appendTo("#hist_info");
+		exec();
+	});
+
 }
 
 function no_cookie_request(data) {
 	if (data === undefined) {
-		$('<br><br><center><h4> Não houve disparo de alarmes até o momento </h4></center>').appendTo("#hist_info");
-		$("#notificacoes").append('<span class="badge">' + 0 + '</span>');
+		$("#hist_info").empty().queue(function(exec) {
+			$('<br><br><center><h4> Não houve disparo de alarmes até o momento </h4></center>').appendTo("#hist_info");
+			$("#notificacoes").append('<span class="badge">' + 0 + '</span>');
+			exec();
+		});
+
 	} else {
 		var hist_sort = [];
 		var historico = data;
@@ -124,7 +139,10 @@ function no_cookie_request(data) {
 }
 
 function no_cookie_error(data) {
-	$('<br><br><center><h4> Ocorreu um erro durante a requisição, tente novamente. </h4></center>').appendTo("#hist_info");
+	$("#hist_info").empty().queue(function(exec) {
+		$('<br><br><center><h4> Ocorreu um erro durante a requisição, tente novamente. </h4></center>').appendTo("#hist_info");
+		exec();
+	});
 }
 
 function tabelaHist(historico_ord, notificacoes) {
@@ -141,10 +159,15 @@ function tabelaHist(historico_ord, notificacoes) {
 	});
 
 	tabela_historico += '</tbody></table>';
-	if (notificacoes > 0 || num_notf > 0) {
-		$(tabela_historico).appendTo("#hist_info");
-	} else {
-		$('<br><br><center><h4> Não houve disparo de alarmes até o momento </h4></center>').appendTo("#hist_info");
-	}
-	console.log("tabela");
+
+	$("#hist_info").empty().queue(function(exec) {
+		if (notificacoes > 0 || num_notf > 0) {
+			$(tabela_historico).appendTo("#hist_info");
+			exec();
+		} else {
+			$('<br><br><center><h4> Não houve disparo de alarmes até o momento </h4></center>').appendTo("#hist_info");
+			exec();
+		}
+	});
+
 }

@@ -1,4 +1,4 @@
-var ip_server = "http://150.165.15.4:9090";
+var ip_server = "http://150.165.15.4:2700";
 //150.165.80.194
 var dados = {};
 var tempo = [];
@@ -99,6 +99,8 @@ function plot() {
 	var resource_vm = $("input[name='defaultVM']:checked").val();
 	url_requisicao_vm += complemento + "&resource_id=" + $("input[name='defaultVM']:checked").val();
 
+	$('<div id="load_rec" style="display:none">	<br><br><center><img src="images/ajax-loader.gif"></img> <br> <h4> Realizando requisição... Isto pode levar alguns minutos. Por favor aguarde.</h4></center></div>').appendTo("#chart");
+	$("#load_rec").show();
 	if (!show_hosts) {
 		$.ajax({
 			url : url_requisicao_vm,
@@ -160,7 +162,11 @@ function plot() {
 						}
 					}
 				};
-				var chart = c3.generate(json);
+
+				$('#chart').empty().queue(function(exec) {
+					var chart = c3.generate(json);
+					exec();
+				});
 			}
 		});
 
@@ -246,7 +252,10 @@ function plot() {
 									}
 								}
 							};
-							var chart = c3.generate(json);
+							$('#chart').empty().queue(function(exec) {
+								var chart = c3.generate(json);
+								exec();
+							});
 						}
 					}
 				}
@@ -301,14 +310,14 @@ function getMemory(json) {
 	return lista_particoes;
 }
 
-String.prototype.replaceAll = function(de, para){
-    var str = this;
-    var pos = str.indexOf(de);
-    while (pos > -1){
+String.prototype.replaceAll = function(de, para) {
+	var str = this;
+	var pos = str.indexOf(de);
+	while (pos > -1) {
 		str = str.replace(de, para);
 		pos = str.indexOf(de);
 	}
-    return (str);
+	return (str);
 };
 
 function getPartitions(json) {
@@ -338,19 +347,6 @@ function getPartitions(json) {
 	});
 
 	return lista_particoes;
-}
-
-function dataDisk() {
-	var disco = getPartitions(dt);
-	return disco;
-}
-
-function jsonCPU() {
-	return json;
-}
-
-function jsonMemory() {
-	return json;
 }
 
 /* Habilitar div selecionada de acordo com a aba selecionada*/

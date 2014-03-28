@@ -3,8 +3,7 @@ var medidas;
 /*Funcao para realizar requisicao de medidas*/
 
 function medidas_de_host() {
-	$('#metricas_de_host').empty();
-	$('<div id="load_met" style="display:none">    <br><br><center><img src="images/ajax-loader.gif"></img> <br> <h4>Obtendo Métricas. Por favor aguarde.</h4></center></div>').appendTo("#metricas_de_host");
+	$('<div id="load_met" style="display:none">    <br><br><center><img src="images/ajax-loader.gif"></img> <br> <h4>Obtendo Métricas. Por favor aguarde.</h4></center></div>').appendTo("#recomendacoes_up");
 	$("#load_met").show();
 
 	var out = $("input[name='defaultTime']:checked").val();
@@ -23,7 +22,10 @@ function medidas_de_host() {
 		url : url_metricas,
 		dataType : 'json'
 	}).fail(function(data) {
-		$('<h3>Ocorreu um erro durante a requisição, por favor tente novamente.</h3>').appendTo('#recomendacoes_up');
+		$('#recomendacoes_up').empty().queue(function(exec) {
+			$('<h3>Ocorreu um erro durante a requisição, por favor tente novamente.</h3>').appendTo('#recomendacoes_up');
+			exec();
+		});
 	}).done(function(data) {
 		$("#load_met").hide();
 		medidas = data;
@@ -36,7 +38,11 @@ function medidas_de_host() {
 		});
 
 		tabela_met += '</tbdody></table>';
-		$(tabela_met).appendTo('#recomendacoes_up');
+		$('#recomendacoes_up').empty().queue(function(exec) {
+			$(tabela_met).appendTo('#recomendacoes_up');
+			exec();
+		});
+
 	});
 
 }
