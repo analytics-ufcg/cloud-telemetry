@@ -3,9 +3,8 @@ var recomendacoes;
 /*Funcao para realizar requisicao de recomendacoes*/
 
 function gera_recomendacao() {
-	console.log("recomendação");
 	$('#recomendacoes_geradas').empty();
-	$('<div id="load_rec" style="display:none">	<br><br><center><img src="images/ajax-loader.gif"></img> <br> <h4>Realizando recomendação.. Por favor aguarde.</h4></center></div>').appendTo("#recomendacoes_geradas");
+	$('<div id="load_rec" style="display:none">	<br><br><center><img src="images/ajax-loader.gif"></img> <br> <h4>Realizando recomendação... Isto pode levar alguns minutos. Por favor aguarde.</h4></center></div>').appendTo("#recomendacoes_geradas");
 	$("#load_rec").show();
 
 	var out = $("input[name='defaultTime']:checked").val();
@@ -17,10 +16,7 @@ function gera_recomendacao() {
 	/*Verificações antes de realizar requisição*/
 	var html_m = '<h2>Atenção!</h2><br />';
 	/*Nenhum Campo selecionado*/
-	if (out == undefined && $('#data_hora1').val().length == 0 && $('#data_hora2').val().length == 0) {
-		//html_m += '<h4>Nenhuma opção selecionada, escolha uma das opções de <b>Período Fixo</b> \n ou <b> Período Específico</b>  </h4><br />';
-		//bootbox.alert(html_m);
-	}
+
 	/*Data de Inicio maior igual Data Fim*/
 	if (dt1.getTime() >= dt2.getTime()) {
 		html_m += '<h4>A data de início fornecida possui tempo maior ou igual à data fim.</h4><br />';
@@ -61,23 +57,15 @@ function gera_recomendacao() {
 
 	console.log(url_recomenda);
 
-	//requisicao
-	//mudar parametro async para "true" para ver se não trava o browser
+
 	$.ajax({
 		url : url_recomenda,
-		async : true,
-		dataType : 'json',
-		success : function(data) {
-			$("#load_rec").hide();
-			recomendacoes = data;
-			console.log(data);
-
-		},
-		error : function(data) {
-			console.log("error");
-			$('<h3> Ocorreu um erro durante a requisição, porfavor tente novamente.</h3>').appendTo('#recomendacoes_geradas');
-		}
+		dataType : 'json'
+	}).fail(function(data) {
+		$('<h3> Ocorreu um erro durante a requisição, porfavor tente novamente.</h3>').appendTo('#recomendacoes_geradas');
 	}).done(function(data) {
+		$("#load_rec").hide();
+		recomendacoes = data;
 		var tabela_rec = '<table class="table table-bordered"><thead><tr><th>Sugestão</th><th>Perda</th><th>Violações</th> </tr></thead><tbody>';
 		var rows;
 		$.each(recomendacoes, function(k, v) {
@@ -89,6 +77,5 @@ function gera_recomendacao() {
 		$(tabela_rec).appendTo('#recomendacoes_geradas');
 	});
 
-	//criacao da tabela de maneira dinamica na div recomendacoes_geradas
 
 }

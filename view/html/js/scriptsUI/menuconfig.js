@@ -1,4 +1,4 @@
-var ip_server = "http://150.165.15.4:2700";
+var ip_server = "http://150.165.15.4:9090";
 //150.165.80.194
 var dados = {};
 var tempo = [];
@@ -99,75 +99,74 @@ function plot() {
 	var resource_vm = $("input[name='defaultVM']:checked").val();
 	url_requisicao_vm += complemento + "&resource_id=" + $("input[name='defaultVM']:checked").val();
 
-	console.log(url_requisicao_vm);
+	$('<div id="load_rec" style="display:none">	<br><br><center><img src="images/ajax-loader.gif"></img> <br> <h4> Realizando requisição... Isto pode levar alguns minutos. Por favor aguarde.</h4></center></div>').appendTo("#chart");
+	$("#load_rec").show();
 	if (!show_hosts) {
 		$.ajax({
 			url : url_requisicao_vm,
-			async : false,
-			dataType : 'json',
-			success : function(data) {
-				dados = data;
-				console.log(data);
-				if (dados.length === 0) {
-					if (resource_vm == undefined) {
-						$('#chart').empty().queue(function(exec) {
-							$('#chart').html('<p><h3>Selecione uma vm</h3><p>');
-							exec();
-						});
-					} else {
-						$('#chart').empty().queue(function(exec) {
-							$('#chart').html('<p><h3>Período de tempo não consta nos dados, selecione outro período.</h3><p>');
-							exec();
-						});
-					}
-				} else {
-					var t1 = [];
-					var cpu = [];
-					t1.push("x");
-					cpu.push("utilização de cpu");
-					$.each(dados, function(d) {
-						t1.push(dados[d].timestamp.replace("T", " "));
-						cpu.push((dados[d].cpu_util_percent).toFixed(2));
+			dataType : 'json'
+		}).fail(function(data) {
+			show_plot = false;
+			$('#chart').empty().queue(function(exec) {
+				$('#chart').html('<p><h3>Período de tempo não consta nos dados, selecione outro período.</h3><p>');
+				exec();
+			});
+		}).done(function(data) {
+			dados = data;
+			if (dados.length === 0) {
+				if (resource_vm == undefined) {
+					$('#chart').empty().queue(function(exec) {
+						$('#chart').html('<p><h3>Selecione uma vm</h3><p>');
+						exec();
 					});
-
-					var json = {
-						data : {
-							x : 'x',
-							x_format : '%Y-%m-%d %H:%M:%S',
-							columns : [t1, cpu]
-						},
-						subchart : {
-							show : true
-						},
-						axis : {
-							x : {
-								label : 'Tempo',
-								type : 'timeseries'
-							},
-							y : {
-								label : '(%) '
-							}
-						},
-						tooltip : {
-							format : {
-								title : function(d) {
-									return formattedDate(new Date(d.getTime())).replace("T", " - ");
-								},
-								value : d3.format(',')
-							}
-						}
-					};
-					var chart = c3.generate(json);
+				} else {
+					$('#chart').empty().queue(function(exec) {
+						$('#chart').html('<p><h3>Período de tempo não consta nos dados, selecione outro período.</h3><p>');
+						exec();
+					});
 				}
-			},
-			error : function(data) {
-				show_plot = false;
+			} else {
+				var t1 = [];
+				var cpu = [];
+				t1.push("x");
+				cpu.push("utilização de cpu");
+				$.each(dados, function(d) {
+					t1.push(dados[d].timestamp.replace("T", " "));
+					cpu.push((dados[d].cpu_util_percent).toFixed(2));
+				});
+
+				var json = {
+					data : {
+						x : 'x',
+						x_format : '%Y-%m-%d %H:%M:%S',
+						columns : [t1, cpu]
+					},
+					subchart : {
+						show : true
+					},
+					axis : {
+						x : {
+							label : 'Tempo',
+							type : 'timeseries'
+						},
+						y : {
+							label : '(%) '
+						}
+					},
+					tooltip : {
+						format : {
+							title : function(d) {
+								return formattedDate(new Date(d.getTime())).replace("T", " - ");
+							},
+							value : d3.format(',')
+						}
+					}
+				};
+
 				$('#chart').empty().queue(function(exec) {
-					$('#chart').html('<p><h3>Período de tempo não consta nos dados, selecione outro período.</h3><p>');
+					var chart = c3.generate(json);
 					exec();
 				});
-				console.log("error");
-				console.log(data);
 			}
 		});
 
@@ -175,126 +174,180 @@ function plot() {
 		var resource_host = $("input[name='deafultHost']:checked").val();
 		console.log(resource_host === undefined);
 		var metric = $("input[name='defaultMetric']:checked").val();
-		if (metric == "memoria") {
-			url_requisicao_host += "/hosts_memory";
-		} else if (metric == "cpu") {
-			url_requisicao_host += "/hosts_cpu_util";
+		if (resource_host === undefined) {
+			$('#chart').empty().queue(function(exec) {
+				$('#chart').html('<p><h3>Selecione um Host</h3><p>');
+				exec();
+			});
+		} else if (metric === undefined) {
+			$('#chart').empty().queue(function(exec) {
+				$('#chart').html('<p><h3>Selecione uma métrica para ser avaliada.</h3><p>');
+				exec();
+			});
 		} else {
-			url_requisicao_host += "/hosts_disk";
-		}
-		url_requisicao_host += complemento;
-		$.ajax({
-			url : url_requisicao_host,
-			async : false,
-			dataType : 'json',
-			success : function(data) {
-				dados = data;
-				console.log(data);
 
-				if (resource_host === undefined) {
-					$('#chart').empty().queue(function(exec) {
-						$('#chart').html('<p><h3>Selecione um Host</h3><p>');
-						exec();
-					});
-				} else if (dados.length === 0) {
-					$('#chart').empty().queue(function(exec) {
-						$('#chart').html('<p><h3>Período de tempo não consta nos dados, selecione outro período.</h3><p>');
-						exec();
-					});
+			if (metric == "memoria") {
+				url_requisicao_host += "/hosts_memory";
+			} else if (metric == "cpu") {
+				url_requisicao_host += "/hosts_cpu_util";
+			} else {
+				url_requisicao_host += "/hosts_disk";
+			}
+			url_requisicao_host += complemento;
+			console.log(url_requisicao_host);
 
-				} else if (metric === undefined) {
-					$('#chart').empty().queue(function(exec) {
-						$('#chart').html('<p><h3>Selecione uma métrica para ser avaliada.</h3><p>');
-						exec();
-					});
-				} else {
-					var t1 = [];
-					var cpu = [];
-					t1.push("x");
-					console.log(url_requisicao_host);
-					var dt = dados[0].data;
-
-					if (dt == null) {
-						console.log("null");
-						$('#chart').html('<p><h3>Período de tempo não consta nos dados, selecione outro período.</h3><p>');
-					} else {
-
-						if (metric == "cpu") {
-							cpu.push("utilização de cpu");
-							$.each(dt, function(d) {
-								t1.push(dt[d].timestamp.replace("T", " "));
-								cpu.push((dt[d].data).toFixed(2));
-							});
-
-							/*
-							 * Verificar modificações necessárias de utilização de disco
-							 */
-						} else if (metric == "disco") {
-							$.each(dt, function(d) {
-								t1.push(dt[d].timestamp.replace("T", " "));
-								var json_disco = JSON.parse(dt[d].data);
-								cpu.push(json_disco[0].percent);
-							});
-							var limite = Math.max.apply(Math, cpu);
-							cpu.splice(0, 0, "utilização de disco");
-							//memora host
-						} else if (metric == "memoria") {
-							$.each(dt, function(d) {
-								t1.push(dt[d].timestamp.replace("T", " "));
-								var json_memory = JSON.parse(dt[d].data);
-								cpu.push(json_memory[0].percent);
-							});
-							var limite = Math.max.apply(Math, cpu);
-							cpu.splice(0, 0, "utilização de memória");
-						} else {
-							console.log(" metrica nao existe");
-						}
-						var json = {
-							data : {
-								x : 'x',
-								x_format : '%Y-%m-%d %H:%M:%S',
-								columns : [t1, cpu]
-							},
-							subchart : {
-								show : true
-							},
-							axis : {
-								x : {
-									label : 'Tempo',
-									type : 'timeseries'
-								},
-								y : {
-									label : '(%) '
-								}
-							},
-							tooltip : {
-								format : {
-									title : function(d) {
-										return formattedDate(new Date(d.getTime())).replace("T", " - ");
-									},
-									value : d3.format(',')
-								}
-							}
-						};
-						var chart = c3.generate(json);
-
-					}
-				}
-			},
-			error : function(data) {
+			$.ajax({
+				url : url_requisicao_host,
+				dataType : 'json'
+			}).fail(function(data) {
 				show_plot = false;
 				$('#chart').empty().queue(function(exec) {
 					$('#chart').html('<p><h3>Período de tempo não consta nos dados, selecione outro período.</h3><p>');
 					exec();
 				});
-				console.log("error");
-				console.log(data);
+			}).done(function(data) {
+				dados = data;
+
+				if (dados.length === 0) {
+					$('#chart').empty().queue(function(exec) {
+						$('#chart').html('<p><h3>Período de tempo não consta nos dados, selecione outro período.</h3><p>');
+						exec();
+					});
+
+				} else {
+					var dt = dados[0].data;
+					if (dt == null) {
+						$('#chart').html('<p><h3>Período de tempo não consta nos dados, selecione outro período.</h3><p>');
+					} else {
+
+						var valores = selectMetric(metric, dt);
+						if (valores == null) {
+							console.log(" metrica nao existe");
+						} else {
+
+							var json = {
+								data : {
+									x : 'x',
+									x_format : '%Y-%m-%d %H:%M:%S',
+									columns : valores
+								},
+								subchart : {
+									show : true
+								},
+								axis : {
+									x : {
+										label : 'Tempo',
+										type : 'timeseries'
+									},
+									y : {
+										label : '(%) '
+									}
+								},
+								tooltip : {
+									format : {
+										title : function(d) {
+											return formattedDate(new Date(d.getTime())).replace("T", " - ");
+										},
+										value : d3.format(',')
+									}
+								}
+							};
+							$('#chart').empty().queue(function(exec) {
+								var chart = c3.generate(json);
+								exec();
+							});
+						}
+					}
+				}
+			});
+
+		}
+	}
+};
+
+function selectMetric(nome, json) {
+	if (nome == "memoria") {
+		return getMemory(json);
+	} else if (nome == "cpu") {
+		return getCPU(json);
+	} else if (nome == "disco") {
+		return getPartitions(json);
+	} else {
+		return null;
+	}
+}
+
+function getCPU(json) {
+	array_tempo = [];
+	array_tempo.push("x");
+	var lista_particoes = [];
+	array_cpu = [];
+	array_cpu.push("utilização de cpu");
+	$.each(json, function(d) {
+		array_tempo.push(json[d].timestamp.replace("T", " "));
+		array_cpu.push((json[d].data).toFixed(2));
+	});
+	lista_particoes.push(array_tempo);
+	lista_particoes.push(array_cpu);
+
+	return lista_particoes;
+}
+
+function getMemory(json) {
+	array_tempo = [];
+	array_tempo.push("x");
+	var lista_particoes = [];
+	array_memoria = [];
+	array_memoria.push("utilização de memória");
+	$.each(json, function(d) {
+		array_tempo.push(json[d].timestamp.replace("T", " "));
+		var json_memory = JSON.parse(json[d].data);
+		array_memoria.push(json_memory[0].percent);
+	});
+	lista_particoes.push(array_tempo);
+	lista_particoes.push(array_memoria);
+
+	return lista_particoes;
+}
+
+String.prototype.replaceAll = function(de, para) {
+	var str = this;
+	var pos = str.indexOf(de);
+	while (pos > -1) {
+		str = str.replace(de, para);
+		pos = str.indexOf(de);
+	}
+	return (str);
+};
+
+function getPartitions(json) {
+	array_tempo = [];
+	array_tempo.push("x");
+	var map_particoes = {};
+	var lista_particoes = [];
+	$.each(json, function(d) {
+		array_tempo.push(json[d].timestamp.replace("T", " "));
+		var json_disco = JSON.parse(json[d].data);
+		$.each(json_disco, function(k, v) {
+			var particao = json_disco[k];
+			var chave = particao.device.replaceAll("/", "\\ ");
+			if (!map_particoes.hasOwnProperty(chave)) {
+				map_particoes[chave] = [];
+				map_particoes[chave].push(chave);
+				map_particoes[chave].push(particao.percent);
+			} else {
+				map_particoes[chave].push(particao.percent);
 			}
 		});
 
-	}
+	});
+	lista_particoes.push(array_tempo);
+	$.each(map_particoes, function(k, v) {
+		lista_particoes.push(map_particoes[k]);
+	});
 
-};
+	return lista_particoes;
+}
 
 /* Habilitar div selecionada de acordo com a aba selecionada*/
 function show_graph() {
@@ -304,7 +357,7 @@ function show_graph() {
 	$("#gerar_rec").hide();
 	$("#aplicarConf").show();
 	$("#chart_div").show();
-	$("#panel_selection_time").show();
+	$("#panel_selection_time").show("slow");
 	var $thisLi = $("#bt_vg").parent('li');
 	var $ul = $thisLi.parent('ul');
 
@@ -321,7 +374,6 @@ function show_recomendacoes() {
 	$("#aplicarConf").hide();
 	//esconde o botão aplicar
 	$("#gerar_rec").show();
-	$("#panel_selection_time").show();
 
 	$("#rec_div").show();
 
@@ -341,7 +393,7 @@ function show_hist() {
 	$("#chart_div").hide();
 	$("#rec_div").hide();
 	$("#gerar_rec").hide();
-	$("#panel_selection_time").hide();
+	$("#panel_selection_time").hide("slow");
 	$("#hist_div").show();
 
 	var $thisLi = $("#bt_hist").parent('li');
@@ -356,6 +408,7 @@ function show_hist() {
 }
 
 function show_rec_flavor() {
+	$("#panel_selection_time").show("slow");
 	$("#rec_div_upgrade").hide();
 	$("#rec_div_flavors").show();
 
@@ -369,6 +422,7 @@ function show_rec_flavor() {
 }
 
 function show_rec_upgrade() {
+	$("#panel_selection_time").hide("slow");
 	$("#rec_div_flavors").hide();
 	$("#rec_div_upgrade").show();
 

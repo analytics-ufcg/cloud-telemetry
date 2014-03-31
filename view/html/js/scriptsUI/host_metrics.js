@@ -3,9 +3,7 @@ var medidas;
 /*Funcao para realizar requisicao de medidas*/
 
 function medidas_de_host() {
-	console.log("Metricas");
-	$('#metricas_de_host').empty();
-	$('<div id="load_met" style="display:none">    <br><br><center><img src="images/ajax-loader.gif"></img> <br> <h4>Obtendo Métricas. Por favor aguarde.</h4></center></div>').appendTo("#metricas_de_host");
+	$('<div id="load_met" style="display:none">    <br><br><center><img src="images/ajax-loader.gif"></img> <br> <h4>Obtendo Métricas. Por favor aguarde.</h4></center></div>').appendTo("#recomendacoes_up");
 	$("#load_met").show();
 
 	var out = $("input[name='defaultTime']:checked").val();
@@ -20,34 +18,31 @@ function medidas_de_host() {
 	var url_metricas = ip_server + "/host_metrics?project=demo";
 
 	//requisicao
-
 	$.ajax({
 		url : url_metricas,
-		async : true,
-		dataType : 'json',
-		success : function(data) {
-			$("#load_met").hide();
-			medidas = data;
-
-		},
-		error : function(data) {
-			console.log("error");
-			$('<h3>Ocorreu um erro durante a requisição, porfavor tente novamente.</h3>').appendTo('#recomendacoes_up');
-		}
+		dataType : 'json'
+	}).fail(function(data) {
+		$('#recomendacoes_up').empty().queue(function(exec) {
+			$('<h3>Ocorreu um erro durante a requisição, por favor tente novamente.</h3>').appendTo('#recomendacoes_up');
+			exec();
+		});
 	}).done(function(data) {
+		$("#load_met").hide();
+		medidas = data;
 		var tabela_met = '<table class="table table-bordered"><thead><tr><th>Host</th><th>Total de CPU</th><th>CPU Utilizada</th><th>Memoria Total</th><th>Memoria Utilizada</th><th>Disco Total</th><th>Disco Utilizado</th><th>Percentual de CPU</th> <th>Percentual de Memoria</th><th>Percentual de Disco</th></tr></thead><tbody>';
 		var rows;
 		$.each(medidas, function(k, v) {
-			console.log(medidas[k]);
 			rows = '<tr><th>' + k + '</th><th>' + medidas[k]["Total"][0] + '</th><th>' + medidas[k]["Em uso"][0];
 			rows += '</th><th>' + medidas[k]["Total"][1] + '</th><th>' + medidas[k]["Em uso"][1] + '</th><th>' + medidas[k]["Total"][2] + '</th><th>' + medidas[k]["Em uso"][2] + '</th><th>' + medidas[k]["Percentual"][0] + '</th><th>' + medidas[k]["Percentual"][1] + '</th><th>' + medidas[k]["Percentual"][2] + '</th></tr>';
 			tabela_met += rows;
 		});
 
 		tabela_met += '</tbdody></table>';
-		$(tabela_met).appendTo('#recomendacoes_up');
-	});
+		$('#recomendacoes_up').empty().queue(function(exec) {
+			$(tabela_met).appendTo('#recomendacoes_up');
+			exec();
+		});
 
-	//criacao da tabela de maneira dinamica na div metricas_de_host
+	});
 
 }
