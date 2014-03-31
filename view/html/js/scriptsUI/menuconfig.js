@@ -172,6 +172,7 @@ function plot() {
 
 	} else {
 		var resource_host = $("input[name='deafultHost']:checked").val();
+		var host_position = $("input[name='deafultHost']:checked").attr("id");
 		var metric = $("input[name='defaultMetric']:checked").val();
 		if (resource_host === undefined) {
 			$('#chart').empty().queue(function(exec) {
@@ -214,8 +215,8 @@ function plot() {
 					});
 
 				} else {
-					var ind = selectHost(resource_host,dados);
-					var dt = dados[ind].data;
+					var dt = dados[host_position].data;
+					console.log(host_position);
 					if (dt == null) {
 						$('#chart').html('<p><h3>Período de tempo não consta nos dados, selecione outro período.</h3><p>');
 					} else {
@@ -264,18 +265,6 @@ function plot() {
 		}
 	}
 };
-
-function selectHost(host, lista) {
-	var posicao = 0;
-	var indice = 0;
-	$.each(lista, function(d) {
-		if (lista[d].host_address == host) {
-			posicao = indice;
-		}
-		indice += 1;
-	});
-	return posicao;
-}
 
 function selectMetric(nome, json) {
 	if (nome == "memoria") {

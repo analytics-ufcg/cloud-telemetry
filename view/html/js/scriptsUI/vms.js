@@ -63,8 +63,11 @@ $.ajax({
 	$('<div id="painel_hosts" class="panel panel-primary">' + '</div>').appendTo('#menu_host');
 	$('<div class="panel-heading">' + '<h3 class="panel-title">Hosts</h3>' + '</div>').appendTo('#painel_hosts');
 	var add_host = '';
+	var posicao = 0;
 	$.each(hosts_ip, function(k2, v2) {
-		add_host += '<div class="radio"><label><input type="radio" name="deafultHost" ' + 'value=' + hosts_ip[k2] + '>' + hosts_ip[k2] + '</label></div>';
+		add_host += '<div class="radio"><label><input type="radio" name="deafultHost" ' + 'value=' + hosts_ip[k2] +  ' ';
+		add_host += 'id='+posicao +'>' + hosts_ip[k2] + '</label></div>';
+		posicao += 1;
 	});
 	$('<div class="panel-body">' + '<strong> Hosts </strong>' + add_host + '</div>').appendTo('#painel_hosts');
 });
