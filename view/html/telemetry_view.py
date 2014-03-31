@@ -4,7 +4,7 @@ import requests, json
 
 app = Flask(__name__)
 
-__SERVER_ADDRESS = 'http://150.165.15.4:1313'
+__SERVER_ADDRESS = 'http://150.165.15.4:9090'
 
 @app.route('/projects')
 def projects():
