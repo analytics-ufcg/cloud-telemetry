@@ -8,7 +8,7 @@ import json, requests
 app = Flask(__name__)
 data_handler = DataHandler()
 
-HOSTS = ['150.165.15.4']
+HOSTS = ['150.165.15.4','150.165.15.38']
 
 @app.route('/projects')
 def projects():
