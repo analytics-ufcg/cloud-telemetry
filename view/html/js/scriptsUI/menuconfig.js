@@ -1,11 +1,11 @@
-var ip_server = "http://150.165.15.4:9090";
+var ip_server = "http://150.165.15.4:2700";
 //150.165.80.194
 var dados = {};
 var tempo = [];
 var cpu_util = [];
 var ultimo_acesso;
 var show_hosts = true;
-var teste;
+var tudo;
 
 /*Habilitando seletores de data/hora */
 $('#datetimepicker1').datetimepicker({
@@ -172,7 +172,6 @@ function plot() {
 
 	} else {
 		var resource_host = $("input[name='deafultHost']:checked").val();
-		console.log(resource_host === undefined);
 		var metric = $("input[name='defaultMetric']:checked").val();
 		if (resource_host === undefined) {
 			$('#chart').empty().queue(function(exec) {
@@ -215,7 +214,8 @@ function plot() {
 					});
 
 				} else {
-					var dt = dados[0].data;
+					var ind = selectHost(resource_host,dados);
+					var dt = dados[ind].data;
 					if (dt == null) {
 						$('#chart').html('<p><h3>Período de tempo não consta nos dados, selecione outro período.</h3><p>');
 					} else {
@@ -264,6 +264,18 @@ function plot() {
 		}
 	}
 };
+
+function selectHost(host, lista) {
+	var posicao = 0;
+	var indice = 0;
+	$.each(lista, function(d) {
+		if (lista[d].host_address == host) {
+			posicao = indice;
+		}
+		indice += 1;
+	});
+	return posicao;
+}
 
 function selectMetric(nome, json) {
 	if (nome == "memoria") {
