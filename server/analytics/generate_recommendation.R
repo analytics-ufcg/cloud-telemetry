@@ -114,7 +114,7 @@ calcMetrics <- function(data, recommendation, limiar){
   lose = lose * 100
   violation = round(violation * 100, 2)
   lose.temp = round(ic.m(lose), 2)
-  lose.temp = paste("{", lose.temp[1], ",",lose.temp[2], "}", sep="")
+  lose.temp = paste("{", lose.temp[1], "-",lose.temp[2], "}", sep="")
   lose = paste(round(mean(lose), 2), lose.temp, sep = ":")
   
   out <- data.frame(recommendation = flavours, lose = lose, violation = violation)
