@@ -28,7 +28,7 @@ class NovaClient:
                     print "Requisicao nao concluida"
                     break
             arquivo = open('metrics.txt')
-            linhas = arquivo.readlines()[3:-4]
+            linhas = arquivo.readlines()[3:-2]
             total = linhas[0].split('|')
             usado = linhas[1].split('|')
             dic =  {'Total':[], 'Em uso':[], 'Percentual': []}
