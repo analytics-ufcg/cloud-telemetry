@@ -15,13 +15,18 @@
 		<script src="js/scriptsUI/menuconfig.js"></script>
 		<script src="js/scriptsUI/vms.js"></script>
 		<script src="js/scriptsUI/lastaccess.js"></script>
+
+		<script src="http://code.highcharts.com/highcharts.js"></script>
+		<script src="http://code.highcharts.com/highcharts-more.js"></script>
+		<script src="http://code.highcharts.com/modules/exporting.js"></script>
+
 		<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
 		<link rel="stylesheet" type="text/css" href="css/bootstrap-theme.css">
 		<link rel="stylesheet" type="text/css" href="css/dashboard.css">
 		<link rel="stylesheet" type="text/css" href="css/bootstrap-datetimepicker.min.css">
 		<link rel="stylesheet" type="text/css" href="css/c3.css">
 		<link rel="stylesheet" type="text/css" href="css/style.css">
-		<!--link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/tomorrow.css') }}"-->
+		<!--<link rel="stylesheet" type="text/css" href="css/master.css">-->
 	</head>
 
 	<body onload="count_alarms();">
@@ -161,8 +166,16 @@
 						</ul>
 						<!-- Div para mostrar recomendacoes de flavors -->
 						<div id="rec_div_flavors" style="display:none;">
+							<div class="row">
+								<div style="height: 400px; margin: auto; min-width: 310px; max-width: 600px" class="col-md-6" id="recomendacoes_geradas_grafico">
+
+								</div>
+								<div class="col-md-6" id="info_rec"></div>
+							</div>
 							<div class="col-md-6" id="recomendacoes_geradas">
-								<p></p><h4> Selecione um período de Tempo para ver as Recomendações.</h4></p>
+								<p>
+									<h4> Recomendações.</h4>
+								</p>
 							</div>
 							<div class="col-md-6" id="info_rec">
 								<h5><b>Sugestão </b> : Neste campo está descrito o número ideal de cores que as instâncias devem possuir de acordo com a recomendação.</h5>
@@ -173,7 +186,7 @@
 						<!-- Div para mostrar recomendacoes de upgrades -->
 						<div id="rec_div_upgrade">
 							<div class="col-md-12" id="recomendacoes_up">
-								
+
 							</div>
 						</div>
 					</div>

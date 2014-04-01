@@ -420,6 +420,8 @@ function show_rec_flavor() {
 		$ul.find('li.active').removeClass('active');
 		$thisLi.addClass('active');
 	}
+	
+	//gera_recomendacao_grafico();
 }
 
 function show_rec_upgrade() {
