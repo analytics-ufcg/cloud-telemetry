@@ -2,7 +2,7 @@ from openstack.ceilometer_client import CeilometerClient
 from openstack.keystone_client import KeystoneClient
 from openstack.nova_client import NovaClient
 from mysql_util import get_latest_cpu_util_from_database
-import json, ast, smtplib
+import json, ast, smtplib, math
 
 import analytics.recommendations
 
@@ -82,3 +82,47 @@ class DataHandler:
 
     def host_metrics(self, project):
         return self.__nova.metrics(project)
+
+    def hosts_recommendation(self, r_cpu, r_memory , r_disk):
+        resource = []
+        ret = ""
+        for host in r_cpu:
+            host_http = host["host_address"]
+            for data in host["data"]:
+                resource.append(data["data"])
+            resource = sorted(resource)
+            if(len(resource)%2 == 0):
+                index = len(resource)/2
+                mediana = (resource[index-1] + resource[index+1])/2
+            else:
+                mediana = resource[int(math.ceil(len(resource)/2))]
+
+            if mediana >= 95:
+                ret += "migrar " + host_http + " cpu sobrecarregada; "
+            else:
+                resource = []
+                for host_mem in r_memory:
+                    if(host["host_address"]  == host_mem["host_address"]):
+                        for data in host_mem["data"]:
+                            for value in json.loads(data["data"]):
+                                resource.append(value["percent"])
+                        resource = sorted(resource)
+
+                if(len(resource)%2 == 0):
+                    index = len(resource)/2
+                    mediana = (resource[index-1] + resource[index+1])/2
+                else:
+                    mediana = resource[int(math.ceil(len(resource)/2))]
+
+                if mediana >= 95:
+                    ret += "migrar " + host_http + " memoria sobrecarregada; "
+                else:
+                    ret += "nao migrar " + host_http + "; "
+        
+        return ret
+        #return json.dumps(cpu)
+
+
+
+
+
