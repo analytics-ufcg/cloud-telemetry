@@ -26,6 +26,10 @@ def cpu_util_flavors():
 def alarms_history():
     return forward_request(request)
 
+@app.route('/hosts')
+def hosts():
+    return forward_request(request)
+
 @app.route('/hosts_cpu_util')
 def hosts_cpu_util():
     return forward_request(request)
