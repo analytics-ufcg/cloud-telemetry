@@ -1,5 +1,5 @@
 import subprocess
-import json
+import json, requests
 import env
 from novaclient.v3 import client
 
@@ -38,3 +38,38 @@ class NovaClient:
             dic_dos_hosts[host] = (dic)
             arquivo.close()
         return json.dumps(dic_dos_hosts)    
+
+    def host_describe(self, host_name):
+        auth_tokens_url = env.OS_AUTH_URL + '/tokens'
+        headers = {'Content-Type':'application/json','Accept':'application/json'}
+        payload = {"auth": {"tenantName": env.OS_ADMIN_TENANT, "passwordCredentials": {"username": env.OS_USERNAME, "password": env.OS_PASSWORD}}}
+
+        r = requests.post(auth_tokens_url, data=json.dumps(payload), headers=headers)
+        if r.status_code != 200:
+            msg = 'Token request error. HTTP error ' + str(r.status_code)
+            raise Exception(msg)
+
+        response = r.json()
+
+        token = response['access']['token']['id']
+        compute_service = None
+        for s in response['access']['serviceCatalog']:
+            if s['type'] == 'compute':
+                compute_service = s
+                break
+
+        if compute_service is None:
+            raise Exception('could not retrieve compute service (nova)')
+
+        admin_url = compute_service['endpoints'][0]['adminURL']
+        headers = {'X-Auth-Project-Id':'admin', 'Accept':'application/json', 'X-Auth-Token':token}
+        os_hosts_url = admin_url + '/os-hosts/' + host_name
+
+        r = requests.get(os_hosts_url, headers=headers)
+        if r.status_code != 200:
+            msg = 'Host info request error. HTTP error ' + str(r.status_code)
+            raise Exception(msg)
+
+        return r.json()
+        
+        
