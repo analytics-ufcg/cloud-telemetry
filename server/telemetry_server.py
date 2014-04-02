@@ -119,6 +119,26 @@ def hosts_disk():
     return resp
 
 
+@app.route('/hosts_recommendation')
+def hosts_recommendation():
+    timestamp_begin = request.args.get('timestamp_begin', None)
+    timestamp_end = request.args.get('timestamp_end', None)
+
+    adicionar_url = ""
+    if timestamp_begin:
+        adicionar_url += "?timestamp_begin=%s" % timestamp_begin
+        if timestamp_end:
+            adicionar_url += "&timestamp_end=%s" % timestamp_end
+
+    r_cpu = requests.get("http://150.165.15.4:9090/hosts_cpu_util" + adicionar_url)
+    r_memory = requests.get("http://150.165.15.4:9090/hosts_memory" + adicionar_url)
+    r_disk = requests.get("http://150.165.15.4:9090/hosts_disk" + adicionar_url)
+
+    resp = make_response(data_handler.hosts_recommendation(r_cpu.json(), r_memory.json() , r_disk.json()))
+
+    return resp
+
+
 @app.route('/cpu_util')  
 def cpu_util():
     timestamp_begin = request.args.get('timestamp_begin', None)
