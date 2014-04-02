@@ -71,11 +71,12 @@ function gera_recomendacao() {
 	}).done(function(data) {
 		$("#load_rec").remove();
 		recomendacoes = data;
-		var tabela_rec = '<table class="table table-bordered"><thead><tr><th>Sugestão</th><th>Perda</th><th>Violações</th> </tr></thead><tbody>';
+		var tabela_rec = '<table class="table table-bordered"><thead><tr><th>Recomendação</th><th>Sugestão</th><th>Perda</th><th>Violações</th> </tr></thead><tbody>';
 		var rows;
+		var numero_da_rec = 1;
 
 		$.each(recomendacoes, function(k, v) {
-			var rec = "Recomendação " + k;
+			var rec = "Recomendação " + numero_da_rec;
 			lista_rec.push(rec);
 			var lista = JSON.parse(recomendacoes[k][0]).split(":");
 			lista_valores.push(parseFloat(lista[0]));
@@ -83,8 +84,9 @@ function gera_recomendacao() {
 			var ic = [parseFloat(valores_ic[0]), parseFloat(valores_ic[1])];
 			lista_ic.push(ic);
 			lista_violacoes.push(parseFloat(recomendacoes[k][1]));
-			rows = '<tr><th>' + k + '</th><th>' + recomendacoes[k][0] + '</th><th>' + recomendacoes[k][1] + '</th></tr>';
+			rows = '<tr><th>'+'Recomendação ' +numero_da_rec + '</th><th>' + k + '</th><th>' + JSON.parse(recomendacoes[k][0]).split(':')[0] + '</th><th>' + recomendacoes[k][1] + '</th></tr>';
 			tabela_rec += rows;
+			numero_da_rec += numero_da_rec;
 		});
 		tabela_rec += '</tbdody></table>';
 		$(tabela_rec).appendTo('#recomendacoes_geradas');
