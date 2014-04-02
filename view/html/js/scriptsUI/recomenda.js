@@ -89,6 +89,7 @@ function gera_recomendacao() {
 		tabela_rec += '</tbdody></table>';
 		$(tabela_rec).appendTo('#recomendacoes_geradas');
 		grafico_rec(lista_rec, lista_valores, lista_ic);
+		grafico_violacoes(lista_rec, lista_violacoes);
 	});
 
 }
@@ -101,7 +102,7 @@ function grafico_rec(nomes, valores, ic) {
 			zoomType : 'x'
 		},
 		title : {
-			text : 'Recomendações'
+			text : 'Média de Perda (%) por Recomendação'
 		},
 		xAxis : [{
 			categories : nomes
@@ -131,7 +132,7 @@ function grafico_rec(nomes, valores, ic) {
 			type : 'column',
 			data : valores,
 			tooltip : {
-				pointFormat : '<span style="font-weight: bold; color: {series.color}">{series.name}</span>: <b>{point.y:.1f}%</b><br/>'
+				pointFormat : '<span style="font-weight: bold; color: {series.color}">{series.name}</span>: <b>{point.y:.2f}%</b><br/>'
 			}
 		}, {
 			color : '#FF0000',
@@ -144,4 +145,49 @@ function grafico_rec(nomes, valores, ic) {
 		}]
 	});
 
+}
+
+function grafico_violacoes(nomes, valores) {
+	var chart;
+	$('#recomendacoes_grafico_violacoes').highcharts({
+		chart : {
+			type: 'column',
+			zoomType : 'x'
+		},
+		title : {
+			text : 'Violações por Recomendação'
+		},
+		xAxis : [{
+			categories : nomes
+		}],
+		yAxis : {
+			min: 0,
+			labels : {
+				formatter : function() {
+					return this.value;
+				}
+			},
+			title : {
+				text : 'Violações'
+			}
+		},
+
+		tooltip : {
+			shared : true
+		},
+		plotOptions : {
+			column : {
+				pointPadding : 0.2,
+				borderWidth : 0
+			}
+		},
+		series : [{
+			name : 'Número de violações',
+			type : 'column',
+			data : valores,
+			tooltip : {
+				pointFormat : '<span style="font-weight: bold; color: {series.color}">{series.name}</span>: <b>{point.y:.1f}%</b><br/>'
+			}
+		}]
+	});
 }
