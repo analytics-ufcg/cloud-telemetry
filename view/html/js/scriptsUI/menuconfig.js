@@ -1,6 +1,6 @@
 var ip_server = "http://150.165.15.4:9090";
 //150.165.80.194
-var dados = {};
+var dados;
 var tempo = [];
 var cpu_util = [];
 var ultimo_acesso;
@@ -102,6 +102,7 @@ function plot() {
 	$('<div id="load_rec" style="display:none">	<br><br><center><img src="images/ajax-loader.gif"></img> <br> <h4> Realizando requisição... Isto pode levar alguns minutos. Por favor aguarde.</h4></center></div>').appendTo("#chart");
 	$("#load_rec").show();
 	if (!show_hosts) {
+		console.log(url_requisicao_vm);
 		$.ajax({
 			url : url_requisicao_vm,
 			dataType : 'json'
@@ -112,8 +113,8 @@ function plot() {
 				exec();
 			});
 		}).done(function(data) {
-			dados = data;
-			if (dados.length === 0) {
+			console.log(data);
+			if (data.length === 0) {
 				if (resource_vm == undefined) {
 					$('#chart').empty().queue(function(exec) {
 						$('#chart').html('<p><h3>Selecione uma vm</h3><p>');
