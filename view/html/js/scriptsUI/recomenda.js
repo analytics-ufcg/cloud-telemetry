@@ -71,27 +71,33 @@ function gera_recomendacao() {
 	}).done(function(data) {
 		$("#load_rec").remove();
 		recomendacoes = data;
-		var tabela_rec = '<table class="table table-bordered"><thead><tr><th>Recomendação</th><th>Sugestão</th><th>Perda</th><th>Violações</th> </tr></thead><tbody>';
-		var rows;
-		var numero_da_rec = 1;
 
-		$.each(recomendacoes, function(k, v) {
-			var rec = "Recomendação " + numero_da_rec;
-			lista_rec.push(rec);
-			var lista = JSON.parse(recomendacoes[k][0]).split(":");
-			lista_valores.push(parseFloat(lista[0]));
-			var valores_ic = lista[1].replace("{", "").replace("}", "").split("-");
-			var ic = [parseFloat(valores_ic[0]), parseFloat(valores_ic[1])];
-			lista_ic.push(ic);
-			lista_violacoes.push(parseFloat(recomendacoes[k][1]));
-			rows = '<tr><th>'+'Recomendação ' +numero_da_rec + '</th><th>' + k + '</th><th>' + JSON.parse(recomendacoes[k][0]).split(':')[0] + '</th><th>' + recomendacoes[k][1] + '</th></tr>';
-			tabela_rec += rows;
-			numero_da_rec += numero_da_rec;
-		});
-		tabela_rec += '</tbdody></table>';
-		$(tabela_rec).appendTo('#recomendacoes_geradas');
-		grafico_rec(lista_rec, lista_valores, lista_ic);
-		grafico_violacoes(lista_rec, lista_violacoes);
+		if (jQuery.isEmptyObject(data)) {
+			$('<h3> O período de tempo escolhido não apresenta dados. </h3>').appendTo('#recomendacoes_geradas');
+		} else {
+
+			var tabela_rec = '<table class="table table-bordered"><thead><tr><th>Recomendação</th><th>Sugestão</th><th>Perda</th><th>Violações</th> </tr></thead><tbody>';
+			var rows;
+			var numero_da_rec = 1;
+
+			$.each(recomendacoes, function(k, v) {
+				var rec = "Recomendação " + numero_da_rec;
+				lista_rec.push(rec);
+				var lista = JSON.parse(recomendacoes[k][0]).split(":");
+				lista_valores.push(parseFloat(lista[0]));
+				var valores_ic = lista[1].replace("{", "").replace("}", "").split("-");
+				var ic = [parseFloat(valores_ic[0]), parseFloat(valores_ic[1])];
+				lista_ic.push(ic);
+				lista_violacoes.push(parseFloat(recomendacoes[k][1]));
+				rows = '<tr><th>' + 'Recomendação ' + numero_da_rec + '</th><th>' + k + '</th><th>' + JSON.parse(recomendacoes[k][0]).split(':')[0] + '</th><th>' + recomendacoes[k][1] + '</th></tr>';
+				tabela_rec += rows;
+				numero_da_rec += numero_da_rec;
+			});
+			tabela_rec += '</tbdody></table>';
+			$(tabela_rec).appendTo('#recomendacoes_geradas');
+			grafico_rec(lista_rec, lista_valores, lista_ic);
+			grafico_violacoes(lista_rec, lista_violacoes);
+		}
 	});
 
 }
@@ -153,7 +159,7 @@ function grafico_violacoes(nomes, valores) {
 	var chart;
 	$('#recomendacoes_grafico_violacoes').highcharts({
 		chart : {
-			type: 'column',
+			type : 'column',
 			zoomType : 'x'
 		},
 		title : {
@@ -163,7 +169,7 @@ function grafico_violacoes(nomes, valores) {
 			categories : nomes
 		}],
 		yAxis : {
-			min: 0,
+			min : 0,
 			labels : {
 				formatter : function() {
 					return this.value;
