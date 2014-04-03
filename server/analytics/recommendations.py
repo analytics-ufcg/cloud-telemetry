@@ -42,7 +42,7 @@ def recomenda_flavor(dado):
     data_csv = "dados.csv"
     data_json = dado
     flavors = "flavors.csv"
-    if(len(dados)>0):
+    if(len(dado)>0):
         return data_to_dic(data_json, data_csv, script, flavors)
     else:
         return {}   

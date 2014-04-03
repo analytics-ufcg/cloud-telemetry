@@ -1,5 +1,4 @@
 var ip_server = "http://analytics.lsd.ufcg.edu.br/telemetry";
-
 //150.165.80.194
 var dados;
 var tempo = [];
@@ -114,7 +113,7 @@ function plot() {
 				exec();
 			});
 		}).done(function(data) {
-			console.log(data);
+			dados = data;
 			if (data.length === 0) {
 				if (resource_vm == undefined) {
 					$('#chart').empty().queue(function(exec) {
