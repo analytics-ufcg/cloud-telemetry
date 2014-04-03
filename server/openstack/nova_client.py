@@ -11,33 +11,37 @@ class NovaClient:
 
 
     def metrics(self, project):
+
         nova = client.Client(env.OS_USERNAME, env.OS_PASSWORD, project, env.OS_AUTH_URL)
-        hosts = nova.hosts.list() 
+        hosts = nova.hosts.list()
         nome_dos_hosts = []
         dic_dos_hosts = {}
         for host in hosts:
             corte = str(host)[7:-1]
             nome_dos_hosts.append(corte)
         nome_dos_hosts = list(set(nome_dos_hosts))
+
         for host in nome_dos_hosts:
-            processo = subprocess.Popen("nova host-describe "+host+" > metrics.txt", shell=True, stdout=subprocess.PIPE)
-            while True:
-                if (processo.poll() == 0):
-                    break
-                elif (processo.poll() == 1):
-                    print "Requisicao nao concluida"
-                    break
-            arquivo = open('metrics.txt')
-            linhas = arquivo.readlines()[3:-2]
-            total = linhas[0].split('|')
-            usado = linhas[1].split('|')
+            descricao = self.host_describe(host)
+
+            cpu_total = descricao['host'][0]['resource']['cpu']
+            memoria_total =  descricao['host'][0]['resource']['memory_mb']
+            disco_total =  descricao['host'][0]['resource']['disk_gb']
+
+            cpu_usado = descricao['host'][1]['resource']['cpu']
+            memoria_usado =  descricao['host'][1]['resource']['memory_mb']
+            disco_usado =  descricao['host'][1]['resource']['disk_gb']
+
             dic =  {'Total':[], 'Em uso':[], 'Percentual': []}
-            dic['Total'] = [int(total[3]), int(total[4]), int(total[5])]
-            dic['Em uso'] = [int(usado[3]), int(usado[4]), int(usado[5])]
-            dic['Percentual'] = [round(float(usado[3])/int(total[3]),3), round(float(usado[4])/int(total[4]),3),round(float(usado[5])/int(total[5]),3) ] 
-            dic_dos_hosts[host] = (dic)
-            arquivo.close()
-        return json.dumps(dic_dos_hosts)    
+
+            dic['Total'] = [cpu_total, memoria_total, disco_total]
+            dic['Em uso'] = [cpu_usado, memoria_usado, disco_usado]
+            dic['Percentual'] = [round(float(cpu_usado)/cpu_total,3), round(float(memoria_usado)/memoria_total, 3), round(float(disco_usado)/disco_total,3)]
+
+            dic_dos_hosts[host] = dic
+
+        return json.dumps(dic_dos_hosts)
+
 
     def host_describe(self, host_name):
         auth_tokens_url = env.OS_AUTH_URL + '/tokens'
