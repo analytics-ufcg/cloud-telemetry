@@ -34,6 +34,22 @@ def hosts():
 def hosts_cpu_util():
     return forward_request(request)
 
+@app.route('/hosts_memory')
+def hosts_memory():
+    return forward_request(request)
+
+@app.route('/hosts_disk')
+def hosts_disk():
+    return forward_request(request)
+
+@app.route('/hosts_recommendation')
+def hosts_recommendation():
+    return forward_request(request)
+
+@app.route('/host_metrics')
+def metrics():
+    return forward_request(request)
+
 @app.route('/add_alarm',  methods=['POST'])
 def add_alarm():
     return forward_request(request)    
