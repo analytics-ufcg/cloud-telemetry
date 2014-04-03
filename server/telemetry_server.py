@@ -8,7 +8,7 @@ import json, requests
 app = Flask(__name__)
 data_handler = DataHandler()
 
-HOSTS = ['150.165.15.4','150.165.15.38']
+HOSTS = ['150.165.15.4','150.165.15.38', '150.165.15.42']
 
 @app.route('/projects')
 def projects():
@@ -203,5 +203,5 @@ if __name__ == '__main__':
 #    worker.start()
 
     app.debug = True 
-    app.run(host='0.0.0.0', port=2700)
+    app.run(host='0.0.0.0', port=9090)
 
