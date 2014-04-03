@@ -21,21 +21,23 @@ function getAlarmHistoryTime() {
 		$.ajax({
 			url : url_alarm_hist_time,
 			dataType : 'json'
-		}).fail(function() {
+		}).fail(function(data) {
 			cookie_error(data);
-		}).done(function() {
+		}).done(function(data) {
 			cookie_request(data);
 		});
 
 	} else {
+		console.log("teste");
 		checkCokie('cookie_acesso');
 		console.log(url_alarm_hist);
 		$.ajax({
 			url : url_alarm_hist,
 			dataType : 'json'
-		}).fail(function() {
+		}).fail(function(data) {
 			no_cookie_error(data);
-		}).done(function() {
+		}).done(function(data) {
+			console.log("done");
 			no_cookie_request(data);
 		});
 	}

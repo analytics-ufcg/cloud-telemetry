@@ -1,4 +1,4 @@
-var ip_server = "http://150.165.15.4:9090";
+var ip_server = "http://150.165.15.4:2700";
 //150.165.80.194
 var dados;
 var tempo = [];
@@ -113,7 +113,7 @@ function plot() {
 				exec();
 			});
 		}).done(function(data) {
-			console.log(data);
+			dados = data;
 			if (data.length === 0) {
 				if (resource_vm == undefined) {
 					$('#chart').empty().queue(function(exec) {
