@@ -34,6 +34,19 @@ def hosts():
     resp.headers['Access-Control-Allow-Origin'] = "*"
     return resp
 
+@app.route('/hosts/instances')
+def hosts_instances():
+    host_name = request.args.get('host_name', None)
+
+    resp = None
+    if not host_name:
+        resp = make_response(json.dumps({'error' : 'host name cannot be empty'}), 400)
+    else:
+        resp = make_response(json.dumps(data_handler.instances_from_host(host_name)))
+
+    resp.headers['Access-Control-Allow-Origin'] = "*"
+    return resp       
+
 @app.route('/hosts_cpu_util')
 def hosts_cpu_util():
     timestamp_begin = request.args.get('timestamp_begin', None)
