@@ -8,7 +8,7 @@ import json, requests
 app = Flask(__name__)
 data_handler = DataHandler()
 
-HOSTS = ['150.165.15.4','150.165.15.38']
+HOSTS = ['150.165.15.4','150.165.15.38', '150.165.15.42']
 
 @app.route('/projects')
 def projects():
@@ -121,21 +121,12 @@ def hosts_disk():
 
 @app.route('/hosts_recommendation')
 def hosts_recommendation():
-    timestamp_begin = request.args.get('timestamp_begin', None)
-    timestamp_end = request.args.get('timestamp_end', None)
+    r_cpu = hosts_cpu_util()
+    r_memory = hosts_memory() 
+    r_disk = hosts_disk()
 
-    adicionar_url = ""
-    if timestamp_begin:
-        adicionar_url += "?timestamp_begin=%s" % timestamp_begin
-        if timestamp_end:
-            adicionar_url += "&timestamp_end=%s" % timestamp_end
-
-    r_cpu = requests.get("http://150.165.15.4:9090/hosts_cpu_util" + adicionar_url)
-    r_memory = requests.get("http://150.165.15.4:9090/hosts_memory" + adicionar_url)
-    r_disk = requests.get("http://150.165.15.4:9090/hosts_disk" + adicionar_url)
-
-    resp = make_response(data_handler.hosts_recommendation(r_cpu.json(), r_memory.json() , r_disk.json()))
-
+    resp = make_response(data_handler.hosts_recommendation(r_cpu.data, r_memory.data , r_disk.data))
+    resp.headers['Access-Control-Allow-Origin'] = "*"
     return resp
 
 

@@ -85,9 +85,14 @@ class DataHandler:
 
     def hosts_recommendation(self, r_cpu, r_memory , r_disk):
         resource = []
-        ret = ""
+        ret = {}
+        r_cpu = json.loads(r_cpu)
+        r_memory = json.loads(r_memory)
+        r_disk = json.loads(r_disk)
         for host in r_cpu:
             host_http = host["host_address"]
+            if host["data"] is None:
+                continue
             for data in host["data"]:
                 resource.append(data["data"])
             resource = sorted(resource)
@@ -98,7 +103,7 @@ class DataHandler:
                 mediana = resource[int(math.ceil(len(resource)/2))]
 
             if mediana >= 95:
-                ret += "migrar " + host_http + " cpu sobrecarregada; "
+                ret[host_http] ="sobrecarregado"
             else:
                 resource = []
                 for host_mem in r_memory:
@@ -115,11 +120,10 @@ class DataHandler:
                     mediana = resource[int(math.ceil(len(resource)/2))]
 
                 if mediana >= 95:
-                    ret += "migrar " + host_http + " memoria sobrecarregada; "
+                    ret[host_http] ="sobrecarregado"
                 else:
-                    ret += "nao migrar " + host_http + "; "
-        
-        return ret
+                    ret[host_http] ="normal"       
+        return json.dumps(ret)
         #return json.dumps(cpu)
 
 
