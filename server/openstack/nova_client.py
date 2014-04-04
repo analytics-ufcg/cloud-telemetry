@@ -1,6 +1,7 @@
 import subprocess
 import json, requests
 import env
+from keystone_client import KeystoneClient
 from novaclient.v3 import client
 
 class NovaClient:
@@ -8,7 +9,6 @@ class NovaClient:
     def instances(self, project):
         nova = client.Client(env.OS_USERNAME, env.OS_PASSWORD, project, env.OS_AUTH_URL)
         return nova.servers.list()
-
 
     def metrics(self, project):
 
@@ -76,4 +76,4 @@ class NovaClient:
 
         return r.json()
         
-        
+

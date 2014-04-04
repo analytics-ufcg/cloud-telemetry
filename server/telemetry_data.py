@@ -126,7 +126,14 @@ class DataHandler:
         return json.dumps(ret)
         #return json.dumps(cpu)
 
-
-
-
+    def instances_from_host(self, host_name):
+        ret = []
+        projects = self.__keystone.projects
+        for project in projects:
+            instances = self.__nova.instances(project['name'])
+            for instance in instances:
+                print instance._info
+                if instance._info['os-extended-server-attributes:host'] == host_name:
+                    ret.append({'instance_name' : instance.name, 'instance_id' : instance.id})
+        return ret   
 
