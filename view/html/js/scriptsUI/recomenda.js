@@ -89,7 +89,13 @@ function gera_recomendacao() {
 				var ic = [parseFloat(valores_ic[0]), parseFloat(valores_ic[1])];
 				lista_ic.push(ic);
 				lista_violacoes.push(parseFloat(recomendacoes[k][1]));
-				rows = '<tr><th>' + 'Recomendação ' + numero_da_rec + '</th><th>' + k + '</th><th>' + JSON.parse(recomendacoes[k][0]).split(':')[0] + '</th><th>' + recomendacoes[k][1] + '</th></tr>';
+				var core = "";
+				if(k == "1"){
+					core = k + " core";
+				}else{
+					core = k + " cores";
+				}
+				rows = '<tr><th>' + 'Recomendação ' + numero_da_rec + '</th><th>' + core +  '</th><th>' + JSON.parse(recomendacoes[k][0]).split(':')[0] + '</th><th>' + recomendacoes[k][1] + '</th></tr>';
 				tabela_rec += rows;
 				numero_da_rec += numero_da_rec;
 			});

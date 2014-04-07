@@ -412,6 +412,7 @@ function show_hist() {
 function show_rec_flavor() {
 	$("#panel_selection_time").show("slow");
 	$("#rec_div_upgrade").hide();
+	$("#rec_div_migracao").hide();
 	$("#rec_div_flavors").show();
 
 	var $thisLi = $("#bt_rec_flavors").parent('li');
@@ -421,13 +422,12 @@ function show_rec_flavor() {
 		$ul.find('li.active').removeClass('active');
 		$thisLi.addClass('active');
 	}
-	
-	//gera_recomendacao_grafico();
 }
 
 function show_rec_upgrade() {
 	$("#panel_selection_time").hide("slow");
 	$("#rec_div_flavors").hide();
+	$("#rec_div_migracao").hide();
 	$("#rec_div_upgrade").show();
 
 	var $thisLi = $("#bt_rec_upgrade").parent('li');
@@ -439,6 +439,23 @@ function show_rec_upgrade() {
 	}
 	$("#recomendacoes_up").empty();
 	medidas_de_host();
+}
+
+function show_rec_migracao() {
+	$("#panel_selection_time").hide("slow");
+	$("#rec_div_flavors").hide();
+	$("#rec_div_upgrade").hide();
+	$("#rec_div_migracao").show();
+
+	var $thisLi = $("#bt_rec_migracao").parent('li');
+	var $ul = $thisLi.parent('ul');
+
+	if (!$thisLi.hasClass('active')) {
+		$ul.find('li.active').removeClass('active');
+		$thisLi.addClass('active');
+	}
+	$("#recomendacoes_migracoes").empty();
+	getMigracoes();
 }
 
 function show_projects() {
