@@ -1,9 +1,10 @@
 from flask import Flask, render_template, request, make_response
 
 from telemetry_data import DataHandler
-#from local_db_worker import db_worker
 
 import json, requests
+
+LOGFILE = 'telemetry_server.log'
 
 app = Flask(__name__)
 data_handler = DataHandler()
@@ -209,12 +210,22 @@ def metrics():
 
 
 if __name__ == '__main__':
-#    import threading
+    #app.debug = True
+    if not app.debug:
+        import logging
+        from logging.handlers import RotatingFileHandler 
+        info = RotatingFileHandler(LOGFILE)
+        info.setLevel(logging.INFO)
 
-#    worker = threading.Thread(target=db_worker)
-#    worker.daemon = True
-#    worker.start()
+        error = RotatingFileHandler(LOGFILE)
+        error.setLevel(logging.ERROR)
 
-    app.debug = True 
+        warning = RotatingFileHandler(LOGFILE)
+        warning.setLevel(logging.WARNING)
+
+        app.logger.addHandler(info)
+        app.logger.addHandler(error)
+        app.logger.addHandler(warning)
+
     app.run(host='0.0.0.0', port=9090)
 
