@@ -4,7 +4,7 @@ from telemetry_data import DataHandler
 
 import json, requests, logging
 
-LOGFILE = 'telemetry_server.log'
+LOGFILE = 'telemetry_server'
 
 app = Flask(__name__)
 data_handler = DataHandler()
@@ -211,12 +211,13 @@ def metrics():
 
 if __name__ == '__main__':
     app.debug = True
+    server_port = 9090
 
-    handler = logging.handlers.RotatingFileHandler(LOGFILE, maxBytes=1024 * 1024 * 100, backupCount=20)
+    handler = logging.handlers.RotatingFileHandler(LOGFILE + '_' + str(server_port) + '.log', maxBytes=1024 * 1024 * 100, backupCount=20)
 
     log = logging.getLogger('werkzeug')
     log.setLevel(logging.INFO)
     log.addHandler(handler)
 
-    app.run(host='0.0.0.0', port=9090)
+    app.run(host='0.0.0.0', port=server_port)
 
