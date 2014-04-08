@@ -2,7 +2,7 @@ from flask import Flask, render_template, request, make_response
 
 from telemetry_data import DataHandler
 
-import json, requests
+import json, requests, logging
 
 LOGFILE = 'telemetry_server.log'
 
@@ -210,22 +210,13 @@ def metrics():
 
 
 if __name__ == '__main__':
-    #app.debug = True
-    if not app.debug:
-        import logging
-        from logging.handlers import RotatingFileHandler 
-        info = RotatingFileHandler(LOGFILE)
-        info.setLevel(logging.INFO)
+    app.debug = True
 
-        error = RotatingFileHandler(LOGFILE)
-        error.setLevel(logging.ERROR)
+    handler = logging.handlers.RotatingFileHandler(LOGFILE, maxBytes=1024 * 1024 * 100, backupCount=20)
 
-        warning = RotatingFileHandler(LOGFILE)
-        warning.setLevel(logging.WARNING)
-
-        app.logger.addHandler(info)
-        app.logger.addHandler(error)
-        app.logger.addHandler(warning)
+    log = logging.getLogger('werkzeug')
+    log.setLevel(logging.INFO)
+    log.addHandler(handler)
 
     app.run(host='0.0.0.0', port=9090)
 
