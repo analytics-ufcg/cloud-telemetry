@@ -63,7 +63,7 @@ def hosts_cpu_util():
 
 @app.route('/hosts_memory')
 def hosts_memory():
-        timestamp_begin = request.args.get('timestamp_begin', None)
+    timestamp_begin = request.args.get('timestamp_begin', None)
     timestamp_end = request.args.get('timestamp_end', None)
     db = HostDataHandler()
     resp = make_response(json.dumps(db.get_data_db('Memory', timestamp_begin, timestamp_end)))
