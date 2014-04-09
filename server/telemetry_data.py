@@ -80,6 +80,10 @@ class DataHandler:
                         'cloudtelemetry@gmail.com',
                         '4n4lyt1cs')
 
+    def alarm_description(self):
+        return json.dumps(self.__ceilometer.get_alarm_parameters())
+
+
     def host_metrics(self, project):
         return self.__nova.metrics(project)
 
