@@ -200,6 +200,12 @@ def alarm():
     data_handler.alarm_email(request.data)
     return 'passou'
 
+@app.route('/alarm_description')
+def alarm_description():
+    resp = make_response(data_handler.alarm_description())
+    resp.headers['Access-Control-Allow-Origin'] = "*"
+    return resp
+
 @app.route('/host_metrics')
 def metrics():
     project = request.args.get('project')
@@ -211,7 +217,7 @@ def metrics():
 
 if __name__ == '__main__':
     app.debug = True
-    server_port = 9090
+    server_port = 2323
 
     handler = logging.handlers.RotatingFileHandler(LOGFILE + '_' + str(server_port) + '.log', maxBytes=1024 * 1024 * 100, backupCount=20)
 
