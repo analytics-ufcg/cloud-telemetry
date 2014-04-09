@@ -200,6 +200,12 @@ def alarm():
     data_handler.alarm_email(request.data)
     return 'passou'
 
+@app.route('/alarm_description')
+def alarm_description():
+    resp = make_response(data_handler.alarm_description())
+    resp.headers['Access-Control-Allow-Origin'] = "*"
+    return resp
+
 @app.route('/host_metrics')
 def metrics():
     project = request.args.get('project')
