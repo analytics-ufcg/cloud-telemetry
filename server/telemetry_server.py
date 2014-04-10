@@ -5,7 +5,6 @@ from telemetry_data import DataHandler
 import json, requests, threading
 
 from agent_server import store_host_data
-from host_data import HostDataHandler
 
 LOGFILE = 'telemetry_server'
 
@@ -55,8 +54,8 @@ def hosts_instances():
 def hosts_cpu_util():
     timestamp_begin = request.args.get('timestamp_begin', None)
     timestamp_end = request.args.get('timestamp_end', None)
-    db = HostDataHandler()
-    resp = make_response(json.dumps(db.get_data_db('Cpu_Util', timestamp_begin, timestamp_end)))
+    
+    resp = make_response(json.dumps(data_handler.hosts_cpu(timestamp_begin, timestamp_end)))
     resp.headers['Access-Control-Allow-Origin'] = "*"
 
     return resp
@@ -65,8 +64,8 @@ def hosts_cpu_util():
 def hosts_memory():
     timestamp_begin = request.args.get('timestamp_begin', None)
     timestamp_end = request.args.get('timestamp_end', None)
-    db = HostDataHandler()
-    resp = make_response(json.dumps(db.get_data_db('Memory', timestamp_begin, timestamp_end)))
+    
+    resp = make_response(json.dumps(data_handler.hosts_memory(timestamp_begin, timestamp_end)))
     resp.headers['Access-Control-Allow-Origin'] = "*"
 
     return resp
@@ -75,8 +74,8 @@ def hosts_memory():
 def hosts_disk():
     timestamp_begin = request.args.get('timestamp_begin', None)
     timestamp_end = request.args.get('timestamp_end', None)
-    db = HostDataHandler()
-    resp = make_response(json.dumps(db.get_data_db('Disk', timestamp_begin, timestamp_end)))
+    
+    resp = make_response(json.dumps(data_handler.hosts_disk(timestamp_begin, timestamp_end)))
     resp.headers['Access-Control-Allow-Origin'] = "*"
 
     return resp
@@ -166,8 +165,9 @@ def metrics():
 
 if __name__ == '__main__':
     worker = threading.Thread(target=store_host_data, kwargs={'hosts':HOSTS})
-    worker.daemon = True
+    worker.daemon = False
     worker.start()
+    
     app.debug = True
     app.run(host='0.0.0.0', port=9090)
 

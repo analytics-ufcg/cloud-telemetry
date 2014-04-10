@@ -7,7 +7,6 @@ def host_data(interval=1, percpu=False):
     disk = get_disk_usage()
     return {"cpu":cpu, "memory":memory, "disk":disk}
 
-
 def get_cpu_percent(interval, percpu):
     return psutil.cpu_percent(interval, percpu)
 
