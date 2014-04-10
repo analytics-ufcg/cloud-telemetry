@@ -2,6 +2,8 @@ from openstack.ceilometer_client import CeilometerClient
 from openstack.keystone_client import KeystoneClient
 from openstack.nova_client import NovaClient
 from mysql_util import get_latest_cpu_util_from_database
+from host_data import HostDataHandler
+
 import json, ast, smtplib, math
 
 import analytics.recommendations
@@ -30,6 +32,7 @@ class DataHandler:
         self.__ceilometer = CeilometerClient()
         self.__keystone = KeystoneClient()
         self.__nova = NovaClient()
+        self.__hosts_db = HostDataHandler()
 
     def projects(self):
         return json.dumps(self.__keystone.projects)
@@ -79,6 +82,18 @@ class DataHandler:
                         'Email disparado pelo alarme!!!', 
                         'cloudtelemetry@gmail.com',
                         '4n4lyt1cs')
+
+    def alarm_description(self):
+        return json.dumps(self.__ceilometer.get_alarm_parameters())
+
+    def hosts_cpu(self, timestamp_begin, timestamp_end):
+        return self.__hosts_db.get_data_db('Cpu_Util', timestamp_begin, timestamp_end)
+
+    def hosts_memory(self, timestamp_begin, timestamp_end):
+        return self.__hosts_db.get_data_db('Memory', timestamp_begin, timestamp_end)
+
+    def hosts_disk(self, timestamp_begin, timestamp_end):
+        return self.__hosts_db.get_data_db('Disk', timestamp_begin, timestamp_end)
 
     def host_metrics(self, project):
         return self.__nova.metrics(project)

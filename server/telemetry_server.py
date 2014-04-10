@@ -1,9 +1,12 @@
 from flask import Flask, render_template, request, make_response
 
 from telemetry_data import DataHandler
-#from local_db_worker import db_worker
 
-import json, requests
+import json, requests, threading
+
+from agent_server import store_host_data
+
+LOGFILE = 'telemetry_server'
 
 app = Flask(__name__)
 data_handler = DataHandler()
@@ -51,27 +54,9 @@ def hosts_instances():
 def hosts_cpu_util():
     timestamp_begin = request.args.get('timestamp_begin', None)
     timestamp_end = request.args.get('timestamp_end', None)
-
-    data = []
-    for host in HOSTS:
-        url = "http://%s:6556/host_cpu" % host
-        if timestamp_begin:
-            url += "?timestamp_begin=%s" % timestamp_begin
-        
-            if timestamp_end:
-                url += "&timestamp_end=%s" % timestamp_end
-
-        r = requests.get(url)
-        if r.status_code == 200:
-            dic = {}
-            dic['host_address'] = host
-            dic['data'] = r.json()
-            data.append(dic)
-        else:
-            print 'Unknown host'
-
-    resp = make_response(json.dumps(data))    
-    resp.headers['Access-Control-Allow-Origin'] = "*" 
+    
+    resp = make_response(json.dumps(data_handler.hosts_cpu(timestamp_begin, timestamp_end)))
+    resp.headers['Access-Control-Allow-Origin'] = "*"
 
     return resp
 
@@ -79,26 +64,8 @@ def hosts_cpu_util():
 def hosts_memory():
     timestamp_begin = request.args.get('timestamp_begin', None)
     timestamp_end = request.args.get('timestamp_end', None)
-
-    data = []
-    for host in HOSTS:
-        url = "http://%s:6556/host_memory" % host
-        if timestamp_begin:
-            url += "?timestamp_begin=%s" % timestamp_begin
-
-            if timestamp_end:
-                url += "&timestamp_end=%s" % timestamp_end
-
-        r = requests.get(url)
-        if r.status_code == 200:
-            dic = {}
-            dic['host_address'] = host
-            dic['data'] = r.json()
-            data.append(dic)
-        else:
-            print 'Unknown host'
-
-    resp = make_response(json.dumps(data))
+    
+    resp = make_response(json.dumps(data_handler.hosts_memory(timestamp_begin, timestamp_end)))
     resp.headers['Access-Control-Allow-Origin'] = "*"
 
     return resp
@@ -107,26 +74,8 @@ def hosts_memory():
 def hosts_disk():
     timestamp_begin = request.args.get('timestamp_begin', None)
     timestamp_end = request.args.get('timestamp_end', None)
-
-    data = []
-    for host in HOSTS:
-        url = "http://%s:6556/host_disk" % host
-        if timestamp_begin:
-            url += "?timestamp_begin=%s" % timestamp_begin
-
-            if timestamp_end:
-                url += "&timestamp_end=%s" % timestamp_end
-
-        r = requests.get(url)
-        if r.status_code == 200:
-            dic = {}
-            dic['host_address'] = host
-            dic['data'] = r.json()
-            data.append(dic)
-        else:
-            print 'Unknown host'
-
-    resp = make_response(json.dumps(data))
+    
+    resp = make_response(json.dumps(data_handler.hosts_disk(timestamp_begin, timestamp_end)))
     resp.headers['Access-Control-Allow-Origin'] = "*"
 
     return resp
@@ -199,6 +148,12 @@ def alarm():
     data_handler.alarm_email(request.data)
     return 'passou'
 
+@app.route('/alarm_description')
+def alarm_description():
+    resp = make_response(data_handler.alarm_description())
+    resp.headers['Access-Control-Allow-Origin'] = "*"
+    return resp
+
 @app.route('/host_metrics')
 def metrics():
     project = request.args.get('project')
@@ -209,12 +164,10 @@ def metrics():
 
 
 if __name__ == '__main__':
-#    import threading
-
-#    worker = threading.Thread(target=db_worker)
-#    worker.daemon = True
-#    worker.start()
-
-    app.debug = True 
+    worker = threading.Thread(target=store_host_data, kwargs={'hosts':HOSTS})
+    worker.daemon = False
+    worker.start()
+    
+    app.debug = True
     app.run(host='0.0.0.0', port=9090)
 

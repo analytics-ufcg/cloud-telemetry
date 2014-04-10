@@ -5,3 +5,4 @@ venv/
 .pydevproject
 *.csv
 *.swp
+*.log
