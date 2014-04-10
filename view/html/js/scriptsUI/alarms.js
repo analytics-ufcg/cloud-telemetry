@@ -74,3 +74,34 @@ function addAlarme() {
 	});
 }
 
+function list_alarms() {
+
+	var url_list_alarms = ip_server + "/alarm_description";
+	console.log(url_list_alarms);
+	$.ajax({
+		url : url_list_alarms,
+		dataType : 'json'
+	}).fail(function(data) {
+	}).done(function(data) {
+		var lista = data;
+		console.log(data);
+		var tabela_list = '<table class="table table-bordered"><thead><tr><th>Alarme Id</th><th>Enabled</th><th>Description</th></tr></thead><tbody>';
+		var rows;
+		$.each(lista, function(k, v) {
+			rows = '<tr><th>' + k + '</th><th>' + lista[k][0] + '</th><th>' + lista[k][1] + '</th></tr>';
+			tabela_list += rows;
+		});
+
+		tabela_list += '</tbdody></table>';
+		
+		console.log(tabela_list);
+		$('#hist_info').empty().queue(function(exec) {
+			$(tabela_list).appendTo('#hist_info');
+			exec();
+		});
+
+	});
+
+}
+
+
