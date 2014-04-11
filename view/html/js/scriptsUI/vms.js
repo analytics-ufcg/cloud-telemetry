@@ -2,6 +2,8 @@ var json_projects;
 var projects_name = [];
 var json_vm = {};
 var hosts_ip = [];
+var alarm_data = [];
+var total_alarms = 0;
 $.ajax({
 	url : (ip_server + "/projects/instances"),
 	global : false,
@@ -96,10 +98,12 @@ function count_alarms() {
 		//colocar mensagem que nao conseguiu
 		console.log("count erro");
 	}).done(function(data) {
-		var num = 0;
+		alarm_data = data;
+    	var num = 0;
 		$.each(data, function(k, v) {
 			num += data[k].history.length;
 		});
+		total_alarms = num;
 		$("#notificacoes").append('<span class="badge">' + num + '</span>');
 	});
 }

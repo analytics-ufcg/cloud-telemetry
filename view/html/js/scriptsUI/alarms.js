@@ -75,7 +75,7 @@ function addAlarme() {
 }
 
 function list_alarms() {
-
+	$("#bt_hist_alarm").hide();
 	var url_list_alarms = ip_server + "/alarm_description";
 	console.log(url_list_alarms);
 	$.ajax({
