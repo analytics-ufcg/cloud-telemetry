@@ -154,6 +154,13 @@ def alarm_description():
     resp.headers['Access-Control-Allow-Origin'] = "*"
     return resp
 
+@app.route('/alarm_delete')
+def alarm_delete():
+    alarm_id = request.args.get('alarm_id')
+    resp = make_response(data_handler.delete_alarm(alarm_id))
+    resp.headers['Access-Control-Allow-Origin'] = "*"
+    return resp
+
 @app.route('/host_metrics')
 def metrics():
     project = request.args.get('project')

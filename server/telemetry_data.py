@@ -85,6 +85,9 @@ class DataHandler:
 
     def alarm_description(self):
         return json.dumps(self.__ceilometer.get_alarm_parameters())
+    
+    def delete_alarm(self, alarm_id):
+        return json.dumps(self.__ceilometer.delete_alarms(alarm_id))
 
     def hosts_cpu(self, timestamp_begin, timestamp_end):
         return self.__hosts_db.get_data_db('Cpu_Util', timestamp_begin, timestamp_end)
