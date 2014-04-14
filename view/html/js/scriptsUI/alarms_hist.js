@@ -89,6 +89,8 @@ function tabelaHist(historico_ord, qtd_alarmes) {
 		var row_hist = '<tr> <th>' + array_h[i].timestamp + '</th> <th>' + nome + '</th> <th>' + array_h[i].type + '</th> <th>' + formatDetail(array_h[i].detail, array_h[i].type) + '</th></tr>';
 		rows += row_hist;
 	}
+	console.log("tabela Hist");
+	console.log(rows);
 	console.log("num notificacoes", num_notf);
 	rows_requisicao += rows;
 	tabela_historico += rows_requisicao + '</tbody></table>';

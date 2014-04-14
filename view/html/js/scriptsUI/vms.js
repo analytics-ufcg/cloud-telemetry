@@ -98,6 +98,7 @@ function count_alarms() {
 		//colocar mensagem que nao conseguiu
 		console.log("count erro");
 	}).done(function(data) {
+		$("#notificacoes .badge").remove();
 		alarm_data = data;
     	var num = 0;
 		$.each(data, function(k, v) {

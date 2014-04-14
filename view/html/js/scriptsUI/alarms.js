@@ -143,6 +143,7 @@ function deleteAlarme() {
 
 
 function list_alarms() {
+	show_hist();
 	$("#bt_hist_alarm").hide();
 	var url_list_alarms = ip_server + "/alarm_description";
 	console.log(url_list_alarms);
