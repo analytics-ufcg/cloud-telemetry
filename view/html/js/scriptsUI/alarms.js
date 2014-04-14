@@ -163,8 +163,8 @@ function list_alarms() {
 		tabela_list += '</tbdody></table>';
 		
 		console.log(tabela_list);
-		$('#list_info').empty().queue(function(exec) {
-			$(tabela_list).appendTo('#list_info');
+		$('#hist_info').empty().queue(function(exec) {
+			$(tabela_list).appendTo('#hist_info');
 			exec();
 		});
 
