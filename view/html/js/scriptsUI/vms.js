@@ -20,27 +20,38 @@ $.ajax({
 		json_vm[nome] = [];
 		$.each(json_projects.children[key1].children, function(key2, value2) {
 			json_vm[json_projects.children[key1].name].push(json_projects.children[key1].children[key2].resource_id);
+			json_vm[json_projects.children[key1].name].push(json_projects.children[key1].children[key2].instance_name);
 		});
 	});
 
 	$('<div id="painel_projetos" class="panel panel-primary">' + '</div>').appendTo('#menu_vm');
 	$('<div class="panel-heading">' + '<h3 class="panel-title">Projetos</h3>' + '</div>').appendTo('#painel_projetos');
 	//Mudancas serão necessárias para aparecer o nome das VMs
-	var cont = 1;
 	$.each(projects_name, function(k, v) {
 		var projeto = projects_name[k];
 		var vms = json_vm[projeto];
 		var add_vm = '';
 		if (vms.length > 0) {
-			$.each(vms, function(i) {
-				add_vm += '<div class="radio"><label><input type="radio" name="defaultVM" ' + 'value=' + vms[i].toString() + '>VM' + cont + '</label></div>';
-				cont += 1;
-			});
+			for(var i = 0; i < vms.length; i = i + 2){
+				add_vm += '<div class="radio"><label data-toggle="tooltip"'+ 'title=' + vms[i+1].toString()+ '><input type="radio" name="defaultVM" ' + 'value=' + vms[i].toString() + '>' + vm_name(vms[i+1].toString());
+				add_vm += '</label></div>';
+			}
 			$('<div class="panel-body">' + '<strong> Projeto ' + projeto + ' <strong>' + add_vm + '</div>').appendTo('#painel_projetos');
 		}
 	});
 
 });
+
+
+function vm_name(nome){
+	if(nome.length < 18){
+		return nome;
+	}else{
+		return nome.substring(0,19)+"...";
+	}
+	
+}
+
 
 $.ajax({
 	url : (ip_server + "/hosts"),
