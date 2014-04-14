@@ -58,6 +58,10 @@ def metrics():
 def alarm_description():
     return forward_request(request)
 
+@app.route('/alarm_delete')
+def alarm_delete():
+    return forward_request(request)
+
 @app.route('/add_alarm',  methods=['POST'])
 def add_alarm():
     return forward_request(request)    
