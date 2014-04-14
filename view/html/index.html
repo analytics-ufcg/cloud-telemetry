@@ -199,15 +199,24 @@
 						</div>
 					</div>
 					<div id="hist_div" class="row" style="display:none;">
+						<ul class="nav nav-pills nav-justified">
+							<li class="active">
+								<a href="#" id="bt_alarm_hist" onclick="count_alarms();getAlarmHistoryTime();">Histórico</a>
+							</li>
+							<li class="">
+								<a href="#" id="bt_alarm_list" onclick="list_alarms();">Lista de Alarmes</a>
+							</li>
+						</ul>
+
 						<div id="hist_info"class="col-md-12 col-lg-12">
 
 						</div>
 						<div id="bt_hist_alarm" class="row">
 							<div class="col-md-4 col-md-offset-5">
-								<button type"button"="" class="btn btn-success" align="right" id="recarregar_alarmes" style="" onclick="count_alarms();getAlarmHistoryTime();">
+								<button type="button" class="btn btn-success" align="right" id="recarregar_alarmes" style="" onclick="count_alarms();getAlarmHistoryTime();">
 									Atualizar
 								</button>
-								<button type"button"="" align="left" class="btn btn-info" id="mais_alarmes" style="" onclick="adicionarAlarmes();">
+								<button type="button" align="left" class="btn btn-info" id="mais_alarmes" style="" onclick="adicionarAlarmes();">
 									Ver mais
 								</button>
 							</div>

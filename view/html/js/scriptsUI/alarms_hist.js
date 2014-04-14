@@ -7,6 +7,13 @@ var posicao_array = 0;
 var ontem;
 
 function getAlarmHistoryTime() {
+	var $thisLi = $("#bt_alarm_hist").parent('li');
+	var $ul = $thisLi.parent('ul');
+
+	if (!$thisLi.hasClass('active')) {
+		$ul.find('li.active').removeClass('active');
+		$thisLi.addClass('active');
+	}
 	$("#bt_hist_alarm").show();
 	$("#hist_info").empty();
 	var hist_sort = [];

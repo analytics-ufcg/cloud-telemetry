@@ -12,11 +12,10 @@ html_addalarm += '<option value="" label=""></option><option value="gt" label="m
 html_addalarm += '<div class="row"><div class="col-lg-8 col-md-8">Evaluation Period <input type="text" id="eval_period" name="evalperiod_val"></input></div> ';
 html_addalarm += '<div class="col-lg-4 col-md-4">Time <input type="text" id="time" name="time_val"></input></div></div>';
 
-
 /*
-var html_deletealarm = '<div class="row"><div class="col-lg-8 col-md-8"><span>Alarme: </span><select id="myRecursos" class="selectpicker show-tick" data-live-search="true" data-size="auto" data-width="160px";>';
-html_deletealarm += '<option value="" label=""></option><option value="cpu_util" label="cpu_util">cpu_util</option></select></div></div>';
-*/
+ var html_deletealarm = '<div class="row"><div class="col-lg-8 col-md-8"><span>Alarme: </span><select id="myRecursos" class="selectpicker show-tick" data-live-search="true" data-size="auto" data-width="160px";>';
+ html_deletealarm += '<option value="" label=""></option><option value="cpu_util" label="cpu_util">cpu_util</option></select></div></div>';
+ */
 function addAlarme() {
 	bootbox.dialog({
 
@@ -79,12 +78,12 @@ function addAlarme() {
 }
 
 function deleteAlarme() {
-	
+
 	var url_list_alarms = ip_server + "/alarm_description";
 	var alarms_list = new Array();
 	var indice = 0;
-	var html_deletealarm = '<div class="row"><div class="col-lg-8 col-md-8"><span>Alarme: </span><select id="myAlarm" class="selectpicker show-tick" data-live-search="true" data-size="auto" data-width="160px";>';
-	
+	var html_deletealarm = '<div class="row"><div class="col-lg-8 col-md-8"><span>Alarm Name: </span><select id="myAlarm" class="selectpicker show-tick" data-live-search="true" data-size="auto" data-width="160px";>';
+
 	$.ajax({
 		url : url_list_alarms,
 		dataType : 'json'
@@ -92,58 +91,59 @@ function deleteAlarme() {
 	}).done(function(data) {
 		var lista = data;
 		$.each(lista, function(k, v) {
-			html_deletealarm += '<option value="'+ k +'" label="'+ k +'">' + k + '</option>';
+			html_deletealarm += '<option value="' + k + '" label="' + lista[k][0] + '">' + k + '</option>';
 		});
-		
-		
+
 		html_deletealarm += '</div></div>';
-			bootbox.dialog({
+		bootbox.dialog({
 
-		message : html_deletealarm,
-		title : "Remoção de Alarmes",
-		buttons : {
-			main : {
-				label : "Remover",
-				className : "btn-primary",
-				callback : function(result) {
-					var alarme_escolhido = $('#myAlarm').find(":selected").val();
-					var url_alarm = ip_server + "/alarm_delete?";
-					url_alarm += 'alarm_id=' + alarme_escolhido;
-					console.log(url_alarm);
+			message : html_deletealarm,
+			title : "Remoção de Alarmes",
+			buttons : {
+				main : {
+					label : "Remover",
+					className : "btn-primary",
+					callback : function(result) {
+						var alarme_escolhido = $('#myAlarm').find(":selected").val();
+						var url_alarm = ip_server + "/alarm_delete?";
+						url_alarm += 'alarm_id=' + alarme_escolhido;
+						console.log(url_alarm);
 
-
-					$.ajax({
-						url : url_alarm,
-						dataType : 'json'
-					}).fail(function(data) {
-						$('#recomendacoes_up').empty().queue(function(exec) {
-							$('<h3>Ocorreu um erro durante a requisição, por favor tente novamente.</h3>').appendTo('#recomendacoes_up');
-							exec();
-						});
-					}).done(function(data) {
+						$.ajax({
+							url : url_alarm,
+							dataType : 'json'
+						}).fail(function(data) {
+							$('#recomendacoes_up').empty().queue(function(exec) {
+								$('<h3>Ocorreu um erro durante a requisição, por favor tente novamente.</h3>').appendTo('#recomendacoes_up');
+								exec();
+							});
+						}).done(function(data) {
 							$('#alarm_ok').append("<span>Alarme removido com sucesso</span>");
 							$('#alarm_ok').show(0).delay(4300).hide(0).queue(function(next) {
 								$('#alarm_ok').find('span').remove();
 								next();
 							});
-							
-							
+
 						});
 
+					}
 				}
 			}
-		}
+		});
+
 	});
-	
-	});
-	
-	
 
 }
 
-
 function list_alarms() {
 	show_hist();
+	var $thisLi = $("#bt_alarm_list").parent('li');
+	var $ul = $thisLi.parent('ul');
+
+	if (!$thisLi.hasClass('active')) {
+		$ul.find('li.active').removeClass('active');
+		$thisLi.addClass('active');
+	}
 	$("#bt_hist_alarm").hide();
 	var url_list_alarms = ip_server + "/alarm_description";
 	console.log(url_list_alarms);
@@ -154,15 +154,15 @@ function list_alarms() {
 	}).done(function(data) {
 		var lista = data;
 		console.log(data);
-		var tabela_list = '<table class="table table-bordered"><thead><tr><th>Alarme Id</th><th>Enabled</th><th>Description</th></tr></thead><tbody>';
+		var tabela_list = '<table class="table table-bordered"><thead><tr> <th> Alarm Name </th> <th>Alarm Id</th> <th>Enabled</th> <th>Description</th> </tr> </thead><tbody>';
 		var rows;
 		$.each(lista, function(k, v) {
-			rows = '<tr><th>' + k + '</th><th>' + lista[k][0] + '</th><th>' + lista[k][1] + '</th></tr>';
+			rows = '<tr><th>' +  lista[k][0]  +'</th><th>'+ k + '</th><th>' + lista[k][1] + '</th><th>' + lista[k][2] + '</th></tr>';
 			tabela_list += rows;
 		});
 
 		tabela_list += '</tbdody></table>';
-		
+
 		console.log(tabela_list);
 		$('#hist_info').empty().queue(function(exec) {
 			$(tabela_list).appendTo('#hist_info');
@@ -172,5 +172,4 @@ function list_alarms() {
 	});
 
 }
-
 
