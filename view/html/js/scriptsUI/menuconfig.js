@@ -390,6 +390,27 @@ function show_recomendacoes() {
 	show_rec_upgrade();
 }
 
+
+function show_list() {
+	$("#hist_info").empty();
+	$("#chart_div").hide();
+	$("#rec_div").hide();
+	$("#gerar_rec").hide();
+	$("#panel_selection_time").hide("slow");
+	$("#hist_div").show();
+
+	var $thisLi = $("#bt_list").parent('li');
+	var $ul = $thisLi.parent('ul');
+
+	if (!$thisLi.hasClass('active')) {
+		$ul.find('li.active').removeClass('active');
+		$thisLi.addClass('active');
+	}
+	//chamada para atualizar o historico
+	list_alarms();
+}
+
+
 function show_hist() {
 	$("#hist_info").empty();
 	$("#chart_div").hide();
@@ -408,6 +429,8 @@ function show_hist() {
 	//chamada para atualizar o historico
 	getAlarmHistoryTime();
 }
+
+
 
 function show_rec_flavor() {
 	$("#panel_selection_time").show("slow");

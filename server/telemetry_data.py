@@ -1,7 +1,6 @@
 from openstack.ceilometer_client import CeilometerClient
 from openstack.keystone_client import KeystoneClient
 from openstack.nova_client import NovaClient
-from mysql_util import get_latest_cpu_util_from_database
 from host_data import HostDataHandler
 
 import json, ast, smtplib, math
@@ -55,9 +54,8 @@ class DataHandler:
 
             instances = self.__nova.instances(p.name)
 
-            cpu_data = get_latest_cpu_util_from_database(project_id=p.id, limit=len(instances))
-            for sample in cpu_data:                 
-                proj['children'].append({ 'resource_id' : sample[4], 'cpu_util_percent' : sample[6] })
+            for i in instances:                 
+                proj['children'].append({ 'resource_id' : i.id, 'instance_name' : i.name })
 
             ret['children'].append(proj)
 
@@ -85,6 +83,9 @@ class DataHandler:
 
     def alarm_description(self):
         return json.dumps(self.__ceilometer.get_alarm_parameters())
+    
+    def delete_alarm(self, alarm_id):
+        return json.dumps(self.__ceilometer.delete_alarms(alarm_id))
 
     def hosts_cpu(self, timestamp_begin, timestamp_end):
         return self.__hosts_db.get_data_db('Cpu_Util', timestamp_begin, timestamp_end)

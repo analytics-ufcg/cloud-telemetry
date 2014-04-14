@@ -78,5 +78,10 @@ class CeilometerClient:
         alarms = self.ceilometer.alarms.list()
         parametros = {}
         for alarm in alarms:
-            parametros[alarm.alarm_id] = [alarm.enabled, alarm.description]
+            parametros[alarm.alarm_id] = [alarm.name, alarm.enabled, alarm.description]
         return parametros
+
+    def delete_alarms(self, alarm_id):
+        self.ceilometer.alarms.delete(alarm_id)
+        return 'removido com sucesso'
+
