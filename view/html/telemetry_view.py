@@ -54,6 +54,10 @@ def hosts_recommendation():
 def metrics():
     return forward_request(request)
 
+@app.route('/alarm_description')
+def alarm_description():
+    return forward_request(request)
+
 @app.route('/add_alarm',  methods=['POST'])
 def add_alarm():
     return forward_request(request)    
