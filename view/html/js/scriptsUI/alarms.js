@@ -12,7 +12,11 @@ html_addalarm += '<option value="" label=""></option><option value="gt" label="m
 html_addalarm += '<div class="row"><div class="col-lg-8 col-md-8">Evaluation Period <input type="text" id="eval_period" name="evalperiod_val"></input></div> ';
 html_addalarm += '<div class="col-lg-4 col-md-4">Time <input type="text" id="time" name="time_val"></input></div></div>';
 
-/*Funcao que oferece a adição de alarme*/
+
+/*
+var html_deletealarm = '<div class="row"><div class="col-lg-8 col-md-8"><span>Alarme: </span><select id="myRecursos" class="selectpicker show-tick" data-live-search="true" data-size="auto" data-width="160px";>';
+html_deletealarm += '<option value="" label=""></option><option value="cpu_util" label="cpu_util">cpu_util</option></select></div></div>';
+*/
 function addAlarme() {
 	bootbox.dialog({
 
@@ -74,6 +78,70 @@ function addAlarme() {
 	});
 }
 
+function deleteAlarme() {
+	
+	var url_list_alarms = ip_server + "/alarm_description";
+	var alarms_list = new Array();
+	var indice = 0;
+	var html_deletealarm = '<div class="row"><div class="col-lg-8 col-md-8"><span>Alarme: </span><select id="myAlarm" class="selectpicker show-tick" data-live-search="true" data-size="auto" data-width="160px";>';
+	
+	$.ajax({
+		url : url_list_alarms,
+		dataType : 'json'
+	}).fail(function(data) {
+	}).done(function(data) {
+		var lista = data;
+		$.each(lista, function(k, v) {
+			html_deletealarm += '<option value="'+ k +'" label="'+ k +'">' + k + '</option>';
+		});
+		
+		
+		html_deletealarm += '</div></div>';
+			bootbox.dialog({
+
+		message : html_deletealarm,
+		title : "Remoção de Alarmes",
+		buttons : {
+			main : {
+				label : "Remover",
+				className : "btn-primary",
+				callback : function(result) {
+					var alarme_escolhido = $('#myAlarm').find(":selected").val();
+					var url_alarm = ip_server + "/alarm_delete?";
+					url_alarm += 'alarm_id=' + alarme_escolhido;
+					console.log(url_alarm);
+
+
+					$.ajax({
+						url : url_alarm,
+						dataType : 'json'
+					}).fail(function(data) {
+						$('#recomendacoes_up').empty().queue(function(exec) {
+							$('<h3>Ocorreu um erro durante a requisição, por favor tente novamente.</h3>').appendTo('#recomendacoes_up');
+							exec();
+						});
+					}).done(function(data) {
+							$('#alarm_ok').append("<span>Alarme removido com sucesso</span>");
+							$('#alarm_ok').show(0).delay(4300).hide(0).queue(function(next) {
+								$('#alarm_ok').find('span').remove();
+								next();
+							});
+							
+							
+						});
+
+				}
+			}
+		}
+	});
+	
+	});
+	
+	
+
+}
+
+
 function list_alarms() {
 
 	var url_list_alarms = ip_server + "/alarm_description";
@@ -95,8 +163,8 @@ function list_alarms() {
 		tabela_list += '</tbdody></table>';
 		
 		console.log(tabela_list);
-		$('#hist_info').empty().queue(function(exec) {
-			$(tabela_list).appendTo('#hist_info');
+		$('#list_info').empty().queue(function(exec) {
+			$(tabela_list).appendTo('#list_info');
 			exec();
 		});
 
