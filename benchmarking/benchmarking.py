@@ -30,7 +30,7 @@ def run(turns=30):
     memory = []
     disk = []
     
-    for i in range(30):
+    for i in range(turns):
         t1 = int(round(time.time() * 1000))
         fibonacci(30000)
         cpu.append(int(round(time.time() * 1000))-t1)
