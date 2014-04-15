@@ -26,7 +26,7 @@ function gera_recomendacao() {
 	}
 
 	var now = new Date();
-	now.setTime(now.getTime() + now.getTimezoneOffset());
+	now.setTime((now.getTime()+3) + now.getTimezoneOffset());
 	/*url de requisicao do json http://150.165.80.194:9090/*/
 	var url_recomenda = ip_server + "/cpu_util_flavors";
 	if (out == "ultima_hora") {
@@ -76,12 +76,12 @@ function gera_recomendacao() {
 			$('<h3> O período de tempo escolhido não apresenta dados. </h3>').appendTo('#recomendacoes_geradas');
 		} else {
 
-			var tabela_rec = '<table class="table table-bordered"><thead><tr><th>Recomendação</th><th>Sugestão</th><th>Perda</th><th>Violações</th> </tr></thead><tbody>';
+			var tabela_rec = '<table class="table table-bordered"><thead><tr><th>Recommendation</th><th>Sugestion</th><th>Lose</th><th>Violations</th> </tr></thead><tbody>';
 			var rows;
 			var numero_da_rec = 1;
 
 			$.each(recomendacoes, function(k, v) {
-				var rec = "Recomendação " + numero_da_rec;
+				var rec = "Recommendation " + numero_da_rec;
 				lista_rec.push(rec);
 				var lista = JSON.parse(recomendacoes[k][0]).split(":");
 				lista_valores.push(parseFloat(lista[0]));
@@ -95,7 +95,7 @@ function gera_recomendacao() {
 				}else{
 					core = k + " cores";
 				}
-				rows = '<tr><th>' + 'Recomendação ' + numero_da_rec + '</th><th>' + core +  '</th><th>' + JSON.parse(recomendacoes[k][0]).split(':')[0] + '</th><th>' + recomendacoes[k][1] + '</th></tr>';
+				rows = '<tr><th>' + 'Recommendation  ' + numero_da_rec + '</th><th>' + core +  '</th><th>' + JSON.parse(recomendacoes[k][0]).split(':')[0] + '</th><th>' + recomendacoes[k][1] + '</th></tr>';
 				tabela_rec += rows;
 				numero_da_rec += numero_da_rec;
 			});
@@ -116,7 +116,7 @@ function grafico_rec(nomes, valores, ic) {
 			zoomType : 'x'
 		},
 		title : {
-			text : 'Média de Perda (%) por Recomendação'
+			text : 'Average of Lose (%) per Recommendation'
 		},
 		xAxis : [{
 			categories : nomes
@@ -128,7 +128,7 @@ function grafico_rec(nomes, valores, ic) {
 				}
 			},
 			title : {
-				text : 'Média'
+				text : 'Average'
 			}
 		},
 
@@ -142,7 +142,7 @@ function grafico_rec(nomes, valores, ic) {
 			}
 		},
 		series : [{
-			name : 'Média',
+			name : 'Average',
 			type : 'column',
 			data : valores,
 			tooltip : {
@@ -150,11 +150,11 @@ function grafico_rec(nomes, valores, ic) {
 			}
 		}, {
 			color : '#FF0000',
-			name : 'Intervalo de Confiança',
+			name : 'Confidence Interval',
 			type : 'errorbar',
 			data : ic,
 			tooltip : {
-				pointFormat : 'Intervalo de Confiança: {point.low}-{point.high}'
+				pointFormat : 'Confidence Interval: {point.low}-{point.high}'
 			}
 		}]
 	});
@@ -169,7 +169,7 @@ function grafico_violacoes(nomes, valores) {
 			zoomType : 'x'
 		},
 		title : {
-			text : 'Violações por Recomendação'
+			text : 'Violations per Recommendation'
 		},
 		xAxis : [{
 			categories : nomes
@@ -182,7 +182,7 @@ function grafico_violacoes(nomes, valores) {
 				}
 			},
 			title : {
-				text : 'Violações'
+				text : 'Violations'
 			}
 		},
 
@@ -196,7 +196,7 @@ function grafico_violacoes(nomes, valores) {
 			}
 		},
 		series : [{
-			name : 'Número de violações',
+			name : 'Number of violations',
 			type : 'column',
 			data : valores,
 			tooltip : {

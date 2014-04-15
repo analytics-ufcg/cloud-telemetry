@@ -91,9 +91,10 @@ function deleteAlarme() {
 	}).done(function(data) {
 		var lista = data;
 		$.each(lista, function(k, v) {
-			html_deletealarm += '<option value="' + k + '" label="' + lista[k][0] + '">' + k + '</option>';
-		});
+			html_deletealarm += '<option value="' + k + '" label="' + lista[k][0] + '">' + lista[k][0] + '</option>';
 
+		});
+		console.log(html_deletealarm);
 		html_deletealarm += '</div></div>';
 		bootbox.dialog({
 
@@ -157,7 +158,7 @@ function list_alarms() {
 		var tabela_list = '<table class="table table-bordered"><thead><tr> <th> Alarm Name </th> <th>Alarm Id</th> <th>Enabled</th> <th>Description</th> </tr> </thead><tbody>';
 		var rows;
 		$.each(lista, function(k, v) {
-			rows = '<tr><th>' +  lista[k][0]  +'</th><th>'+ k + '</th><th>' + lista[k][1] + '</th><th>' + lista[k][2] + '</th></tr>';
+			rows = '<tr><th>' + lista[k][0] + '</th><th>' + k + '</th><th>' + lista[k][1] + '</th><th>' + lista[k][2] + '</th></tr>';
 			tabela_list += rows;
 		});
 

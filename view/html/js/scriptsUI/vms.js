@@ -25,7 +25,7 @@ $.ajax({
 	});
 
 	$('<div id="painel_projetos" class="panel panel-primary">' + '</div>').appendTo('#menu_vm');
-	$('<div class="panel-heading">' + '<h3 class="panel-title">Projetos</h3>' + '</div>').appendTo('#painel_projetos');
+	$('<div class="panel-heading">' + '<h3 class="panel-title">Projects</h3>' + '</div>').appendTo('#painel_projetos');
 	//Mudancas serão necessárias para aparecer o nome das VMs
 	$.each(projects_name, function(k, v) {
 		var projeto = projects_name[k];
@@ -67,7 +67,7 @@ $.ajax({
 	});
 
 	$('<div id="painel_metrica" class="panel panel-primary"></div>').appendTo('#menu_host');
-	$('<div class="panel-heading"> <h3 class="panel-title">Metricas</h3></div>').appendTo("#painel_metrica");
+	$('<div class="panel-heading"> <h3 class="panel-title">Metrics</h3></div>').appendTo("#painel_metrica");
 	var metricas = '<div class="radio"><label><input type="radio" name="defaultMetric" value="cpu">CPU</label></div>';
 	metricas += '<div class="radio"><label><input type="radio" name="defaultMetric" value="disco">Disco</label></div>';
 	metricas += '<div class="radio"><label><input type="radio" name="defaultMetric" value="memoria">Memória</label></div>';
@@ -82,7 +82,7 @@ $.ajax({
 		add_host += 'id='+posicao +'>' + hosts_ip[k2] + '</label></div>';
 		posicao += 1;
 	});
-	$('<div class="panel-body">' + '<strong> Hosts </strong>' + add_host + '</div>').appendTo('#painel_hosts');
+	$('<div class="panel-body">' + add_host + '</div>').appendTo('#painel_hosts');
 	
 	$(function() {
     var $radios = $('input:radio[name=defaultMetric]');

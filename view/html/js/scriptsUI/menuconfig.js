@@ -27,7 +27,7 @@ $('.input-group-addon').click(function() {
 
 /*Funcao para converter dia e mês*/
 function formattedDate(date, verificador) {
-	var d = new Date(date || Date.now()), month = '' + (d.getMonth() + 1), day = '' + d.getDate(), year = '' + d.getFullYear(), hour = '' + (d.getHours()), minuto = '' + (d.getMinutes());
+	var d = new Date(date || Date.now()), month = '' + (d.getMonth() + 1), day = '' + d.getDate(), year = '' + d.getFullYear(), hour = '' + (d.getHours()+3), minuto = '' + (d.getMinutes());
 	if (verificador == 1) {
 		month = '' + d.getMonth();
 	}
@@ -208,8 +208,8 @@ function plot() {
 				});
 			}).done(function(data) {
 				dados = data;
-
-				if (dados.length === 0) {
+				console.log(typeof dados);
+				if (dados === null || dados.length === 0 ) {
 					$('#chart').empty().queue(function(exec) {
 						$('#chart').html('<p><h3>Período de tempo não consta nos dados, selecione outro período.</h3><p>');
 						exec();
@@ -238,7 +238,7 @@ function plot() {
 								},
 								axis : {
 									x : {
-										label : 'Tempo',
+										label : 'Time',
 										type : 'timeseries'
 									},
 									y : {
@@ -284,7 +284,7 @@ function getCPU(json) {
 	array_tempo.push("x");
 	var lista_particoes = [];
 	array_cpu = [];
-	array_cpu.push("utilização de cpu");
+	array_cpu.push("CPU usage");
 	$.each(json, function(d) {
 		array_tempo.push(json[d].timestamp.replace("T", " "));
 		array_cpu.push((json[d].data).toFixed(2));
@@ -300,7 +300,7 @@ function getMemory(json) {
 	array_tempo.push("x");
 	var lista_particoes = [];
 	array_memoria = [];
-	array_memoria.push("utilização de memória");
+	array_memoria.push("Memory usage");
 	$.each(json, function(d) {
 		array_tempo.push(json[d].timestamp.replace("T", " "));
 		var json_memory = JSON.parse(json[d].data);
