@@ -97,7 +97,7 @@ function gera_recomendacao() {
 				}
 				rows = '<tr><th>' + 'Recommendation  ' + numero_da_rec + '</th><th>' + core +  '</th><th>' + JSON.parse(recomendacoes[k][0]).split(':')[0] + '</th><th>' + recomendacoes[k][1] + '</th></tr>';
 				tabela_rec += rows;
-				numero_da_rec += numero_da_rec;
+				numero_da_rec += 1;
 			});
 			tabela_rec += '</tbdody></table>';
 			$(tabela_rec).appendTo('#recomendacoes_geradas');

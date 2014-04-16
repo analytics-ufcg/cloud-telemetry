@@ -27,7 +27,7 @@ $('.input-group-addon').click(function() {
 
 /*Funcao para converter dia e mês*/
 function formattedDate(date, verificador) {
-	var d = new Date(date || Date.now()), month = '' + (d.getMonth() + 1), day = '' + d.getDate(), year = '' + d.getFullYear(), hour = '' + (d.getHours()+3), minuto = '' + (d.getMinutes());
+	var d = new Date(date || Date.now()), month = '' + (d.getMonth() + 1), day = '' + d.getDate(), year = '' + d.getFullYear(), hour = '' + (d.getHours()), minuto = '' + (d.getMinutes());
 	if (verificador == 1) {
 		month = '' + d.getMonth();
 	}
@@ -130,7 +130,7 @@ function plot() {
 				var t1 = [];
 				var cpu = [];
 				t1.push("x");
-				cpu.push("utilização de cpu");
+				cpu.push("CPU usage");
 				$.each(dados, function(d) {
 					t1.push(dados[d].timestamp.replace("T", " "));
 					cpu.push((dados[d].cpu_util_percent).toFixed(2));
