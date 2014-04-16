@@ -29,7 +29,7 @@ function medidas_de_host() {
 	}).done(function(data) {
 		$("#load_met").hide();
 		medidas = data;
-		var tabela_met = '<table class="table table-bordered"><thead><tr><th>Host</th><th>Total de CPU</th><th>CPU Utilizada</th><th>Memoria Total</th><th>Memoria Utilizada</th><th>Disco Total</th><th>Disco Utilizado</th><th>Percentual de CPU</th> <th>Percentual de Memoria</th><th>Percentual de Disco</th></tr></thead><tbody>';
+		var tabela_met = '<table class="table table-bordered"><thead><tr><th>Host</th><th>Total CPU</th><th>CPU usage</th><th>Total Memory</th><th>Memory Usage</th><th>Total Disk</th><th>Disk Usage</th><th>CPU Percentage</th> <th>Memory Percentage</th><th>Disk Percentage</th></tr></thead><tbody>';
 		var rows;
 		$.each(medidas, function(k, v) {
 			rows = '<tr><th>' + k + '</th><th>' + medidas[k]["Total"][0] + '</th><th>' + medidas[k]["Em uso"][0];

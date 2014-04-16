@@ -22,7 +22,7 @@ function getAlarmHistoryTime() {
 
 	if (alarm_data.length === 0) {
 		$("#hist_info .no").remove();
-		$('<span class="no"><br><center><h4> Não há histórico de alarmes. </h4></center></span>').appendTo("#hist_info");
+		$('<span class="no"><br><center><h4>There is no alarm history </h4></center></span>').appendTo("#hist_info");
 	} else {
 		$.each(alarm_data, function(k, v) {
 			var name = alarm_data[k].alarm_name;
@@ -53,7 +53,7 @@ function adicionarAlarmes() {
 		tabelaHist(historico_alarmes, num_alarmes);
 	} else if (num_alarmes_restantes == 0) {
 		$("#hist_info .no").remove();
-		$('<span class="no"><br><center><h4> Não há mais histórico de alarmes. </h4></center></span>').appendTo("#hist_info");
+		$('<span class="no"><br><center><h4> There is no more alarm history. </h4></center></span>').appendTo("#hist_info");
 	} else {
 		tabelaHist(historico_alarmes, num_alarmes_restantes);
 	}
@@ -106,7 +106,7 @@ function tabelaHist(historico_ord, qtd_alarmes) {
 		$(tabela_historico).appendTo("#hist_info");
 	} else {
 		$("#hist_info .no").remove();
-		$('<span class="no"><br><center><h4> Não houve disparo de alarmes até o momento </h4></center></span>').appendTo("#hist_info");
+		$('<span class="no"><br><center><h4> There was no trigger alarms yet </h4></center></span>').appendTo("#hist_info");
 	}
 	posicao_array += qtd_alarmes;
 	num_alarmes_restantes -= qtd_alarmes;

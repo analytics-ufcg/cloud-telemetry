@@ -35,16 +35,16 @@
 				<div class="navbar-collapse collapse">
 					<ul class="nav navbar-nav navbar-right">
 						<li class="dropdown">
-							<a href="#" class="dropdown-toggle" data-toggle="dropdown"> <span class="glyphicon glyphicon-cog"></span> Alarmes <b class="caret"></b></a>
+							<a href="#" class="dropdown-toggle" data-toggle="dropdown"> <span class="glyphicon glyphicon-cog"></span> Alarm Configuration <b class="caret"></b></a>
 							<ul class="dropdown-menu">
 								<li>
-									<a href="#" onclick="list_alarms();"><span class="glyphicon glyphicon-th-list"></span>Todos os Alarmes</a>
+									<a href="#" onclick="list_alarms();"><span class="glyphicon glyphicon-th-list"></span> All Alarms</a>
 								</li>
 								<li>
-									<a href="#" onclick="addAlarme();"><span class="glyphicon glyphicon-plus-sign"></span>Adicionar Alarme</a>
+									<a href="#" onclick="addAlarme();"><span class="glyphicon glyphicon-plus-sign"></span> Add Alarm</a>
 								</li>
 								<li>
-									<a href="#" onclick="deleteAlarme()"><span class="glyphicon glyphicon-minus-sign"></span>Remover Alarme</a>
+									<a href="#" onclick="deleteAlarme()"><span class="glyphicon glyphicon-minus-sign"></span> Remove Alarm</a>
 								</li>
 							</ul>
 						</li>
@@ -58,40 +58,40 @@
 				<div class="col-md-2 col-md-offset-10 sidebar">
 					<div id="panel_selection_time" class="panel panel-primary">
 						<div class="panel-heading">
-							<h3 class="panel-title">Seleção de Tempo</h3>
+							<h3 class="panel-title">Time Selection</h3>
 						</div>
 						<div class="panel-body">
 
-							<strong>Período Fixo</strong>
+							<strong>Fixed Time Interval</strong>
 							<div class="radio">
 								<label data-toggle="tooltip" data-original-title="Permite">
 									<input type="radio" name="defaultTime" id="ultima_hora" value="ultima_hora" checked="true">
-									Última Hora </label>
+									Last Hour </label>
 							</div>
 							<div class="radio">
 								<label data-toggle="tooltip" data-original-title="Permite">
 									<input type="radio" name="defaultTime" id="ultimo_dia" value="ultimo_dia">
-									Último Dia </label>
+									Last Day </label>
 							</div>
 							<div class="radio">
 								<label data-toggle="tooltip" data-original-title="Permite">
 									<input type="radio" name="defaultTime" id="ultima_semana" value="ultima_semana">
-									Última Semana </label>
+									Last Week </label>
 							</div>
 							<div class="radio">
 								<label data-toggle="tooltip" data-original-title="Permite">
 									<input type="radio" name="defaultTime" id="ultimo_mes" value="ultimo_mes">
-									Último Mês </label>
+									Last Month </label>
 							</div>
-							<strong>Período Específico</strong>
+							<strong>Specific Time Interval</strong>
 							<br>
 							<br>
-							<label for="dtp_input1" >Início</label>
+							<label for="dtp_input1" >Start</label>
 							<div class="input-group date" id="datetimepicker1">
 								<input class="form-control" type="text" id="data_hora1" data-format="DD/MM/YYYY HH:mm">
 								<span id="selc_dh1" class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
 							</div>
-							<label for="dtp_input2" >Fim</label>
+							<label for="dtp_input2" >End</label>
 							<div class="input-group date" id="datetimepicker2">
 								<input class="form-control" type="text" id="data_hora2" data-format="DD/MM/YYYY HH:mm">
 								<span id="selc_dh2" class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
@@ -99,10 +99,10 @@
 							<br>
 							<div align="center">
 								<button type="button" class="btn btn-primary" id="aplicarConf" onclick="plot()">
-									Aplicar
+									Apply
 								</button>
 								<button type"button" class="btn btn-primary" id="gerar_rec" style="display:none;" onclick="gera_recomendacao()">
-									Recomendar
+									Recommend
 								</button>
 							</div>
 						</div>
@@ -112,7 +112,7 @@
 					<ul onclick="show_hist();" class="list-group">
 						<li id="notificacoes" class="list-group-item alert alert-warning">
 							<!--<span id="num_notificacoes" class="badge" value=10>12</span>-->
-							<span  class="glyphicon glyphicon-warning-sign"></span>Notificações
+							<span  class="glyphicon glyphicon-warning-sign"></span>Notifications
 						</li>
 					</ul>
 					<div id="alarm_fail" class="alert alert-danger" data-alerts="alerts" style="display:none">
@@ -127,13 +127,13 @@
 					<!--abas para escolha -->
 					<ul class="nav nav-tabs nav-justified">
 						<li class="active">
-							<a href="" id="bt_vg" onclick="show_graph();" data-toggle="tab">Visão Geral</a>
+							<a href="" id="bt_vg" onclick="show_graph();" data-toggle="tab">Graphs</a>
 						</li>
 						<li>
-							<a href="" id="bt_rec" onclick="show_recomendacoes();" data-toggle="tab">Recomendações</a>
+							<a href="" id="bt_rec" onclick="show_recomendacoes();" data-toggle="tab">Recommendations</a>
 						</li>
 						<li>
-							<a href="" id="bt_hist" onclick="show_hist();" data-toggle="tab">Alarmes</a>
+							<a href="" id="bt_hist" onclick="show_hist();" data-toggle="tab">Alarm</a>
 						</li>
 					</ul>
 
@@ -150,7 +150,7 @@
 						<div id="menu_vm" class="col-md-2" style="display:none"></div>
 						<div class="col-md-10 col-md-offset-2" id="chart">
 							<center>
-								selecione um Host e um período de Tempo
+								Select a Host and a period of time.
 							</center>
 						</div>
 					</div>
@@ -176,13 +176,13 @@
 							</div>
 							<div class="col-md-6" id="recomendacoes_geradas">
 								<p>
-									<h4> Selecione um período de tempo para ver as Recomendações </h4>
+									<h4> Select a period of time to see the Recomendations.</h4>
 								</p>
 							</div>
 							<div class="col-md-6" id="info_rec">
-								<h5><b>Sugestão </b> : Neste campo está descrito o número ideal de cores que as instâncias devem possuir de acordo com a recomendação.</h5>
-								<h5><b>Perda</b>: Neste campo está descrito o somatório da quantidade de CPU não utilizada para todas as instâncias em relação ao número de cores para cada dado disponível.</h5>
-								<h5><b>Violações</b>: Neste campo está descrito o número de vezes em que há sobrecarga nas máquinas, considerando o uso das instâncias da sugestão indicada.</h5>
+								<h5><b>Sugestion </b> :  Describe the ideal number of cores that instances should have according to the recommendation.</h5>
+								<h5><b>Lose</b>: Describe the sum of the amount of CPU not used in every instance in relation to the number of cores for each data available.</h5>
+								<h5><b>Violations</b>: Describe the number of times that overloaded the machines considering the use of instances of suggestion indicated.</h5>
 							</div>
 						</div>
 						<!-- Div para mostrar recomendacoes de upgrades -->
@@ -201,10 +201,10 @@
 					<div id="hist_div" class="row" style="display:none;">
 						<ul class="nav nav-pills nav-justified">
 							<li class="active">
-								<a href="#" id="bt_alarm_hist" onclick="count_alarms();getAlarmHistoryTime();">Histórico</a>
+								<a href="#" id="bt_alarm_hist" onclick="count_alarms();getAlarmHistoryTime();">Alarm history</a>
 							</li>
 							<li class="">
-								<a href="#" id="bt_alarm_list" onclick="list_alarms();">Lista de Alarmes</a>
+								<a href="#" id="bt_alarm_list" onclick="list_alarms();">Alarm list</a>
 							</li>
 						</ul>
 
@@ -214,10 +214,10 @@
 						<div id="bt_hist_alarm" class="row">
 							<div class="col-md-4 col-md-offset-5">
 								<button type="button" class="btn btn-success" align="right" id="recarregar_alarmes" style="" onclick="count_alarms();getAlarmHistoryTime();">
-									Atualizar
+									Update
 								</button>
 								<button type="button" align="left" class="btn btn-info" id="mais_alarmes" style="" onclick="adicionarAlarmes();">
-									Ver mais
+									See more
 								</button>
 							</div>
 						</div>
