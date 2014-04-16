@@ -69,8 +69,8 @@ $.ajax({
 	$('<div id="painel_metrica" class="panel panel-primary"></div>').appendTo('#menu_host');
 	$('<div class="panel-heading"> <h3 class="panel-title">Metrics</h3></div>').appendTo("#painel_metrica");
 	var metricas = '<div class="radio"><label><input type="radio" name="defaultMetric" value="cpu">CPU</label></div>';
-	metricas += '<div class="radio"><label><input type="radio" name="defaultMetric" value="disco">Disco</label></div>';
-	metricas += '<div class="radio"><label><input type="radio" name="defaultMetric" value="memoria">Memória</label></div>';
+	metricas += '<div class="radio"><label><input type="radio" name="defaultMetric" value="disco">Disk</label></div>';
+	metricas += '<div class="radio"><label><input type="radio" name="defaultMetric" value="memoria">Memory</label></div>';
 	$('<div class="panel-body">' + metricas + '</div>').appendTo("#painel_metrica");
 
 	$('<div id="painel_hosts" class="panel panel-primary">' + '</div>').appendTo('#menu_host');
