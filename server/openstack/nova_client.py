@@ -3,6 +3,7 @@ import json, requests
 import env
 from keystone_client import KeystoneClient
 from novaclient.v3 import client
+from novaclient.v3.servers import ServerManager
 
 class NovaClient:
 
@@ -76,4 +77,14 @@ class NovaClient:
 
         return r.json()
         
+    def vm_migration(self,project_name,host_name,instance_id):
+        nova = client.Client(env.OS_USERNAME, env.OS_PASSWORD, project_name, env.OS_AUTH_URL)
+        server = ServerManager(nova)
+        block = True
+        disk_commit = False 
+        server.live_migrate(instance_id,host_name,block,disk_commit)
 
+    def vm_hostname(self,project_name,instance_id):
+        nova = client.Client(env.OS_USERNAME, env.OS_PASSWORD, project_name, env.OS_AUTH_URL)
+        server = ServerManager(nova)
+        return server.get(instance_id)

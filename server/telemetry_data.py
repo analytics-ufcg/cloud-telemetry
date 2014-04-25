@@ -25,6 +25,13 @@ def send_email(from_addr, to_addr_list, cc_addr_list,
     server.quit()
     return problems
 
+class MigrateException(Exception):
+    
+    def __init__(self,error,message):
+        Exception.__init__(self)
+        self.error = error
+        self.message = message
+
 class DataHandler:
 
     def __init__(self):
@@ -153,3 +160,12 @@ class DataHandler:
                     ret.append({'instance_name' : instance.name, 'instance_id' : instance.id})
         return ret   
 
+    def migrate_to_host(self, project_name, host_name, instance_id):
+        host_vm = self.__nova.vm_hostname(project_name,instance_id)
+        if host_vm._info['os-extended-server-attributes:host'] == host_name:
+            raise MigrateException(400,"Migracao para o mesmo destino")
+	elif host_vm._info['os-extended-server-attributes:host'] == 'truta' and host_name != 'truta':
+            raise MigrateException(500,"Migracao de host para compute node")
+        else:
+            self.__nova.vm_migration(project_name,host_name,instance_id)
+            return True

@@ -1,6 +1,6 @@
 from flask import Flask, render_template, request, make_response
 
-from telemetry_data import DataHandler
+from telemetry_data import DataHandler, MigrateException
 
 import json, requests, threading
 
@@ -169,6 +169,19 @@ def metrics():
 
     return resp
 
+@app.route('/live_migration', methods=['POST'])
+def live_migration():
+    project_name = request.args.get('project')
+    host = request.args.get('host_name')
+    vm = request.args.get('instance_id')
+    try:
+        migrate = data_handler.migrate_to_host(project_name,host,vm)
+        resp = make_response(json.dumps({'migracao' : 'efetuando'}))
+        resp.headers['Access-Control-Allow-Origin']="*"
+    except MigrateException, exc:    
+        resp = make_response(json.dumps({'migracao': exc.message}),exc.error)
+        resp.headers['Access-Control-Allow-Origin']="*"
+    return resp
 
 if __name__ == '__main__':
     worker = threading.Thread(target=store_host_data, kwargs={'hosts':HOSTS})
