@@ -2,6 +2,7 @@ from openstack.ceilometer_client import CeilometerClient
 from openstack.keystone_client import KeystoneClient
 from openstack.nova_client import NovaClient
 from host_data import HostDataHandler
+from benchmark_data import BenchmarkDataHandler
 
 import json, ast, smtplib, math
 
@@ -39,6 +40,7 @@ class DataHandler:
         self.__keystone = KeystoneClient()
         self.__nova = NovaClient()
         self.__hosts_db = HostDataHandler()
+        self.__benchmark_db = BenchmarkDataHandler()
 
     def projects(self):
         return json.dumps(self.__keystone.projects)
@@ -169,3 +171,8 @@ class DataHandler:
         else:
             self.__nova.vm_migration(project_name,host_name,instance_id)
             return True
+
+
+    def get_benchmark_bd(self):
+        ret = self.__benchmark_db.get_data_db()
+        return ret

@@ -183,6 +183,12 @@ def live_migration():
         resp.headers['Access-Control-Allow-Origin']="*"
     return resp
 
+@app.route('/benchmark_data')
+def benchmark_data():
+    resp = make_response(data_handler.get_benchmark_bd())
+    resp.headers['Access-Control-Allow-Origin'] = "*"
+    return resp
+
 if __name__ == '__main__':
     worker = threading.Thread(target=store_host_data, kwargs={'hosts':HOSTS})
     worker.daemon = False
