@@ -1,4 +1,4 @@
-var ip_server = "http://150.165.15.4:9090";
+var ip_server = "http://150.165.15.4:1313";
 //150.165.80.194
 var dados;
 var tempo = [];
@@ -354,6 +354,7 @@ function getPartitions(json) {
 /* Habilitar div selecionada de acordo com a aba selecionada*/
 function show_graph() {
 	$("#hist_info").empty();
+  $("#bench_div").hide();
 	$("#hist_div").hide();
 	$("#rec_div").hide();
 	$("#gerar_rec").hide();
@@ -373,6 +374,7 @@ function show_recomendacoes() {
 	$("#hist_info").empty();
 	$("#chart_div").hide();
 	$("#hist_div").hide();
+  $("#bench_div").hide();
 	$("#aplicarConf").hide();
 	//esconde o botão aplicar
 	$("#gerar_rec").show();
@@ -391,11 +393,13 @@ function show_recomendacoes() {
 }
 
 
+
 function show_list() {
 	$("#hist_info").empty();
 	$("#chart_div").hide();
 	$("#rec_div").hide();
 	$("#gerar_rec").hide();
+  $("#bench_div").hide();
 	$("#panel_selection_time").hide("slow");
 	$("#hist_div").show();
 
@@ -416,6 +420,7 @@ function show_hist() {
 	$("#chart_div").hide();
 	$("#rec_div").hide();
 	$("#gerar_rec").hide();
+  $("#bench_div").hide();
 	$("#panel_selection_time").hide("slow");
 	$("#hist_div").show();
 
@@ -463,6 +468,30 @@ function show_rec_upgrade() {
 	$("#recomendacoes_up").empty();
 	medidas_de_host();
 }
+
+function show_bench() {
+  $("#hist_info").empty();
+  $("#chart_div").hide();
+	$("#rec_div").hide();
+  $("#hist_div").hide();
+	$("#gerar_rec").hide();
+	$("#panel_selection_time").hide("slow");
+  $("#bench_div").show();
+  execute_bench();
+ 
+ var $thisLi = $("#bt_bench").parent('li');
+  var $ul = $thisLi.parent('ul');
+
+	if (!$thisLi.hasClass('active')) {
+		$ul.find('li.active').removeClass('active');
+		$thisLi.addClass('active');
+	}
+ $("#bench_table").empty();
+ execute_bench();
+ 
+}
+
+
 
 function show_rec_migracao() {
 	$("#panel_selection_time").hide("slow");
