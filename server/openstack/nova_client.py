@@ -88,3 +88,24 @@ class NovaClient:
         nova = client.Client(env.OS_USERNAME, env.OS_PASSWORD, project_name, env.OS_AUTH_URL)
         server = ServerManager(nova)
         return server.get(instance_id)
+
+    def start_instance_bench(self, project):
+        nova = client.Client(env.OS_USERNAME, env.OS_PASSWORD, project, env.OS_AUTH_URL)
+        servers = nova.servers.list()
+        for server in servers:
+            if server.name == 'benchmark':
+                return 'ja ha uma instancia chamada benchmark'
+        nova.servers.create('benchmark', '330a1d0b-5dc4-4dac-b83f-a45212abf5fd', '4d8a8f1a-2a43-4b0c-9af6-7e379a2358b8')
+        return 'instancia disparada'
+
+    def get_benchmark_ip(self, project):
+        nova = client.Client(env.OS_USERNAME, env.OS_PASSWORD, project, env.OS_AUTH_URL)
+        servers = nova.servers.list()
+        benchmark_id  = ' '
+        for server in servers:
+            if server.name == 'benchmark':
+                benchmark_id = server.id
+        if benchmark_id == ' ':
+            return 'nao ha instancia de benchmark'
+        instance_bench = nova.servers.get(benchmark_id)
+        return instance_bench.addresses['private'][0]['addr']
