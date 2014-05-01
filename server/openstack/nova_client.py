@@ -89,6 +89,42 @@ class NovaClient:
         server = ServerManager(nova)
         return server.get(instance_id)
 
+    def flavor_information(self, project):
+        nova = client.Client(env.OS_USERNAME, env.OS_PASSWORD, project, env.OS_AUTH_URL)
+        dic_flavors = {}
+        lista_flavors = nova.flavors.list()
+        for flavor in lista_flavors:
+            lista_valores = [flavor.vcpus,flavor.ram,flavor.disk]
+            dic_flavors[flavor.id] = lista_valores
+        return dic_flavors
+
+    def vm_info(self,projects):
+        dic_hosts = {}
+        host_statistics = json.loads( self.metrics(projects[0]) )
+        keys = host_statistics.keys()
+        keys.remove('cloud-analytics')
+        for host in keys:
+            dic_hosts[host] = {'Total':host_statistics[host]['Total'], 'Livre': [a - b for a,b in zip(host_statistics[host]['Total'],host_statistics[host]['Em uso']) ] , 'vms':{} , 'nomes':{} }
+        for p in projects:
+            nova = client.Client(env.OS_USERNAME, env.OS_PASSWORD, p, env.OS_AUTH_URL)
+            flavors = self.flavor_information(p)
+            vm_list = nova.servers.list()
+            for vm in vm_list:
+                dic_hosts[vm._info['os-extended-server-attributes:host']]['vms'][vm.id] = flavors[vm.flavor['id']]
+                dic_hosts[vm._info['os-extended-server-attributes:host']]['nomes'][vm.id] = vm._info['name']
+        lista_ordenada = []
+        dic_ord = sorted( dic_hosts.items(), key=lambda x: (  len( x[1]['vms'].keys() )==0, -x[1]['Livre'][0] ))
+        for e in dic_ord:
+            dic_aux = {}
+            dic_aux[e[0]] = e[1]
+            lista_ordenada.append(dic_aux)
+        lista_ordenada2 = lista_ordenada[:]
+        for dic in lista_ordenada:
+            if len( dic[dic.keys()[0]]['vms'].keys()) == 0:
+               lista_ordenada2.remove(dic)
+               lista_ordenada2.insert(0,dic)
+        return lista_ordenada2 
+
     def start_instance_bench(self, project):
         nova = client.Client(env.OS_USERNAME, env.OS_PASSWORD, project, env.OS_AUTH_URL)
         servers = nova.servers.list()

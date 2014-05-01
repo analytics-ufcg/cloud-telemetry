@@ -183,6 +183,13 @@ def live_migration():
         resp.headers['Access-Control-Allow-Origin']="*"
     return resp
 
+@app.route('/host_migration')
+def can_migrate():
+    migrate = data_handler.sugestion()
+    resp = make_response(migrate)
+    resp.headers['Access-Control-Allow-Origin']="*"
+    return resp
+
 @app.route('/benchmark_data')
 def benchmark_data():
     resp = make_response(data_handler.get_benchmark_bd())

@@ -45,6 +45,45 @@ class DataHandler:
     def projects(self):
         return json.dumps(self.__keystone.projects)
 
+    def sugestion(self):
+        project_list = [ a['name'] for a in json.loads(self.projects()) ]
+        host_vm_info = self.__nova.vm_info(project_list)
+        desligar = {}
+        migracoes = {}
+        copia_hosts = host_vm_info[:]
+        for e in host_vm_info:
+            dic_aux = e.copy()
+            chave = e.keys()[0]
+            if( len( dic_aux[chave]['vms'].keys() ) > 0 ):
+                vms_aux = dic_aux[chave]['vms'].copy()
+                copia_hosts.remove(e)
+                migra = False
+                migracoes[chave] = {}                
+                for i in vms_aux:
+                    for j in copia_hosts:
+                        migra = False
+                        if( (j[j.keys()[0]]['Livre'][0] >= vms_aux[i][0]) and (j[j.keys()[0]]['Livre'][1] >= vms_aux[i][1])  and (j[j.keys()[0]]['Livre'][2] >= vms_aux[i][2])):
+                            valores = [ j[j.keys()[0]]['Livre'][0] - vms_aux[i][0], j[j.keys()[0]]['Livre'][1] - vms_aux[i][1], j[j.keys()[0]]['Livre'][2] - vms_aux[i][2] ]
+                            j[j.keys()[0]]['Livre'] = valores
+                            migracoes[chave][ e[chave]['nomes'].get(i) ] = j.keys()[0]
+                            migra = True
+                            break
+                        else:
+                            continue
+                    if migra == False:
+                        migracoes[chave][ e[chave]['nomes'].get(i) ] = None
+                        desligar[chave] = False
+                if not chave in desligar:
+                   desligar[chave] = True
+            else:
+                copia_hosts.remove(e)
+                desligar[chave] = True
+                continue
+        saida = {}
+        saida['Hosts']= desligar
+        saida['Migracoes'] = migracoes
+        return json.dumps(saida)    
+
     def cpu_util_from(self, timestamp_begin=None, timestamp_end=None, resource_id=None):
         return json.dumps(self.__ceilometer.get_cpu_util(timestamp_begin, timestamp_end, resource_id))
 
