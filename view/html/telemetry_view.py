@@ -66,6 +66,34 @@ def alarm_delete():
 def add_alarm():
     return forward_request(request)    
 
+@app.route('/live_migration', methods=['POST'])
+def live_migration():
+    return forward_request(request)
+
+@app.route('/host_migration')
+def can_migrate():
+    return forward_request(request)
+
+@app.route('/benchmark_data')
+def benchmark_data():
+    return forward_request(request)
+
+@app.route('/get_benchmark')
+def get_benchmark():
+    return forward_request(request)
+
+@app.route('/start_instance_bench')
+def start_instance_bench():
+    return forward_request(request)
+
+@app.route('/get_benchmark_status')
+def get_benchmark_status():
+    return forward_request(request) 
+
+@app.route('/repeat_benchmark')
+def repeat_benchmark():
+    return forward_request(request)
+
 def forward_request(req):
     url = req.url
     path = req.path
