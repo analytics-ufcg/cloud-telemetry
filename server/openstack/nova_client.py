@@ -102,7 +102,6 @@ class NovaClient:
         dic_hosts = {}
         host_statistics = json.loads( self.metrics(projects[0]) )
         keys = host_statistics.keys()
-        keys.remove('cloud-analytics')
         for host in keys:
             dic_hosts[host] = {'Total':host_statistics[host]['Total'], 'Livre': [a - b for a,b in zip(host_statistics[host]['Total'],host_statistics[host]['Em uso']) ] , 'vms':{} , 'nomes':{} }
         for p in projects:
