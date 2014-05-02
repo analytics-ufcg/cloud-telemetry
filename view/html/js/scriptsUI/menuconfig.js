@@ -486,7 +486,7 @@ function show_bench() {
 		$ul.find('li.active').removeClass('active');
 		$thisLi.addClass('active');
 	}
- $("#bench_table").empty();
+ $("#bench_table_cpu").empty();
  execute_bench();
  
 }
