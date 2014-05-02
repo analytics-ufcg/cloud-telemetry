@@ -17,7 +17,7 @@ def start_bench_th(projeto):
 
     read_benchmark = json.loads(dados.get_benchmark('admin')[0])
     read_benchmark['Host'] = '150.165.15.4'
-#    read_benchmark['Host']='150.165.15.4'
-   # bench.save_data_db(read_benchmark)
+    
+    bench.save_data_db(read_benchmark)
     return read_benchmark
 
