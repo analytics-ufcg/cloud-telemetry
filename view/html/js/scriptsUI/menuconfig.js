@@ -1,4 +1,4 @@
-var ip_server = "http://150.165.15.4:9090";
+var ip_server = "http://150.165.15.4:5111";
 //150.165.80.194
 var dados;
 var tempo = [];
@@ -508,6 +508,35 @@ function show_rec_migracao() {
 	}
 	$("#recomendacoes_migracoes").empty();
 	getMigracoes();
+	
+	$.ajax({
+			url : ip_server + "/host_migration",
+			dataType : 'json'
+		}).fail(function(data) {
+			show_plot = false;
+			$('#chart').empty().queue(function(exec) {
+				$('#chart').html('<p><h3>Erro na requisicao</h3><p>');
+				exec();
+			});
+		}).done(function(data) {
+			console.log(data);
+		});
+
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 }
 
 function show_projects() {
