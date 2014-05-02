@@ -102,7 +102,6 @@ class NovaClient:
         dic_hosts = {}
         host_statistics = json.loads( self.metrics(projects[0]) )
         keys = host_statistics.keys()
-        keys.remove('cloud-analytics')
         for host in keys:
             dic_hosts[host] = {'Total':host_statistics[host]['Total'], 'Livre': [a - b for a,b in zip(host_statistics[host]['Total'],host_statistics[host]['Em uso']) ] , 'vms':{} , 'nomes':{} }
         for p in projects:
@@ -131,7 +130,7 @@ class NovaClient:
         for server in servers:
             if server.name == 'benchmark':
                 return 'ja ha uma instancia chamada benchmark'
-        nova.servers.create('benchmark', '330a1d0b-5dc4-4dac-b83f-a45212abf5fd', '4d8a8f1a-2a43-4b0c-9af6-7e379a2358b8')
+        nova.servers.create('benchmark', '330a1d0b-5dc4-4dac-b83f-a45212abf5fd', '4d8a8f1a-2a43-4b0c-9af6-7e379a2358b8', availability_zone='nova:truta')
         return 'instancia disparada'
 
     def get_benchmark_ip(self, project):

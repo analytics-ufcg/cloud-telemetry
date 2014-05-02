@@ -39,7 +39,7 @@ function getMigracoes() {
 			rows = '<tr>';
 			$.each(requisicao['Migracoes'][k], function(j, i) {
 				
-				destino = (i == null)? 'Not Migration':i; 
+				destino = (i == null)? '---':i; 
 				rows += '<tr>';
 				rows += '<th>' + k + '</th>' + '<th>' + j + '</th>' + '<th>' + destino + '</th>';
 				rows += '</tr>';
@@ -58,9 +58,9 @@ function getMigracoes() {
 		$.each(requisicao['Hosts'], function(k, v) {
 			rows_status= '<tr>'+'<th>'+k+'</th>'+'<th>';
 			if(v == true){
-				rows_status+= '<font color="FF0000">Shut OFF</font>'+'</th>'+'</tr>';
+				rows_status+= '<font color="FF0000">Shut Off</font>'+'</th>'+'</tr>';
 			}else{
-				rows_status+= '<font color="00FF00">Keep ON</font>'+'</th>'+'</tr>';
+				rows_status+= '<font color="00FF00">Keep On</font>'+'</th>'+'</tr>';
 			}	
 			tabela_host_status+=rows_status;
 		});

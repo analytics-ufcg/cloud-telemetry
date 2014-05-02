@@ -4,6 +4,7 @@ from openstack.nova_client import NovaClient
 from host_data import HostDataHandler
 from benchmark_data import BenchmarkDataHandler
 
+
 import json, ast, smtplib, math, requests
 
 import analytics.recommendations
@@ -224,7 +225,7 @@ class DataHandler:
     def get_benchmark(self, project):
         benchmark_ip = self.__nova.get_benchmark_ip(project)
         data = requests.get('http://'+benchmark_ip+':5151/get_benchmarking')
-        return data.text
+        return data.json()
  
     def get_benchmark_status(self, project):
         benchmark_ip = self.__nova.get_benchmark_ip(project)
