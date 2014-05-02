@@ -8,7 +8,7 @@ function getMigracoes() {
 	var requisicao;
 
 	$('<div id="load_migration" style="display:none">    <br><br><center><img src="images/ajax-loader.gif"></img> <br> <h4>Obtendo dados. Por favor aguarde.</h4></center></div>').appendTo("#migrations");
-	$('<div id="load_migration2" style="display:none">    <br><br><center><img src="images/ajax-loader.gif"></img> <br> <h4>Obtendo dados. Por favor aguarde.</h4></center></div>').appendTo("#hoststatusenable");
+	$('<div id="load_migration2" style="display:none">    <br><br><center><img src="images/ajax-loader.gif"></img> <br> <h4>Obtendo dados. Por favor aguarde.</h4></center></div>').appendTo("#host_status_enable");
 	$("#load_migration").show();
 	$("#load_migration2").show();
 
@@ -66,8 +66,8 @@ function getMigracoes() {
 		});
 		tabela_host_status += '</tbdody></table>';
 		
-		$('#hoststatusenable').empty().queue(function(exec) {
-			$(tabela_host_status).appendTo('#hoststatusenable');
+		$('#host_status_enable').empty().queue(function(exec) {
+			$(tabela_host_status).appendTo('#host_status_enable');
 			exec();
 		});
 
