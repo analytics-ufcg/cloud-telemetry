@@ -1,6 +1,6 @@
 from flask import Flask, render_template, request, make_response
 
-from telemetry_data import DataHandler
+from telemetry_data import DataHandler, MigrateException
 
 import json, requests, threading
 
@@ -168,6 +168,58 @@ def metrics():
     resp.headers['Access-Control-Allow-Origin'] = "*"
 
     return resp
+
+@app.route('/live_migration', methods=['POST'])
+def live_migration():
+    project_name = request.args.get('project')
+    host = request.args.get('host_name')
+    vm = request.args.get('instance_id')
+    try:
+        migrate = data_handler.migrate_to_host(project_name,host,vm)
+        resp = make_response(json.dumps({'migracao' : 'efetuando'}))
+        resp.headers['Access-Control-Allow-Origin']="*"
+    except MigrateException, exc:    
+        resp = make_response(json.dumps({'migracao': exc.message}),exc.error)
+        resp.headers['Access-Control-Allow-Origin']="*"
+    return resp
+
+@app.route('/host_migration')
+def can_migrate():
+    migrate = data_handler.sugestion()
+    resp = make_response(migrate)
+    resp.headers['Access-Control-Allow-Origin']="*"
+    return resp
+
+@app.route('/benchmark_data')
+def benchmark_data():
+    resp = make_response(data_handler.get_benchmark_bd())
+    resp.headers['Access-Control-Allow-Origin'] = "*"
+    return resp
+
+@app.route('/get_benchmark')
+def get_benchmark():
+    resp = make_response(data_handler.get_benchmark('admin'))
+    resp.headers['Access-Control-Allow-Origin'] = "*"
+    return resp
+
+@app.route('/start_instance_bench')
+def start_instance_bench():
+    resp = make_response(json.dumps(data_handler.start_instance_bench('admin')))
+    resp.headers['Access-Control-Allow-Origin'] = "*"
+    return resp
+
+@app.route('/get_benchmark_status')
+def get_benchmark_status():
+    resp = make_response(json.dumps(data_handler.get_benchmark_status('admin')))
+    resp.headers['Access-Control-Allow-Origin'] = "*"
+    return resp
+
+@app.route('/repeat_benchmark')
+def repeat_benchmark():
+    resp = make_response(json.dumps(data_handler.repeat_benchmark('admin')))
+    resp.headers['Access-Control-Allow-Origin'] = "*"
+    return resp
+
 
 
 if __name__ == '__main__':

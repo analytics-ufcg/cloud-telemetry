@@ -2,8 +2,9 @@ from openstack.ceilometer_client import CeilometerClient
 from openstack.keystone_client import KeystoneClient
 from openstack.nova_client import NovaClient
 from host_data import HostDataHandler
+from benchmark_data import BenchmarkDataHandler
 
-import json, ast, smtplib, math
+import json, ast, smtplib, math, requests
 
 import analytics.recommendations
 
@@ -25,6 +26,13 @@ def send_email(from_addr, to_addr_list, cc_addr_list,
     server.quit()
     return problems
 
+class MigrateException(Exception):
+    
+    def __init__(self,error,message):
+        Exception.__init__(self)
+        self.error = error
+        self.message = message
+
 class DataHandler:
 
     def __init__(self):
@@ -32,9 +40,49 @@ class DataHandler:
         self.__keystone = KeystoneClient()
         self.__nova = NovaClient()
         self.__hosts_db = HostDataHandler()
+        self.__benchmark_db = BenchmarkDataHandler()
 
     def projects(self):
         return json.dumps(self.__keystone.projects)
+
+    def sugestion(self):
+        project_list = [ a['name'] for a in json.loads(self.projects()) ]
+        host_vm_info = self.__nova.vm_info(project_list)
+        desligar = {}
+        migracoes = {}
+        copia_hosts = host_vm_info[:]
+        for e in host_vm_info:
+            dic_aux = e.copy()
+            chave = e.keys()[0]
+            if( len( dic_aux[chave]['vms'].keys() ) > 0 ):
+                vms_aux = dic_aux[chave]['vms'].copy()
+                copia_hosts.remove(e)
+                migra = False
+                migracoes[chave] = {}                
+                for i in vms_aux:
+                    for j in copia_hosts:
+                        migra = False
+                        if( (j[j.keys()[0]]['Livre'][0] >= vms_aux[i][0]) and (j[j.keys()[0]]['Livre'][1] >= vms_aux[i][1])  and (j[j.keys()[0]]['Livre'][2] >= vms_aux[i][2])):
+                            valores = [ j[j.keys()[0]]['Livre'][0] - vms_aux[i][0], j[j.keys()[0]]['Livre'][1] - vms_aux[i][1], j[j.keys()[0]]['Livre'][2] - vms_aux[i][2] ]
+                            j[j.keys()[0]]['Livre'] = valores
+                            migracoes[chave][ e[chave]['nomes'].get(i) ] = j.keys()[0]
+                            migra = True
+                            break
+                        else:
+                            continue
+                    if migra == False:
+                        migracoes[chave][ e[chave]['nomes'].get(i) ] = None
+                        desligar[chave] = False
+                if not chave in desligar:
+                   desligar[chave] = True
+            else:
+                copia_hosts.remove(e)
+                desligar[chave] = True
+                continue
+        saida = {}
+        saida['Hosts']= desligar
+        saida['Migracoes'] = migracoes
+        return json.dumps(saida)    
 
     def cpu_util_from(self, timestamp_begin=None, timestamp_end=None, resource_id=None):
         return json.dumps(self.__ceilometer.get_cpu_util(timestamp_begin, timestamp_end, resource_id))
@@ -152,4 +200,39 @@ class DataHandler:
                 if instance._info['os-extended-server-attributes:host'] == host_name:
                     ret.append({'instance_name' : instance.name, 'instance_id' : instance.id})
         return ret   
+
+    def migrate_to_host(self, project_name, host_name, instance_id):
+        host_vm = self.__nova.vm_hostname(project_name,instance_id)
+        if host_vm._info['os-extended-server-attributes:host'] == host_name:
+            raise MigrateException(400,"Migracao para o mesmo destino")
+	elif host_vm._info['os-extended-server-attributes:host'] == 'truta' and host_name != 'truta':
+            raise MigrateException(500,"Migracao de host para compute node")
+        else:
+            self.__nova.vm_migration(project_name,host_name,instance_id)
+            return True
+
+
+    def get_benchmark_bd(self):
+        ret = self.__benchmark_db.get_data_db()
+        return ret
+
+
+    def start_instance_bench(self, project):
+        return self.__nova.start_instance_bench(project)
+
+
+    def get_benchmark(self, project):
+        benchmark_ip = self.__nova.get_benchmark_ip(project)
+        data = requests.get('http://'+benchmark_ip+':5151/get_benchmarking')
+        return data.text
+ 
+    def get_benchmark_status(self, project):
+        benchmark_ip = self.__nova.get_benchmark_ip(project)
+        data = requests.get('http://'+benchmark_ip+':5151/get_status')
+        return data.text
+
+    def repeat_benchmark(self, project):
+        benchmark_ip = self.__nova.get_benchmark_ip(project)
+        data = requests.get('http://'+benchmark_ip+':5151/start_benchmarking')
+        return data.text
 

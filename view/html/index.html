@@ -135,6 +135,9 @@
 						<li>
 							<a href="" id="bt_hist" onclick="show_hist();" data-toggle="tab">Alarm</a>
 						</li>
+            <li>
+  						<a href="" id="bt_bench" onclick="show_bench();" data-toggle="tab">Benchmark</a>
+						</li>
 					</ul>
 
 					<div id="chart_div" class="row">
@@ -162,9 +165,9 @@
 							<li class="">
 								<a href="#" id="bt_rec_flavors" onclick="show_rec_flavor();">Flavors</a>
 							</li>
-							<!--<li class="">
-							<a href="#" id="bt_rec_migracao" onclick="show_rec_migracao();">Migrações</a>
-							</li>-->
+							<li class="">
+							<a href="#" id="bt_rec_migracao" onclick="show_rec_migracao();">Power Saving</a>
+							</li>
 						</ul>
 						<!-- Div para mostrar recomendacoes de flavors -->
 						<div id="rec_div_flavors" style="display:none;">
@@ -198,6 +201,7 @@
 							</div>
 						</div>
 					</div>
+          <!-- Div para mostrar historicos de alarmes -->
 					<div id="hist_div" class="row" style="display:none;">
 						<ul class="nav nav-pills nav-justified">
 							<li class="active">
@@ -211,6 +215,7 @@
 						<div id="hist_info"class="col-md-12 col-lg-12">
 
 						</div>
+            
 						<div id="bt_hist_alarm" class="row">
 							<div class="col-md-4 col-md-offset-5">
 								<button type="button" class="btn btn-success" align="right" id="recarregar_alarmes" style="" onclick="count_alarms();getAlarmHistoryTime();">
@@ -222,6 +227,17 @@
 							</div>
 						</div>
 					</div>
+           <!-- Div para mostrar benchmark -->         
+          <div id="bench_div"class="row" style="display:none;">
+            <br></br>
+            <button type="button" class="btn btn-success" align="right" id="loadBench" style="" onclick="execute_bench();">
+  					  Load Benchmark
+						</button><br></br>
+            <div id="bench_table"class="col-md-12 col-lg-12">
+              
+						</div>
+					</div>
+          
 				</div><!-- fim div col-md-10 main -->
 			</div>
 		</div>
@@ -237,6 +253,7 @@
 		<script src="js/scriptsUI/recomenda.js"></script>
 		<script src="js/scriptsUI/host_metrics.js"></script>
 		<script src="js/scriptsUI/migracao.js"></script>
+  	<script src="js/scriptsUI/benchmark.js"></script>
 		<script src="http://code.highcharts.com/highcharts.js"></script>
 		<script src="http://code.highcharts.com/highcharts-more.js"></script>
 		<script src="http://code.highcharts.com/modules/exporting.js"></script>
