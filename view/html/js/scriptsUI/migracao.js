@@ -1,6 +1,6 @@
 function getMigracoes() {
-	var panel = '<div  id= "panel_host" class="col-md-6"><div class="panel panel-danger"> <div class="panel-heading"> <h3 class="panel-title">Resource Savings</h3> </div> <div id="hoststatusenable" class="panel-body"></div></div>';
-	var panel2 = '<div id="panel_migration" class="col-md-6"><div class="panel panel-success"> <div class="panel-heading"> <h3 class="panel-title">Migrations</h3></div>  <div id="migrations" class="panel-body"> </div></div></div>';
+	var panel = '<div  id= "panel_host" class="col-md-6"><div class="panel panel-danger"> <div class="panel-heading"> <h3 class="panel-title">Hosts Power Status</h3> </div> <div id="host_status_enable" class="panel-body"></div></div>';
+	var panel2 = '<div id="panel_migration" class="col-md-6"><div class="panel panel-success"> <div class="panel-heading"> <h3 class="panel-title">Suggested Server Migrations</h3></div>  <div id="migrations" class="panel-body"> </div></div></div>';
 
 	$(panel).appendTo("#recomendacoes_migracoes");
 	$(panel2).appendTo("#recomendacoes_migracoes");
@@ -25,7 +25,7 @@ function getMigracoes() {
 		$("#panel_migration").hide(); 
 
 			$('#hosts_enable').empty().queue(function(exec) {
-			$('<h3>Ocorreu um erro durante a requisição, por favor tente novamente.</h3>').appendTo('#hoststatusenable');
+			$('<h3>Ocorreu um erro durante a requisição, por favor tente novamente.</h3>').appendTo('#host_status_enable');
 			exec();
 		});
 	}).done(function(data) {
@@ -39,7 +39,7 @@ function getMigracoes() {
 			rows = '<tr>';
 			$.each(requisicao['Migracoes'][k], function(j, i) {
 				
-				destino = (i == null)? 'NOT MIGRATION':i; 
+				destino = (i == null)? 'Not Migration':i; 
 				rows += '<tr>';
 				rows += '<th>' + k + '</th>' + '<th>' + j + '</th>' + '<th>' + destino + '</th>';
 				rows += '</tr>';
@@ -58,9 +58,9 @@ function getMigracoes() {
 		$.each(requisicao['Hosts'], function(k, v) {
 			rows_status= '<tr>'+'<th>'+k+'</th>'+'<th>';
 			if(v == true){
-				rows_status+= '<font color="00FF00">SHUT OFF</font>'+'</th>'+'</tr>';
+				rows_status+= '<font color="FF0000">Shut OFF</font>'+'</th>'+'</tr>';
 			}else{
-				rows_status+= '<font color="FF0000">SWITCH ON</font>'+'</th>'+'</tr>';
+				rows_status+= '<font color="00FF00">Keep ON</font>'+'</th>'+'</tr>';
 			}	
 			tabela_host_status+=rows_status;
 		});
