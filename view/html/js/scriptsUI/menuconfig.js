@@ -509,7 +509,7 @@ function show_rec_migracao() {
 	$("#recomendacoes_migracoes").empty();
 	getMigracoes();
 	
-	$.ajax({
+	/*$.ajax({
 			url : ip_server + "/host_migration",
 			dataType : 'json'
 		}).fail(function(data) {
@@ -520,7 +520,7 @@ function show_rec_migracao() {
 			});
 		}).done(function(data) {
 			console.log(data);
-		});
+		});*/
 
 	
 	
