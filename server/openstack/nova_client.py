@@ -144,3 +144,21 @@ class NovaClient:
             return 'nao ha instancia de benchmark'
         instance_bench = nova.servers.get(benchmark_id)
         return instance_bench.addresses['private'][0]['addr']
+
+    def remove_instance(self, id):
+        nova = client.Client(env.OS_USERNAME,env.OS_PASSWORD,"admin",env.OS_AUTH_URL)
+        sm = ServerManager(nova)
+        instancia = sm.get(id)
+        sm.delete(instancia)
+        return True
+
+    def benchmark_id(self):
+        nova = client.Client(env.OS_USERNAME,env.OS_PASSWORD,"admin",env.OS_AUTH_URL)
+        servers = nova.servers.list()
+        for server in servers:
+            if server.name != 'benchmark':
+                 pass
+            else:
+                 return server.id
+        return None
+              
