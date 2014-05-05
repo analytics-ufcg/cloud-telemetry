@@ -239,7 +239,7 @@ class DataHandler:
 
     def remove_benchmark_instance(self):
         id = self.__nova.benchmark_id()
-        if id !== None:
+        if id == None:
             return "sem instancia benchmark"
         else:
             remove = self.__nova.remove_instance(id)
