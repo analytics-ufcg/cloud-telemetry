@@ -237,3 +237,10 @@ class DataHandler:
         data = requests.get('http://'+benchmark_ip+':5151/start_benchmarking')
         return data.text
 
+    def remove_benchmark_instance(self):
+        id = self.__nova.benchmark_id()
+        if id != None:
+            return "sem instancia benchmark"
+        else:
+            remove = self.__nova.remove_instance(id)
+            return remove

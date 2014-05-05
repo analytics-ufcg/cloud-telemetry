@@ -19,5 +19,6 @@ def start_bench_th(projeto):
     read_benchmark['Host'] = '150.165.15.4'
     
     bench.save_data_db(read_benchmark)
+    dados.remove_benchmark_instance()
     return read_benchmark
 
