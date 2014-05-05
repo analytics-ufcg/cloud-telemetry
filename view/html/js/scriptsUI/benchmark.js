@@ -67,7 +67,8 @@ function load_bench() {
 				next();
 			});
 
-		} else if (data == "instancia disparada") {
+		} else if (data == "thread started") {
+			$('#alarm_ok').empty();
 			$('#alarm_ok').append("<span>Benchmark scheduled.</span>");
 			$('#alarm_ok').show(0).delay(4300).hide(0).queue(function(next) {
 				$('#alarm_fail').find('span').remove();
