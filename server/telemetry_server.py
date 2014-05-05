@@ -204,11 +204,6 @@ def get_benchmark():
     resp.headers['Access-Control-Allow-Origin'] = "*"
     return resp
 
-@app.route('/start_instance_bench')
-def start_instance_bench():
-    resp = make_response(json.dumps(data_handler.start_instance_bench('admin')))
-    resp.headers['Access-Control-Allow-Origin'] = "*"
-    return resp
 
 @app.route('/get_benchmark_status')
 def get_benchmark_status():
@@ -235,5 +230,5 @@ if __name__ == '__main__':
     worker.start()
     
     app.debug = True
-    app.run(host='0.0.0.0', port=9090)
+    app.run(host='0.0.0.0', port=2323)
 
