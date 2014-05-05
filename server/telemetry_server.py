@@ -6,6 +6,8 @@ import json, requests, threading
 
 from agent_server import store_host_data
 
+from start_bench_thread import start_bench_ 
+
 LOGFILE = 'telemetry_server'
 
 app = Flask(__name__)
@@ -220,6 +222,11 @@ def repeat_benchmark():
     resp.headers['Access-Control-Allow-Origin'] = "*"
     return resp
 
+@app.route('/start_bench_th')
+def start_bench_thread():
+    resp = make_response(json.dumps(start_bench_()))
+    resp.headers['Access-Control-Allow-Origin'] = "*"
+    return resp
 
 
 if __name__ == '__main__':
