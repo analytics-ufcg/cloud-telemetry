@@ -10,7 +10,7 @@ function execute_bench() {
 		dataType : 'json'
 	}).fail(function(data) {
 		$('#bench_table_cpu').empty().queue(function(exec) {
-			$('<h4>Ocorreu um erro durante a requisição, por favor tente novamente.</h4>').appendTo('#bench_table_cpu');
+			$('<h4>There was an error with the request. Please try again.</h4>').appendTo('#bench_table_cpu');
 			exec();
 		});
 	}).done(function(data) {
@@ -61,14 +61,14 @@ function load_bench() {
 	}).done(function(data) {
 		console.log(data);
 		if (data == "ja ha uma instancia chamada benchmark") {
-			$('#alarm_fail').append("<span>Já existe uma execução em andamento.</span>");
+			$('#alarm_fail').append("<span>There is already a benchmark execution scheduled</span>");
 			$('#alarm_fail').show(0).delay(4300).hide(0).queue(function(next) {
 				$('#alarm_fail').find('span').remove();
 				next();
 			});
 
 		} else if (data == "instancia disparada") {
-			$('#alarm_ok').append("<span>Bechmark iniciado.</span>");
+			$('#alarm_ok').append("<span>Benchmark scheduled.</span>");
 			$('#alarm_ok').show(0).delay(4300).hide(0).queue(function(next) {
 				$('#alarm_fail').find('span').remove();
 				next();
