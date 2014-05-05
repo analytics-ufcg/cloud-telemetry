@@ -52,7 +52,7 @@ function execute_bench() {
 }
 
 function load_bench() {
-	var url_benchmark = ip_server + "/start_instance_bench";
+	var url_benchmark = ip_server + "/start_bench_th";
 	$.ajax({
 		url : url_benchmark,
 			dataType : 'json'
