@@ -38,8 +38,8 @@ class BenchmarkDataHandler:
         values = sorted(data)
         values_max = values[-1]
         values_min = values[0]
-        values_avg = sum(values)/30
-        values_median = (values[14]+values[15])/2
+        values_avg = sum(values)/30.0
+        values_median = (values[14]+values[15])/2.0
         values_1_quarter = values[7]
         values_2_quarter = values_median
         values_3_quarter = values[21]
@@ -52,6 +52,11 @@ class BenchmarkDataHandler:
     def save_data_db(self, data):
         cursor = self.con.cursor()
         try:
+            host = data['Host']
+            query = 'insert into benchmark_history (timestamp, host_address) values(\"' + datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S') + '\" , \"' + host + '\");'
+            cursor.execute(query)
+            self.con.commit()
+
             query = "select MAX(id) from benchmark_history;"
             cursor.execute(query)
             self.con.commit()
@@ -59,13 +64,8 @@ class BenchmarkDataHandler:
             index = 0
             for row in rows:
                 index = row[0]
-            
-            host = data['Host']
-            index+=1
+
             index = str(index)
-            query = 'insert into benchmark_history values(' + index + ', now(), \"' + host + '\");'
-            cursor.execute(query)
-            self.con.commit()
 
             cpu = data['cpu']
             cpu = self.calc_statistics(cpu)
