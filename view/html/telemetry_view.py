@@ -82,7 +82,7 @@ def benchmark_data():
 def get_benchmark():
     return forward_request(request)
 
-@app.route('/start_instance_bench')
+@app.route('/start_bench_th')
 def start_instance_bench():
     return forward_request(request)
 
