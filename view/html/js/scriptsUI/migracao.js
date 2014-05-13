@@ -7,8 +7,8 @@ function getMigracoes() {
 
 	var requisicao;
 
-	$('<div id="load_migration" style="display:none">    <br><br><center><img src="images/ajax-loader.gif"></img> <br> <h4>Obtendo dados. Por favor aguarde.</h4></center></div>').appendTo("#migrations");
-	$('<div id="load_migration2" style="display:none">    <br><br><center><img src="images/ajax-loader.gif"></img> <br> <h4>Obtendo dados. Por favor aguarde.</h4></center></div>').appendTo("#host_status_enable");
+	$('<div id="load_migration" style="display:none">    <br><br><center><img src="images/ajax-loader.gif"></img> <br> <h4>Getting data, please wait.</h4></center></div>').appendTo("#migrations");
+	$('<div id="load_migration2" style="display:none">    <br><br><center><img src="images/ajax-loader.gif"></img> <br> <h4>Getting data, please wait.</h4></center></div>').appendTo("#host_status_enable");
 	$("#load_migration").show();
 	$("#load_migration2").show();
 
@@ -25,7 +25,7 @@ function getMigracoes() {
 		$("#panel_migration").hide(); 
 
 			$('#hosts_enable').empty().queue(function(exec) {
-			$('<h3>Ocorreu um erro durante a requisição, por favor tente novamente.</h3>').appendTo('#host_status_enable');
+			$('<h3>An error has occurred during the request, please try again.</h3>').appendTo('#host_status_enable');
 			exec();
 		});
 	}).done(function(data) {
