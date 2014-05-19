@@ -95,12 +95,16 @@ calcMetrics <- function(data, recommendation, limiar){
   for(i in 1:length(recommendation)){
     if(i==1){
       selection <- subset(data, CPU_UTIL < recommendation[i] - recommendation[i]*limiar)
-      lose[(length(lose)+1):(length(lose)+length(selection$CPU_UTIL))] = (recommendation[i] - selection$CPU_UTIL)/recommendation[i]
-      flavours <- paste(flavours, recommendation[i], sep=":")
+      if(length(selection[,1]) != 0){
+        lose[(length(lose)+1):(length(lose)+length(selection$CPU_UTIL))] = (recommendation[i] - selection$CPU_UTIL)/recommendation[i] 
+        flavours <- paste(flavours, recommendation[i], sep=":")
+      }
     }else{
       selection <- subset(data, CPU_UTIL < recommendation[i] - recommendation[i]*limiar & CPU_UTIL > recommendation[i-1] - recommendation[i-1]*limiar)
-      lose[(length(lose)+1):(length(lose)+length(selection$CPU_UTIL))] = (recommendation[i] - selection$CPU_UTIL)/recommendation[i]
-      flavours <- paste(flavours, recommendation[i], sep=":")
+      if(length(selection[,1]) != 0){
+        lose[(length(lose)+1):(length(lose)+length(selection$CPU_UTIL))] = (recommendation[i] - selection$CPU_UTIL)/recommendation[i]
+        flavours <- paste(flavours, recommendation[i], sep=":")
+      }
     }
     
     
