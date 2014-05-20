@@ -76,7 +76,7 @@ function gera_recomendacao() {
 			$('<h3> The time period chosen has no data. </h3>').appendTo('#recomendacoes_geradas');
 		} else {
 
-			var tabela_rec = '<table class="table table-bordered"><thead><tr><th>Recommendation</th><th>Sugestion</th><th>Lose</th><th>Violations</th> </tr></thead><tbody>';
+			var tabela_rec = '<table class="table table-bordered"><thead><tr><th>Recommendation</th><th>Sugestion</th><th>Lost</th><th>Violations</th> </tr></thead><tbody>';
 			var rows;
 			var numero_da_rec = 1;
 
@@ -116,7 +116,7 @@ function grafico_rec(nomes, valores, ic) {
 			zoomType : 'x'
 		},
 		title : {
-			text : 'Average of Lose (%) per Recommendation'
+			text : 'Average of Lost (%) per Recommendation'
 		},
 		xAxis : [{
 			categories : nomes
