@@ -14,7 +14,6 @@
 		<script src="js/d3.layout.js"></script>
 		<script src="js/scriptsUI/menuconfig.js"></script>
 		<script src="js/scriptsUI/vms.js"></script>
-		<script src="js/scriptsUI/lastaccess.js"></script>
 
 		<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
 		<link rel="stylesheet" type="text/css" href="css/bootstrap-theme.css">
@@ -183,8 +182,8 @@
 								</p>
 							</div>
 							<div class="col-md-6" id="info_rec">
-								<h5><b>Sugestion </b> :  Describe the ideal number of cores that instances should have according to the recommendation.</h5>
-								<h5><b>Lose</b>: Describe the sum of the amount of CPU not used in every instance in relation to the number of cores for each data available.</h5>
+								<h5><b>Sugestion</b>:  Describe the ideal number of cores that instances should have according to the recommendation.</h5>
+								<h5><b>Lost</b>: Describe the sum of the amount of CPU not used in every instance in relation to the number of cores for each data available.</h5>
 								<h5><b>Violations</b>: Describe the number of times that overloaded the machines considering the use of instances of suggestion indicated.</h5>
 							</div>
 						</div>
@@ -230,25 +229,25 @@
            <!-- Div para mostrar benchmark -->         
           <div id="bench_div"class="row" style="display:none;">
             <br></br>
-            <button type="button" class="btn btn-success" align="right" id="loadBench" style="" onclick="execute_bench();">
-  					  Load Benchmark
+            <button type="button" class="btn btn-success" align="right" id="loadBench" style="" onclick="load_bench();">
+  					  Schedule Benchmark
 						</button>
-            
+            <div align="center"><h3>Latest Results</h3></div>
             <br></br>
-            <h4>CPU Table</h4>
+            <h4>CPU</h4>
             <div id="bench_table_cpu"class="col-md-12 col-lg-12">
               
 						</div>
             <br></br><br></br>
             
-            <h4>Memory Table</h4>
+            <h4>Memory</h4>
             
             <div id="bench_table_memory"class="col-md-12 col-lg-12">
               
   					</div>
             <br></br><br></br>
       
-            <h4>Disk Table</h4>
+            <h4>Disk</h4>
             
             <div id="bench_table_disk"class="col-md-12 col-lg-12">
               
@@ -270,10 +269,10 @@
 		<script src="js/scriptsUI/recomenda.js"></script>
 		<script src="js/scriptsUI/host_metrics.js"></script>
 		<script src="js/scriptsUI/migracao.js"></script>
-  	<script src="js/scriptsUI/benchmark.js"></script>
-		<script src="http://code.highcharts.com/highcharts.js"></script>
-		<script src="http://code.highcharts.com/highcharts-more.js"></script>
-		<script src="http://code.highcharts.com/modules/exporting.js"></script>
+  		<script src="js/scriptsUI/benchmark.js"></script>
+		<script src="js/highcharts.js"></script>
+		<script src="js/highcharts-more.js"></script>
+		
 		<script type="text/javascript">
 			$('[data-toggle="tooltip"]').tooltip({
 				placement : 'right',

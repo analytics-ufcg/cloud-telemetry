@@ -7,8 +7,8 @@ function getMigracoes() {
 
 	var requisicao;
 
-	$('<div id="load_migration" style="display:none">    <br><br><center><img src="images/ajax-loader.gif"></img> <br> <h4>Obtendo dados. Por favor aguarde.</h4></center></div>').appendTo("#migrations");
-	$('<div id="load_migration2" style="display:none">    <br><br><center><img src="images/ajax-loader.gif"></img> <br> <h4>Obtendo dados. Por favor aguarde.</h4></center></div>').appendTo("#host_status_enable");
+	$('<div id="load_migration" style="display:none">    <br><br><center><img src="images/ajax-loader.gif"></img> <br> <h4>Getting data, please wait.</h4></center></div>').appendTo("#migrations");
+	$('<div id="load_migration2" style="display:none">    <br><br><center><img src="images/ajax-loader.gif"></img> <br> <h4>Getting data, please wait.</h4></center></div>').appendTo("#host_status_enable");
 	$("#load_migration").show();
 	$("#load_migration2").show();
 
@@ -25,32 +25,50 @@ function getMigracoes() {
 		$("#panel_migration").hide(); 
 
 			$('#hosts_enable').empty().queue(function(exec) {
-			$('<h3>Ocorreu um erro durante a requisição, por favor tente novamente.</h3>').appendTo('#host_status_enable');
+			$('<h3>An error has occurred during the request, please try again.</h3>').appendTo('#host_status_enable');
 			exec();
 		});
 	}).done(function(data) {
+		console.log(data);
 		$("#load_migration").hide();
 		$("#load_migration2").hide();
 		requisicao = data;
-		var tabela_migration = '<table class="table table-bordered"><thead><tr><th>Host</th><th>Server</th><th>End Host</th></tr></thead><tbody>';
-		var rows;
-
+		var tabela_migration;
+		
 		$.each(requisicao['Migracoes'], function(k, v) {
-			rows = '<tr>';
-			$.each(requisicao['Migracoes'][k], function(j, i) {
-				
-				destino = (i == null)? '---':i; 
-				rows += '<tr>';
-				rows += '<th>' + k + '</th>' + '<th>' + j + '</th>' + '<th>' + destino + '</th>';
-				rows += '</tr>';
+			tabela_migration = '<table class="table table-bordered"><thead><tr><th>Host</th><th>Server</th><th>End Host</th></tr></thead><tbody>';
+			var rows;
+			var qtd_migracoes = 0;
+			$.each(requisicao['Migracoes'][k], function(k,v){
+				if(v != null){
+				  qtd_migracoes += 1;
+                                  return false;
+				}
 			});
-			rows += '</tr>';
-			tabela_migration += rows;
+			
+			console.log(qtd_migracoes);
+			if(qtd_migracoes != 0){
+				rows = '<tr>';
+				$.each(requisicao['Migracoes'][k], function(j, i) {
+				console.log(i);
+					if(i != null){
+                                        	destino = i; 
+                                        	rows += '<tr>';
+						rows += '<th>' + k + '</th>' + '<th>' + j + '</th>' + '<th>' + destino + '</th>';
+						rows += '</tr>';
+					}
+				});
+				rows += '</tr>';
+				tabela_migration += rows;
+				tabela_migration += '</tbdody></table>';
+			}else{
+				tabela_migration = "";
+			}
 
 			
 		});
-		tabela_migration += '</tbdody></table>';
-
+		
+		console.log(tabela_migration);
 		
 		var tabela_host_status = '<table class="table table-bordered"><thead><tr><th>Host</th><th>Status</th></tr></thead><tbody>';
 		var rows_status;
@@ -73,7 +91,11 @@ function getMigracoes() {
 
 
 		$('#migrations').empty().queue(function(exec) {
-			$(tabela_migration).appendTo('#migrations');
+			if(tabela_migration == ""){
+				$("<p>No migrations</p>").appendTo("#migrations"); 			
+			}else{
+				$(tabela_migration).appendTo('#migrations');
+			}
 			exec();
 		});
 

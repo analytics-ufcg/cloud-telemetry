@@ -34,6 +34,61 @@ class BenchmarkDataHandler:
         finally:
             cursor.close()
 
+    def calc_statistics(self, data):
+        values = sorted(data)
+        values_max = values[-1]
+        values_min = values[0]
+        values_avg = sum(values)/30.0
+        values_median = (values[14]+values[15])/2.0
+        values_1_quarter = values[7]
+        values_2_quarter = values_median
+        values_3_quarter = values[21]
+        values_4_quarter = values_max
 
+        return [str(values_avg), str(values_median), str(values_min), str(values_max), str(values_1_quarter), str(values_2_quarter), str(values_3_quarter), str(values_4_quarter)]
+
+
+
+    def save_data_db(self, data):
+        cursor = self.con.cursor()
+        try:
+            host = data['Host']
+            query = 'insert into benchmark_history (timestamp, host_address) values(\"' + datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S') + '\" , \"' + host + '\");'
+            cursor.execute(query)
+            self.con.commit()
+
+            query = "select MAX(id) from benchmark_history;"
+            cursor.execute(query)
+            self.con.commit()
+            rows = cursor.fetchall()
+            index = 0
+            for row in rows:
+                index = row[0]
+
+            index = str(index)
+
+            cpu = data['cpu']
+            cpu = self.calc_statistics(cpu)
+            query = 'insert into cpu_table values(' + index + ',' + cpu[0]+ ',' + cpu[1] + ',' + cpu[2]+ ',' + cpu[3] + ',' + cpu[4] + ',' + cpu[5] + ',' + cpu[6] + ',' + cpu[7] + ');'
+            cursor.execute(query)
+            self.con.commit()
+
+            mem = data['memory']
+            mem = self.calc_statistics(mem)
+            query = 'insert into mem_table values(' + index + ',' + mem[0]+ ',' + mem[1] + ',' + mem[2]+ ',' + mem[3] + ',' + mem[4] + ',' + mem[5] + ',' + mem[6] + ',' + mem[7] + ');'
+            cursor.execute(query)
+            self.con.commit()
+
+            disk = data['disk']
+            disk = self.calc_statistics(disk)
+            query = 'insert into disk_table values(' + index + ',' + disk[0]+ ',' + disk[1] + ',' + disk[2]+ ',' + disk[3] + ',' + disk[4] + ',' + disk[5] + ',' + disk[6] + ',' + disk[7] + ');'
+            cursor.execute(query)
+            self.con.commit()
+            
+        except Exception, e:
+            print e
+            return None
+        finally:
+            cursor.close()
 
 
