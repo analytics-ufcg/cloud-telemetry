@@ -112,6 +112,9 @@ calcMetrics <- function(data, recommendation, limiar){
     if(i == length(recommendation)){
       selection <- subset(data, CPU_UTIL >= recommendation[i] - recommendation[i]*limiar)
       violation = length(selection[,1])/length(data[,1])
+      if(length(selection[,1]) != 0){
+          lose[(length(lose)+1):(length(lose)+length(selection$CPU_UTIL))] = (recommendation[i] - selection$CPU_UTIL)/recommendation[i]
+      }
     }
   }
   
