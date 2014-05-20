@@ -69,7 +69,7 @@ function plot() {
 	now.setTime(now.getTime() + now.getTimezoneOffset());
 	/*url de requisicao do json http://150.165.80.194:9090/*/
 	var url_requisicao_bubble = ip_server + "/projects";
-	var url_requisicao_vm = ip_server + "/cpu_util";
+	var url_requisicao_vm = ip_server + "/cpu_util2";
 	var url_requisicao_host = ip_server;
 	var complemento = "";
 	if (out == "ultima_hora") {
@@ -188,9 +188,9 @@ function plot() {
 		} else {
 
 			if (metric == "memoria") {
-				url_requisicao_host += "/hosts_memory";
+				url_requisicao_host += "/hosts_memory_otimization";
 			} else if (metric == "cpu") {
-				url_requisicao_host += "/hosts_cpu_util";
+				url_requisicao_host += "/hosts_cpu_util_otimization";
 			} else {
 				url_requisicao_host += "/hosts_disk";
 			}
