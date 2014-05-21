@@ -156,7 +156,6 @@ def points_reduction_vm(timestamp_begin,timestamp_end,resource_id):
     dh = DataHandler()
     old_data = json.loads(dh.cpu_util_from(timestamp_begin,timestamp_end,resource_id))
     key2 = "cpu_util_percent"
-    print type(old_data[0])
     data  =  points_reduction(old_data,key2)
     return data
 
