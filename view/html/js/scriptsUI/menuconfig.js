@@ -67,6 +67,7 @@ function plot() {
 
 	var now = new Date();
 	now.setTime(now.getTime() + now.getTimezoneOffset());
+	now.setHours(now.getHours()+3);
 	/*url de requisicao do json http://150.165.80.194:9090/*/
 	var url_requisicao_bubble = ip_server + "/projects";
 	var url_requisicao_vm = ip_server + "/cpu_util2";
@@ -114,6 +115,7 @@ function plot() {
 			});
 		}).done(function(data) {
 			dados = data;
+			console.log(data);
 			if (data.length === 0) {
 				if (resource_vm == undefined) {
 					$('#chart').empty().queue(function(exec) {
