@@ -94,6 +94,22 @@ def get_benchmark_status():
 def repeat_benchmark():
     return forward_request(request)
 
+@app.route('/hosts_cpu_util_otimization')
+def hosts_cpu_util_otimization():
+    return forward_request(request)
+
+@app.route('/hosts_memory_otimization')
+def hosts_memory_otimization():
+    return forward_request(request)
+
+@app.route('/hosts_disk_otimization')
+def hosts_disk_otimization():
+    return forward_request(request)
+
+@app.route('/cpu_util2')
+def cpu_util2():
+    return forward_request(request)
+
 def forward_request(req):
     url = req.url
     path = req.path
