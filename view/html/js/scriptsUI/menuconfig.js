@@ -67,7 +67,10 @@ function plot() {
 
 	var now = new Date();
 	now.setTime(now.getTime() + now.getTimezoneOffset());
-	now.setHours(now.getHours()+3);
+	if(!show_hosts){
+		now.setHours(now.getHours()+3);
+	}
+	
 	/*url de requisicao do json http://150.165.80.194:9090/*/
 	var url_requisicao_bubble = ip_server + "/projects";
 	var url_requisicao_vm = ip_server + "/cpu_util2";
