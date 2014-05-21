@@ -1,4 +1,4 @@
-var ip_server = "http://150.165.15.4:9090";
+var ip_server = "http://150.165.15.4:2700";
 //150.165.80.194
 var dados;
 var tempo = [];
@@ -192,7 +192,7 @@ function plot() {
 			} else if (metric == "cpu") {
 				url_requisicao_host += "/hosts_cpu_util_otimization";
 			} else {
-				url_requisicao_host += "/hosts_disk";
+				url_requisicao_host += "/hosts_disk_otimization";
 			}
 			url_requisicao_host += complemento;
 			console.log(url_requisicao_host);
