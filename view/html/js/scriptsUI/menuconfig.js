@@ -192,7 +192,7 @@ function plot() {
 			} else if (metric == "cpu") {
 				url_requisicao_host += "/hosts_cpu_util_otimization";
 			} else {
-				url_requisicao_host += "/hosts_disk";
+				url_requisicao_host += "/hosts_disk_otimization";
 			}
 			url_requisicao_host += complemento;
 			console.log(url_requisicao_host);
