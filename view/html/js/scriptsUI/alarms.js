@@ -1,29 +1,25 @@
 //input para nome do alarme
-var html_addalarm = '<div class="row"><div class="col-lg-8 col-md-8">Nome do alarme:  <input type="text" id="name_alarm" name="alarm_name"></input></div>';
+var html_addalarm = '<div class="row"><div class="col-lg-8 col-md-8">Alarm name:  <input type="text" id="name_alarm" name="alarm_name"></input></div>';
 //criacao de dropdown com os recursos
-html_addalarm += '<div class="col-lg-4 col-md-4"><span>Recurso</span><select id="myRecursos" class="selectpicker show-tick" data-live-search="true" data-size="auto" data-width="160px";>';
+html_addalarm += '<div class="col-lg-4 col-md-4"><span>Resource</span><select id="myRecursos" class="selectpicker show-tick" data-live-search="true" data-size="auto" data-width="160px";>';
 html_addalarm += '<option value="" label=""></option><option value="cpu_util" label="cpu_util">cpu_util</option></select></div></div>';
 //valor de threshold
 html_addalarm += '<div class="row"><div class="col-lg-8 col-md-8">Threshold  <input type="text" id="threshold" name="param_val"></input></div>';
 //criacao de dropdown para escolhar do operador
-html_addalarm += '<div class="col-lg-4 col-md-4"><span>Operador: </span><select id="myOp" class="selectpicker show-tick" data-live-search="true" data-size="auto" data-width="160px";>';
-html_addalarm += '<option value="" label=""></option><option value="gt" label="maior">maior</option><option value="lt" label="menor">menor</option></select></div></div>';
+html_addalarm += '<div class="col-lg-4 col-md-4"><span>Operator: </span><select id="myOp" class="selectpicker show-tick" data-live-search="true" data-size="auto" data-width="160px";>';
+html_addalarm += '<option value="" label=""></option><option value="gt" label="greater">greater</option><option value="lt" label="less">less</option></select></div></div>';
 //div para adição de novo parametro
 html_addalarm += '<div class="row"><div class="col-lg-8 col-md-8">Evaluation Period <input type="text" id="eval_period" name="evalperiod_val"></input></div> ';
 html_addalarm += '<div class="col-lg-4 col-md-4">Time <input type="text" id="time" name="time_val"></input></div></div>';
 
-/*
- var html_deletealarm = '<div class="row"><div class="col-lg-8 col-md-8"><span>Alarme: </span><select id="myRecursos" class="selectpicker show-tick" data-live-search="true" data-size="auto" data-width="160px";>';
- html_deletealarm += '<option value="" label=""></option><option value="cpu_util" label="cpu_util">cpu_util</option></select></div></div>';
- */
 function addAlarme() {
 	bootbox.dialog({
 
 		message : html_addalarm,
-		title : "Adição de Alarmes",
+		title : "Add Alarms",
 		buttons : {
 			main : {
-				label : "Adicionar",
+				label : "Add",
 				className : "btn-primary",
 				callback : function(result) {
 					var recurso = $('#myRecursos').find(":selected").text();
@@ -49,21 +45,21 @@ function addAlarme() {
 						type : 'POST',
 						dataType : 'json'
 					}).fail(function(data) {
-						$('#alarm_fail').append("<span>Erro no Servidor ao tentar criar alarme.<br>Alarme não foi criado</span>");
+						$('#alarm_fail').append("<span>Server Error when trying to create alarm.<br>Alarm was not created</span>");
 						$('#alarm_fail').show(0).delay(4300).hide(0).queue(function(next) {
 							$('#alarm_fail').find('span').remove();
 							next();
 						});
 					}).done(function(data) {
 						if (data.alarm_id == "null") {
-							$('#alarm_fail').append("<span>Alarme não foi criado </span>");
+							$('#alarm_fail').append("<span>Alarm was not created</span>");
 							$('#alarm_fail').show(0).delay(4300).hide(0).queue(function(next) {
 								$('#alarm_fail').find('span').remove();
 								next();
 							});
 
 						} else {
-							$('#alarm_ok').append("<span>Alarme criado com id=" + data.alarm_id + "</span>");
+							$('#alarm_ok').append("<span>Alarm created with id=" + data.alarm_id + "</span>");
 							$('#alarm_ok').show(0).delay(4300).hide(0).queue(function(next) {
 								$('#alarm_ok').find('span').remove();
 								next();
@@ -99,10 +95,10 @@ function deleteAlarme() {
 		bootbox.dialog({
 
 			message : html_deletealarm,
-			title : "Remoção de Alarmes",
+			title : "Remove Alarms",
 			buttons : {
 				main : {
-					label : "Remover",
+					label : "Remove",
 					className : "btn-primary",
 					callback : function(result) {
 						var alarme_escolhido = $('#myAlarm').find(":selected").val();
@@ -115,11 +111,11 @@ function deleteAlarme() {
 							dataType : 'json'
 						}).fail(function(data) {
 							$('#recomendacoes_up').empty().queue(function(exec) {
-								$('<h3>Ocorreu um erro durante a requisição, por favor tente novamente.</h3>').appendTo('#recomendacoes_up');
+								$('<h3>An error occurred during the request, please try again.</h3>').appendTo('#recomendacoes_up');
 								exec();
 							});
 						}).done(function(data) {
-							$('#alarm_ok').append("<span>Alarme removido com sucesso</span>");
+							$('#alarm_ok').append("<span>Alarm successfully removed</span>");
 							$('#alarm_ok').show(0).delay(4300).hide(0).queue(function(next) {
 								$('#alarm_ok').find('span').remove();
 								next();

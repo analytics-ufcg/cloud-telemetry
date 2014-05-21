@@ -8,6 +8,9 @@ from agent_server import store_host_data
 
 from start_bench_thread import start_bench_ 
 
+from window_points import points_reduction_by_server_cpu, points_reduction_by_server_disk, points_reduction_by_server_memory,  points_reduction_vm
+
+
 LOGFILE = 'telemetry_server'
 
 app = Flask(__name__)
@@ -62,6 +65,17 @@ def hosts_cpu_util():
 
     return resp
 
+@app.route('/hosts_cpu_util_otimization')
+def hosts_cpu_util_otimization():
+    timestamp_begin = request.args.get('timestamp_begin', None)
+    timestamp_end = request.args.get('timestamp_end', None)
+
+    resp = make_response(json.dumps(points_reduction_by_server_cpu(timestamp_begin, timestamp_end,HOSTS)))
+    resp.headers['Access-Control-Allow-Origin'] = "*"
+
+    return resp
+
+
 @app.route('/hosts_memory')
 def hosts_memory():
     timestamp_begin = request.args.get('timestamp_begin', None)
@@ -72,12 +86,34 @@ def hosts_memory():
 
     return resp
 
+
+@app.route('/hosts_memory_otimization')
+def hosts_memory_otimization():
+    timestamp_begin = request.args.get('timestamp_begin', None)
+    timestamp_end = request.args.get('timestamp_end', None)
+
+    resp = make_response(json.dumps(points_reduction_by_server_memory(timestamp_begin, timestamp_end, HOSTS)))
+    resp.headers['Access-Control-Allow-Origin'] = "*"
+
+    return resp
+
+
 @app.route('/hosts_disk')
 def hosts_disk():
     timestamp_begin = request.args.get('timestamp_begin', None)
     timestamp_end = request.args.get('timestamp_end', None)
     
     resp = make_response(json.dumps(data_handler.hosts_disk(timestamp_begin, timestamp_end)))
+    resp.headers['Access-Control-Allow-Origin'] = "*"
+
+    return resp
+
+@app.route('/hosts_disk_otimization')
+def hosts_disk_otimization():
+    timestamp_begin = request.args.get('timestamp_begin', None)
+    timestamp_end = request.args.get('timestamp_end', None)
+
+    resp = make_response(json.dumps(points_reduction_by_server_disk(timestamp_begin, timestamp_end, HOSTS)))
     resp.headers['Access-Control-Allow-Origin'] = "*"
 
     return resp
@@ -104,6 +140,17 @@ def cpu_util():
     resp.headers['Access-Control-Allow-Origin'] = "*" 
 
     return resp
+
+@app.route('/cpu_util2')
+def cpu_util2():
+    timestamp_begin = request.args.get('timestamp_begin', None)
+    timestamp_end = request.args.get('timestamp_end', None)
+    resource_id = request.args.get('resource_id', None)
+    
+    resp = make_response(json.dumps(points_reduction_vm(timestamp_begin, timestamp_end,resource_id)))
+    resp.headers['Access-Control-Allow-Origin'] = "*"
+    return resp
+
 
 @app.route('/cpu_util_flavors')
 def cpu_util_flavors():

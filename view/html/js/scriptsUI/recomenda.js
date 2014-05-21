@@ -5,7 +5,7 @@ var recomendacoes;
 function gera_recomendacao() {
 	console.log("funcao gera_recomendacao()");
 	$('#recomendacoes_geradas').empty();
-	$('<div id="load_rec" style="display:none">	<br><br><center><img src="images/ajax-loader.gif"></img> <br> <h4>Realizando recomendação... Isto pode levar alguns minutos. Por favor aguarde.</h4></center></div>').appendTo("#recomendacoes_geradas");
+	$('<div id="load_rec" style="display:none">	<br><br><center><img src="images/ajax-loader.gif"></img> <br> <h4>Running recommendation... This may take a few minutes. Please wait.</h4></center></div>').appendTo("#recomendacoes_geradas");
 	$("#load_rec").show();
 
 	var out = $("input[name='defaultTime']:checked").val();
@@ -15,13 +15,13 @@ function gera_recomendacao() {
 	var dt2 = new Date(dh2[2], dh2[1], dh2[0], dh2[3], dh2[4]);
 	var vm = $("input[name='defaultVM']:checked").val();
 	/*Verificações antes de realizar requisição*/
-	var html_m = '<h2>Atenção!</h2><br />';
+	var html_m = '<h2>Caution!</h2><br />';
 	/*Nenhum Campo selecionado*/
 
 	/*Data de Inicio maior igual Data Fim*/
 	if (dt1.getTime() >= dt2.getTime()) {
-		html_m += '<h4>A data de início fornecida possui tempo maior ou igual à data fim.</h4><br />';
-		html_m += '<h4>Escolha outra data. Obrigado</h4>';
+		html_m += '<h4> start date is greater than or equal to the end date.</h4><br />';
+		html_m += '<h4>Choose another date. Thanks.</h4>';
 		bootbox.alert(html_m);
 	}
 
@@ -67,16 +67,16 @@ function gera_recomendacao() {
 		dataType : 'json'
 	}).fail(function(data) {
 		$("#load_rec").remove();
-		$('<h3> Ocorreu um erro durante a requisição, porfavor tente novamente.</h3>').appendTo('#recomendacoes_geradas');
+		$('<h3> An error has occurred during the request, please try again.</h3>').appendTo('#recomendacoes_geradas');
 	}).done(function(data) {
 		$("#load_rec").remove();
 		recomendacoes = data;
 
 		if (jQuery.isEmptyObject(data)) {
-			$('<h3> O período de tempo escolhido não apresenta dados. </h3>').appendTo('#recomendacoes_geradas');
+			$('<h3> The time period chosen has no data. </h3>').appendTo('#recomendacoes_geradas');
 		} else {
 
-			var tabela_rec = '<table class="table table-bordered"><thead><tr><th>Recommendation</th><th>Sugestion</th><th>Lose</th><th>Violations</th> </tr></thead><tbody>';
+			var tabela_rec = '<table class="table table-bordered"><thead><tr><th>Recommendation</th><th>Sugestion</th><th>Lost</th><th>Violations</th> </tr></thead><tbody>';
 			var rows;
 			var numero_da_rec = 1;
 
@@ -116,7 +116,7 @@ function grafico_rec(nomes, valores, ic) {
 			zoomType : 'x'
 		},
 		title : {
-			text : 'Average of Lose (%) per Recommendation'
+			text : 'Average of Lost (%) per Recommendation'
 		},
 		xAxis : [{
 			categories : nomes

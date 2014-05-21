@@ -69,7 +69,7 @@ function plot() {
 	now.setTime(now.getTime() + now.getTimezoneOffset());
 	/*url de requisicao do json http://150.165.80.194:9090/*/
 	var url_requisicao_bubble = ip_server + "/projects";
-	var url_requisicao_vm = ip_server + "/cpu_util";
+	var url_requisicao_vm = ip_server + "/cpu_util2";
 	var url_requisicao_host = ip_server;
 	var complemento = "";
 	if (out == "ultima_hora") {
@@ -99,7 +99,7 @@ function plot() {
 	var resource_vm = $("input[name='defaultVM']:checked").val();
 	url_requisicao_vm += complemento + "&resource_id=" + $("input[name='defaultVM']:checked").val();
 
-	$('<div id="load_rec" style="display:none">	<br><br><center><img src="images/ajax-loader.gif"></img> <br> <h4> Realizando requisição... Isto pode levar alguns minutos. Por favor aguarde.</h4></center></div>').appendTo("#chart");
+	$('<div id="load_rec" style="display:none">	<br><br><center><img src="images/ajax-loader.gif"></img> <br> <h4> The request is being made... This may take a few minutes. Please wait.</h4></center></div>').appendTo("#chart");
 	$("#load_rec").show();
 	if (!show_hosts) {
 		console.log(url_requisicao_vm);
@@ -109,7 +109,7 @@ function plot() {
 		}).fail(function(data) {
 			show_plot = false;
 			$('#chart').empty().queue(function(exec) {
-				$('#chart').html('<p><h3>Período de tempo não consta nos dados, selecione outro período.</h3><p>');
+				$('#chart').html('<p><h3>  </h3><p>');
 				exec();
 			});
 		}).done(function(data) {
@@ -117,12 +117,12 @@ function plot() {
 			if (data.length === 0) {
 				if (resource_vm == undefined) {
 					$('#chart').empty().queue(function(exec) {
-						$('#chart').html('<p><h3>Selecione uma vm</h3><p>');
+						$('#chart').html('<p><h3>Select a VM</h3><p>');
 						exec();
 					});
 				} else {
 					$('#chart').empty().queue(function(exec) {
-						$('#chart').html('<p><h3>Período de tempo não consta nos dados, selecione outro período.</h3><p>');
+						$('#chart').html('<p><h3>The period chosen has no data,  choose another please.</h3><p>');
 						exec();
 					});
 				}
@@ -177,22 +177,22 @@ function plot() {
 		var metric = $("input[name='defaultMetric']:checked").val();
 		if (resource_host === undefined) {
 			$('#chart').empty().queue(function(exec) {
-				$('#chart').html('<p><h3>Selecione um Host</h3><p>');
+				$('#chart').html('<p><h3>Select a Host</h3><p>');
 				exec();
 			});
 		} else if (metric === undefined) {
 			$('#chart').empty().queue(function(exec) {
-				$('#chart').html('<p><h3>Selecione uma métrica para ser avaliada.</h3><p>');
+				$('#chart').html('<p><h3>Select a metric to be evaluated.</h3><p>');
 				exec();
 			});
 		} else {
 
 			if (metric == "memoria") {
-				url_requisicao_host += "/hosts_memory";
+				url_requisicao_host += "/hosts_memory_otimization";
 			} else if (metric == "cpu") {
-				url_requisicao_host += "/hosts_cpu_util";
+				url_requisicao_host += "/hosts_cpu_util_otimization";
 			} else {
-				url_requisicao_host += "/hosts_disk";
+				url_requisicao_host += "/hosts_disk_otimization";
 			}
 			url_requisicao_host += complemento;
 			console.log(url_requisicao_host);
@@ -203,7 +203,7 @@ function plot() {
 			}).fail(function(data) {
 				show_plot = false;
 				$('#chart').empty().queue(function(exec) {
-					$('#chart').html('<p><h3>Período de tempo não consta nos dados, selecione outro período.</h3><p>');
+					$('#chart').html('<p><h3>The period chosen has no data, choose another please.</h3><p>');
 					exec();
 				});
 			}).done(function(data) {
@@ -211,7 +211,7 @@ function plot() {
 				console.log(typeof dados);
 				if (dados === null || dados.length === 0 ) {
 					$('#chart').empty().queue(function(exec) {
-						$('#chart').html('<p><h3>Período de tempo não consta nos dados, selecione outro período.</h3><p>');
+						$('#chart').html('<p><h3>The period chosen has no data, choose another please.</h3><p>');
 						exec();
 					});
 
@@ -219,7 +219,7 @@ function plot() {
 					var dt = dados[host_position].data;
 					console.log(host_position);
 					if (dt == null) {
-						$('#chart').html('<p><h3>Período de tempo não consta nos dados, selecione outro período.</h3><p>');
+						$('#chart').html('<p><h3>The period chosen has no data, choose another please.</h3><p>');
 					} else {
 
 						var valores = selectMetric(metric, dt);
@@ -509,34 +509,6 @@ function show_rec_migracao() {
 	$("#recomendacoes_migracoes").empty();
 	getMigracoes();
 	
-	/*$.ajax({
-			url : ip_server + "/host_migration",
-			dataType : 'json'
-		}).fail(function(data) {
-			show_plot = false;
-			$('#chart').empty().queue(function(exec) {
-				$('#chart').html('<p><h3>Erro na requisicao</h3><p>');
-				exec();
-			});
-		}).done(function(data) {
-			console.log(data);
-		});*/
-
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 }
 
 function show_projects() {
@@ -553,7 +525,7 @@ function show_projects() {
 		$thisLi.addClass('active');
 	}
 
-	$('<center> selecione uma VM de um projeto e um período de Tempo </center>').appendTo("#chart");
+	$('<center> select a VM from one project and a period of time. </center>').appendTo("#chart");
 }
 
 function show_host() {
@@ -570,7 +542,7 @@ function show_host() {
 		$thisLi.addClass('active');
 	}
 
-	$('<center> selecione um Host e um período de Tempo </center>').appendTo("#chart");
+	$('<center> select a Host and a period of time.</center>').appendTo("#chart");
 }
 
 /*Funcação necessária para que a aba selecionada fique active devido a um reload do bootstrap3*/
