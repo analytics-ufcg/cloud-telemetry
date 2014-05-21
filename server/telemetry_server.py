@@ -113,7 +113,7 @@ def hosts_disk_otimization():
     timestamp_begin = request.args.get('timestamp_begin', None)
     timestamp_end = request.args.get('timestamp_end', None)
 
-    resp = make_response(json.dumps(data_handler.hosts_disk(timestamp_begin, timestamp_end)))
+    resp = make_response(json.dumps(points_reduction_by_server_disk(timestamp_begin, timestamp_end, HOSTS)))
     resp.headers['Access-Control-Allow-Origin'] = "*"
 
     return resp
