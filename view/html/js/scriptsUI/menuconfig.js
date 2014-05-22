@@ -1,4 +1,4 @@
-var ip_server = "http://150.165.15.4:9090";
+var ip_server = "http://150.165.15.4:1313";
 //150.165.80.194
 var dados;
 var tempo = [];

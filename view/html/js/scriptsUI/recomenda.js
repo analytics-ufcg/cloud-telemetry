@@ -76,7 +76,7 @@ function gera_recomendacao() {
 			$('<h3> The time period chosen has no data. </h3>').appendTo('#recomendacoes_geradas');
 		} else {
 
-			var tabela_rec = '<table class="table table-bordered"><thead><tr><th>Recommendation</th><th>Sugestion</th><th>Lost</th><th>Violations</th> </tr></thead><tbody>';
+			var tabela_rec = '<table class="table table-bordered"><thead><tr><th>Recommendation</th><th>Sugestion</th><th>Lose</th><th>Violations</th> </tr></thead><tbody>';
 			var rows;
 			var numero_da_rec = 1;
 
@@ -95,7 +95,7 @@ function gera_recomendacao() {
 				}else{
 					core = k + " cores";
 				}
-				rows = '<tr><th>' + 'Recommendation  ' + numero_da_rec + '</th><th>' + core +  '</th><th>' + JSON.parse(recomendacoes[k][0]).split(':')[0] + '</th><th>' + recomendacoes[k][1] + '</th></tr>';
+				rows = '<tr><th>' + 'Recommendation  ' + numero_da_rec + '</th><th>' + core.replace(':',', ') +  '</th><th>' + JSON.parse(recomendacoes[k][0]).split(':')[0]+' %' + '</th><th>' + recomendacoes[k][1] + ' %' + '</th></tr>';
 				tabela_rec += rows;
 				numero_da_rec += 1;
 			});
@@ -116,7 +116,7 @@ function grafico_rec(nomes, valores, ic) {
 			zoomType : 'x'
 		},
 		title : {
-			text : 'Average of Lost (%) per Recommendation'
+			text : 'Average of Lose (%) per Recommendation'
 		},
 		xAxis : [{
 			categories : nomes
@@ -128,7 +128,7 @@ function grafico_rec(nomes, valores, ic) {
 				}
 			},
 			title : {
-				text : 'Average'
+				text : 'Lose'
 			}
 		},
 
@@ -142,7 +142,7 @@ function grafico_rec(nomes, valores, ic) {
 			}
 		},
 		series : [{
-			name : 'Average',
+			name : 'Lose (%)',
 			type : 'column',
 			data : valores,
 			tooltip : {
@@ -169,7 +169,7 @@ function grafico_violacoes(nomes, valores) {
 			zoomType : 'x'
 		},
 		title : {
-			text : 'Violations per Recommendation'
+			text : 'Violations (%) per Recommendation'
 		},
 		xAxis : [{
 			categories : nomes
@@ -178,11 +178,11 @@ function grafico_violacoes(nomes, valores) {
 			min : 0,
 			labels : {
 				formatter : function() {
-					return this.value;
+					return this.value + '%';
 				}
 			},
 			title : {
-				text : 'Violations'
+				text : 'Violations (%)'
 			}
 		},
 
@@ -196,7 +196,7 @@ function grafico_violacoes(nomes, valores) {
 			}
 		},
 		series : [{
-			name : 'Number of violations',
+			name : 'Violations (%)',
 			type : 'column',
 			data : valores,
 			tooltip : {
