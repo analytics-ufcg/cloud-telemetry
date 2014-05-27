@@ -140,11 +140,10 @@ function plot() {
 					t1.push(dados[d].timestamp.replace("T", " "));
 					cpu.push((dados[d].cpu_util_percent).toFixed(2));
 				});
-
+				console.log(t1);
 				var json = {
 					data : {
 						x : 'x',
-						x_format : '%Y-%m-%d %H:%M:%S',
 						columns : [t1, cpu]
 					},
 					subchart : {
@@ -152,8 +151,13 @@ function plot() {
 					},
 					axis : {
 						x : {
-							label : 'Tempo',
-							type : 'timeseries'
+							label : 'Time',
+							type : 'timeseries',
+							tick: {
+											fit: true,
+											count: 5,
+											format: '%e %b %H:%M',
+										}
 						},
 						y : {
 							label : '(%) '
@@ -231,11 +235,10 @@ function plot() {
 						if (valores == null) {
 							console.log(" metrica nao existe");
 						} else {
-
+							console.log(valores);
 							var json = {
 								data : {
 									x : 'x',
-									x_format : '%Y-%m-%d %H:%M:%S',
 									columns : valores
 								},
 								subchart : {
@@ -244,7 +247,12 @@ function plot() {
 								axis : {
 									x : {
 										label : 'Time',
-										type : 'timeseries'
+										type : 'timeseries',
+										tick: {
+											fit: true,
+											count: 5,
+											format: '%e %b %H:%M',
+										}
 									},
 									y : {
 										label : '(%) '
