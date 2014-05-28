@@ -162,3 +162,10 @@ class NovaClient:
                  return server.id
         return None
               
+    def host_aggregates(self, project):
+        nova = client.Client(env.OS_USERNAME,env.OS_PASSWORD,project,env.OS_AUTH_URL)
+        aggregates = nova.aggregates.list()
+        aggregates_hosts = []        
+        for aggregate in aggregates:
+            aggregates_hosts.append({aggregate.name:aggregate.hosts})
+        return aggregates_hosts
