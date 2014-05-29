@@ -169,3 +169,7 @@ class NovaClient:
         for aggregate in aggregates:
             aggregates_hosts.append({aggregate.name:aggregate.hosts})
         return aggregates_hosts
+
+
+    def resource_host(self, host):
+        return self.host_describe(host)['host'][0]['resource']

@@ -148,6 +148,13 @@ class DataHandler:
     def host_metrics(self, project):
         return self.__nova.metrics(project)
 
+    def host_aggregates(self, project):
+        return self.__nova.host_aggregates(project)
+
+    def resource_host(self, host):
+        return self.__nova.resource_host(host)
+
+
     def hosts_recommendation(self, r_cpu, r_memory , r_disk):
         resource = []
         ret = {}
