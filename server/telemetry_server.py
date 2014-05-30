@@ -270,6 +270,14 @@ def start_bench_thread():
     resp.headers['Access-Control-Allow-Origin'] = "*"
     return resp
 
+@app.route('/hosts_aggregation_cpu')
+def hosts_aggregation():
+    timestamp_begin = request.args.get('timestamp_begin', None)
+    timestamp_end = request.args.get('timestamp_end', None)
+    
+    resp = make_response(data_handler.hosts_aggregation_cpu(timestamp_begin, timestamp_end))
+    resp.headers['Access-Control-Allow-Origin'] = "*"
+    return resp
 
 if __name__ == '__main__':
     worker = threading.Thread(target=store_host_data, kwargs={'hosts':HOSTS})

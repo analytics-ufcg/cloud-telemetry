@@ -251,3 +251,45 @@ class DataHandler:
         else:
             remove = self.__nova.remove_instance(id)
             return remove
+
+    def hosts_aggregation_cpu(self, timestamp_begin=None, timestamp_end=None):
+        ret = []
+
+        cpu_data = self.hosts_cpu(timestamp_begin, timestamp_end)
+        #encontrar um modo de pegar os agregados
+        aggregates = [["150.165.15.4", "150.165.15.38"]]
+        #fim        
+
+        for aggregate in aggregates:
+            result = []
+            for host in aggregate:
+                #encontrar um modo de converter os enderecos em nomes
+                host_name = "empty"
+                if(host == "150.165.15.4"):
+                    host_name = "truta"
+                else:
+                    host_name = "cloud-analytics1"
+                #fim
+                host_cpu = self.__nova.resource_host(host_name)["cpu"]
+                
+                for data in cpu_data:
+                    if(data["host_address"]==host):
+                        convert = []
+
+                        for cpu_percent in data["data"]:
+                            cpu_percent["data"] = (1 - cpu_percent["data"]/100.0)* host_cpu
+                            convert.append(cpu_percent)
+ 
+                        if(len(result)==0):
+                            result = convert
+                        else:
+                            if(len(result) > len(convert)):
+                                result = result[0:len(convert)]
+                            for i in range(len(result)):
+                                value = result[i]
+                                value["data"] = value["data"] + (convert[i])["data"]
+                                result[i] = value
+                                
+                        break
+            ret.append({"Aggregate":aggregate, "data":result})
+        return json.dumps(ret)
