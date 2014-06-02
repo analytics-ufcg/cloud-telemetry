@@ -256,20 +256,13 @@ class DataHandler:
         ret = []
 
         cpu_data = self.hosts_cpu(timestamp_begin, timestamp_end)
-        #encontrar um modo de pegar os agregados
-        aggregates = [["150.165.15.4", "150.165.15.38"]]
-        #fim        
+        aggregates = self.__nova.host_aggregates('admin')
 
         for aggregate in aggregates:
             result = []
-            for host in aggregate:
-                #encontrar um modo de converter os enderecos em nomes
-                host_name = "empty"
-                if(host == "150.165.15.4"):
-                    host_name = "truta"
-                else:
-                    host_name = "cloud-analytics1"
-                #fim
+            host_address = aggregate["host_address"]
+            for host in host_address:
+                host_name = self.__nova.server_name_by_ip(host)
                 host_cpu = self.__nova.resource_host(host_name)["cpu"]
                 
                 for data in cpu_data:
@@ -291,5 +284,5 @@ class DataHandler:
                                 result[i] = value
                                 
                         break
-            ret.append({"Aggregate":aggregate, "data":result})
+            ret.append({"Aggregate":aggregate["name"], "data":result})
         return json.dumps(ret)
