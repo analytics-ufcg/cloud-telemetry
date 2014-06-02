@@ -162,13 +162,24 @@ class NovaClient:
                  return server.id
         return None
               
+    def server_get_ip_by_name(self, host_name):
+        hosts = {'truta':'150.165.15.4', 'cloud-analytics1':'150.165.15.38'  ,'cloud-analytics2':'150.165.15.42'}
+        return hosts[host_name]
+
     def host_aggregates(self, project):
         nova = client.Client(env.OS_USERNAME,env.OS_PASSWORD,project,env.OS_AUTH_URL)
         aggregates = nova.aggregates.list()
         aggregates_hosts = []        
         for aggregate in aggregates:
-            aggregates_hosts.append({aggregate.name:aggregate.hosts})
+            hosts_list = []
+            for host in aggregate.hosts:
+                hosts_list.append(self.server_get_ip_by_name(host))
+            aggregates_hosts.append({'name':aggregate.name, 'host_address':hosts_list})
         return aggregates_hosts
+
+    def server_name_by_ip(self, ip):
+        hosts = {'150.165.15.4':'truta', '150.165.15.38':'cloud-analytics1'  ,'150.165.15.42':'cloud-analytics1'}
+        return hosts[ip]
 
 
     def resource_host(self, host):
