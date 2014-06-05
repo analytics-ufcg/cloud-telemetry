@@ -152,8 +152,13 @@ function plot() {
 					},
 					axis : {
 						x : {
-							label : 'Tempo',
-							type : 'timeseries'
+							label : 'Time',
+							type : 'timeseries',
+							tick : {
+								fit: true,
+								count: 5,
+								format: '%e %b %H:%M',
+							}
 						},
 						y : {
 							label : '(%) '
@@ -244,7 +249,13 @@ function plot() {
 								axis : {
 									x : {
 										label : 'Time',
-										type : 'timeseries'
+										type : 'timeseries',
+										tick: {
+											fit: true,
+											count: 5,
+											format: '%e %b %H:%M',
+
+										}
 									},
 									y : {
 										label : '(%) '
