@@ -16,7 +16,7 @@ $('#datetimepicker2').datetimepicker({
 	pick12HourFormat : true
 });
 
-/*Habilitando escolha de apenas um atributo para visualização*/
+/*Habilitando escolha de apenas um atributo para visualizaÃ§Ã£o*/
 $("input[name='defaultTime']").click(function() {
 	$('#data_hora1').val("");
 	$('#data_hora2').val("");
@@ -25,7 +25,7 @@ $('.input-group-addon').click(function() {
 	$('input[name=defaultTime]').prop('checked', false);
 });
 
-/*Funcao para converter dia e mês*/
+/*Funcao para converter dia e mÃªs*/
 function formattedDate(date, verificador) {
 	var d = new Date(date || Date.now()), month = '' + (d.getMonth() + 1), day = '' + d.getDate(), year = '' + d.getFullYear(), hour = '' + (d.getHours()), minuto = '' + (d.getMinutes());
 	if (verificador == 1) {
@@ -51,16 +51,16 @@ function plot() {
 	var dh2 = $('#data_hora2').val().replace("/", " ").replace("/", " ").replace(":", " ").split(" ");
 	var dt2 = new Date(dh2[2], dh2[1], dh2[0], dh2[3], dh2[4]);
 	var vm = $("input[name='defaultVM']:checked").val();
-	/*Verificações antes de realizar requisição*/
-	var html_m = '<h2>Atenção!</h2><br />';
+	/*VerificaÃ§Ãµes antes de realizar requisiÃ§Ã£o*/
+	var html_m = '<h2>AtenÃ§Ã£o!</h2><br />';
 	/*Nenhum Campo selecionado*/
 	if (out == undefined && $('#data_hora1').val().length == 0 && $('#data_hora2').val().length == 0) {
-		html_m += '<h4>Nenhuma opção selecionada, escolha uma das opções de <b>Período Fixo</b> \n ou <b> Período Específico</b>  </h4><br />';
+		html_m += '<h4>Nenhuma opÃ§Ã£o selecionada, escolha uma das opÃ§Ãµes de <b>PerÃ­odo Fixo</b> \n ou <b> PerÃ­odo EspecÃ­fico</b>  </h4><br />';
 		bootbox.alert(html_m);
 	}
 	/*Data de Inicio maior igual Data Fim*/
 	if (dt1.getTime() >= dt2.getTime()) {
-		html_m += '<h4>A data de início fornecida possui tempo maior ou igual à data fim.</h4><br />';
+		html_m += '<h4>A data de inÃ­cio fornecida possui tempo maior ou igual Ã  data fim.</h4><br />';
 		html_m += '<h4>Escolha outra data. Obrigado</h4>';
 		bootbox.alert(html_m);
 	}
@@ -140,10 +140,11 @@ function plot() {
 					t1.push(dados[d].timestamp.replace("T", " "));
 					cpu.push((dados[d].cpu_util_percent).toFixed(2));
 				});
-				console.log(t1);
+
 				var json = {
 					data : {
 						x : 'x',
+						x_format : '%Y-%m-%d %H:%M:%S',
 						columns : [t1, cpu]
 					},
 					subchart : {
@@ -151,13 +152,8 @@ function plot() {
 					},
 					axis : {
 						x : {
-							label : 'Time',
-							type : 'timeseries',
-							tick: {
-											fit: true,
-											count: 5,
-											format: '%e %b %H:%M',
-										}
+							label : 'Tempo',
+							type : 'timeseries'
 						},
 						y : {
 							label : '(%) '
@@ -235,10 +231,11 @@ function plot() {
 						if (valores == null) {
 							console.log(" metrica nao existe");
 						} else {
-							console.log(valores);
+
 							var json = {
 								data : {
 									x : 'x',
+									x_format : '%Y-%m-%d %H:%M:%S',
 									columns : valores
 								},
 								subchart : {
@@ -247,12 +244,7 @@ function plot() {
 								axis : {
 									x : {
 										label : 'Time',
-										type : 'timeseries',
-										tick: {
-											fit: true,
-											count: 5,
-											format: '%e %b %H:%M',
-										}
+										type : 'timeseries'
 									},
 									y : {
 										label : '(%) '
@@ -389,7 +381,7 @@ function show_recomendacoes() {
 	$("#hist_div").hide();
   $("#bench_div").hide();
 	$("#aplicarConf").hide();
-	//esconde o botão aplicar
+	//esconde o botÃ£o aplicar
 	$("#gerar_rec").show();
 
 	$("#rec_div").show();
@@ -558,7 +550,7 @@ function show_host() {
 	$('<center> select a Host and a period of time.</center>').appendTo("#chart");
 }
 
-/*Funcação necessária para que a aba selecionada fique active devido a um reload do bootstrap3*/
+/*FuncaÃ§Ã£o necessÃ¡ria para que a aba selecionada fique active devido a um reload do bootstrap3*/
 $(function() {
 	$("#myTab a:last").tab('show');
 });
