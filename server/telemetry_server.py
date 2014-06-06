@@ -279,6 +279,12 @@ def hosts_aggregation():
     resp.headers['Access-Control-Allow-Origin'] = "*"
     return resp
 
+@app.route('/hosts_aggregates')
+def hosts_aggregates():
+    resp = make_response(json.dumps(data_handler.host_aggregates('admin')))
+    resp.headers['Access-Control-Allow-Origin'] = "*"
+    return resp
+
 if __name__ == '__main__':
     worker = threading.Thread(target=store_host_data, kwargs={'hosts':HOSTS})
     worker.daemon = False
