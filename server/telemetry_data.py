@@ -286,3 +286,38 @@ class DataHandler:
                         break
             ret.append({"Aggregate":aggregate["name"], "data":result})
         return json.dumps(ret)
+
+    def hosts_aggregation_memory(self, timestamp_begin=None, timestamp_end=None):
+        ret = []
+
+        memory_data = self.hosts_memory(timestamp_begin, timestamp_end)
+        aggregates = self.__nova.host_aggregates('admin')
+
+        for aggregate in aggregates:
+            result = []
+            host_address = aggregate["host_address"]
+            for host in host_address:		
+                host_name = self.__nova.server_name_by_ip(host)
+                host_memory = self.__nova.resource_host(host_name)["memory_mb"]
+
+                for data in memory_data:
+                    if(data["host_address"]==host):
+                        convert = []
+
+                        for memory_percent in data["data"]:
+                            memory_percent['data'] = (1 - json.loads(memory_percent['data'])[0]['percent']/100.0 )*host_memory
+                            convert.append(memory_percent)
+
+                        if(len(result)==0):
+                            result = convert
+                        else:
+                            if(len(result) > len(convert)):
+                                result = result[0:len(convert)]
+                            for i in range(len(result)):
+                                value = result[i]
+                                value["data"] = value["data"] + (convert[i])["data"]
+                                result[i] = value
+
+                        break
+            ret.append({"Aggregate":aggregate["name"], "data":result})
+        return json.dumps(ret)
