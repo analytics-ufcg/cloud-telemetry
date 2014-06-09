@@ -108,9 +108,13 @@ class NovaClient:
             nova = client.Client(env.OS_USERNAME, env.OS_PASSWORD, p, env.OS_AUTH_URL)
             flavors = self.flavor_information(p)
             vm_list = nova.servers.list()
-            for vm in vm_list:
-                dic_hosts[vm._info['os-extended-server-attributes:host']]['vms'][vm.id] = flavors[vm.flavor['id']]
-                dic_hosts[vm._info['os-extended-server-attributes:host']]['nomes'][vm.id] = vm._info['name']
+            if len(vm_list) > 0:
+                for vm in vm_list:
+                    if vm._info['os-extended-server-attributes:host'] == None:
+                        pass
+                    else:
+                        dic_hosts[vm._info['os-extended-server-attributes:host']]['vms'][vm.id] = flavors[vm.flavor['id']]
+                        dic_hosts[vm._info['os-extended-server-attributes:host']]['nomes'][vm.id] = vm._info['name']
         lista_ordenada = []
         dic_ord = sorted( dic_hosts.items(), key=lambda x: (  len( x[1]['vms'].keys() )==0, -x[1]['Livre'][0] ))
         for e in dic_ord:
