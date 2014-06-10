@@ -271,7 +271,7 @@ class DataHandler:
                         convert = []
 
                         for cpu_percent in data["data"]:
-                            cpu_percent["data"] = ((cpu_percent["data"]/100.0)* host_cpu)/aggregate_cpu
+                            cpu_percent["data"] = ((cpu_percent["data"])* host_cpu)/aggregate_cpu
                             convert.append(cpu_percent)
  
                         if(len(result)==0):
@@ -307,7 +307,7 @@ class DataHandler:
                         convert = []
 
                         for memory_percent in data["data"]:
-                            memory_percent['data'] = ((json.loads(memory_percent['data'])[0]['percent']/100.0 )*host_memory)/aggregate_memory
+                            memory_percent['data'] = ((json.loads(memory_percent['data'])[0]['percent'])*host_memory)/aggregate_memory
                             convert.append(memory_percent)
 
                         if(len(result)==0):
@@ -344,7 +344,7 @@ class DataHandler:
                         convert = []
 
                         for disk_percent in data["data"]:
-                            disk_percent['data'] = ((json.loads(disk_percent['data'])[0]['percent']/100)*host_disk)/aggregate_disk
+                            disk_percent['data'] = ((json.loads(disk_percent['data'])[0]['percent'])*host_disk)/aggregate_disk
                             convert.append(disk_percent)
 
                         if(len(result)==0):
