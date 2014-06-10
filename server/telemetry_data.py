@@ -261,6 +261,7 @@ class DataHandler:
         for aggregate in aggregates:
             result = []
             host_address = aggregate["host_address"]
+            aggregate_cpu = self.__nova.resource_aggregates(aggregate['name'])['cpu']
             for host in host_address:
                 host_name = self.__nova.server_name_by_ip(host)
                 host_cpu = self.__nova.resource_host(host_name)["cpu"]
@@ -270,7 +271,7 @@ class DataHandler:
                         convert = []
 
                         for cpu_percent in data["data"]:
-                            cpu_percent["data"] = (1 - cpu_percent["data"]/100.0)* host_cpu
+                            cpu_percent["data"] = ((cpu_percent["data"]/100.0)* host_cpu)/aggregate_cpu
                             convert.append(cpu_percent)
  
                         if(len(result)==0):
@@ -296,6 +297,7 @@ class DataHandler:
         for aggregate in aggregates:
             result = []
             host_address = aggregate["host_address"]
+            aggregate_memory = self.__nova.resource_aggregates(aggregate['name'])['memory_mb']
             for host in host_address:		
                 host_name = self.__nova.server_name_by_ip(host)
                 host_memory = self.__nova.resource_host(host_name)["memory_mb"]
@@ -305,8 +307,45 @@ class DataHandler:
                         convert = []
 
                         for memory_percent in data["data"]:
-                            memory_percent['data'] = (1 - json.loads(memory_percent['data'])[0]['percent']/100.0 )*host_memory
+                            memory_percent['data'] = ((json.loads(memory_percent['data'])[0]['percent']/100.0 )*host_memory)/aggregate_memory
                             convert.append(memory_percent)
+
+                        if(len(result)==0):
+                            result = convert
+                        else:
+                            if(len(result) > len(convert)):
+                                result = result[0:len(convert)]
+                            for i in range(len(result)):
+                                value = result[i]
+                                value["data"] = (value["data"] + (convert[i])["data"])
+                                result[i] = value
+
+                        break
+            ret.append({"Aggregate":aggregate["name"], "data":result})
+        return json.dumps(ret)
+
+
+    def hosts_aggregation_disk(self, timestamp_begin=None, timestamp_end=None):
+        ret = []
+
+        disk_data = self.hosts_disk(timestamp_begin, timestamp_end)
+        aggregates = self.__nova.host_aggregates('admin')
+
+        for aggregate in aggregates:
+            result = []
+            host_address = aggregate["host_address"]
+            aggregate_disk = self.__nova.resource_aggregates(aggregate['name'])['disk']
+            for host in host_address:
+                host_name = self.__nova.server_name_by_ip(host)
+                host_disk = self.__nova.resource_host(host_name)["disk_gb"]
+
+                for data in disk_data:
+                    if(data["host_address"]==host):
+                        convert = []
+
+                        for disk_percent in data["data"]:
+                            disk_percent['data'] = ((json.loads(disk_percent['data'])[0]['percent']/100)*host_disk)/aggregate_disk
+                            convert.append(disk_percent)
 
                         if(len(result)==0):
                             result = convert
@@ -321,3 +360,4 @@ class DataHandler:
                         break
             ret.append({"Aggregate":aggregate["name"], "data":result})
         return json.dumps(ret)
+

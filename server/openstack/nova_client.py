@@ -191,9 +191,9 @@ class NovaClient:
 
 
 
-    def resource_aggregates(self, name, project):
+    def resource_aggregates(self, name):
 
-        nova = client.Client(env.OS_USERNAME,env.OS_PASSWORD,project,env.OS_AUTH_URL)
+        nova = client.Client(env.OS_USERNAME,env.OS_PASSWORD,'admin',env.OS_AUTH_URL)
         aggregates = nova.aggregates.list()
 
         for aggregate in aggregates:
