@@ -108,9 +108,13 @@ class NovaClient:
             nova = client.Client(env.OS_USERNAME, env.OS_PASSWORD, p, env.OS_AUTH_URL)
             flavors = self.flavor_information(p)
             vm_list = nova.servers.list()
-            for vm in vm_list:
-                dic_hosts[vm._info['os-extended-server-attributes:host']]['vms'][vm.id] = flavors[vm.flavor['id']]
-                dic_hosts[vm._info['os-extended-server-attributes:host']]['nomes'][vm.id] = vm._info['name']
+            if len(vm_list) > 0:
+                for vm in vm_list:
+                    if vm._info['os-extended-server-attributes:host'] == None:
+                        pass
+                    else:
+                        dic_hosts[vm._info['os-extended-server-attributes:host']]['vms'][vm.id] = flavors[vm.flavor['id']]
+                        dic_hosts[vm._info['os-extended-server-attributes:host']]['nomes'][vm.id] = vm._info['name']
         lista_ordenada = []
         dic_ord = sorted( dic_hosts.items(), key=lambda x: (  len( x[1]['vms'].keys() )==0, -x[1]['Livre'][0] ))
         for e in dic_ord:
@@ -184,3 +188,27 @@ class NovaClient:
 
     def resource_host(self, host):
         return self.host_describe(host)['host'][0]['resource']
+
+
+
+    def resource_aggregates(self, name):
+
+        nova = client.Client(env.OS_USERNAME,env.OS_PASSWORD,'admin',env.OS_AUTH_URL)
+        aggregates = nova.aggregates.list()
+
+        for aggregate in aggregates:
+            if aggregate.name == name:
+                hosts = aggregate.hosts
+                cpu = 0
+                memory = 0
+                disk = 0
+                for host in hosts:
+                    resource = self.resource_host(host)
+                    cpu +=resource['cpu']
+                    memory += resource['memory_mb']
+                    disk += resource['disk_gb']
+                return {'cpu':cpu,'memory_mb':memory,'disk':disk}
+            else:
+                pass
+
+        return None
