@@ -3,11 +3,14 @@ from openstack.keystone_client import KeystoneClient
 from openstack.nova_client import NovaClient
 from host_data import HostDataHandler
 from benchmark_data import BenchmarkDataHandler
+from reduction import Reduction
 
-
-import json, ast, smtplib, math, requests
+import json, ast, smtplib, math, requests, numpy
 
 import analytics.recommendations
+
+HOSTS = ['150.165.15.4','150.165.15.38', '150.165.15.42']
+
 
 def send_email(from_addr, to_addr_list, cc_addr_list,
               subject, message,
@@ -42,6 +45,7 @@ class DataHandler:
         self.__nova = NovaClient()
         self.__hosts_db = HostDataHandler()
         self.__benchmark_db = BenchmarkDataHandler()
+        self.__reduction = Reduction()
 
     def projects(self):
         return json.dumps(self.__keystone.projects)
@@ -196,7 +200,6 @@ class DataHandler:
                 else:
                     ret[host_http] ="normal"       
         return json.dumps(ret)
-        #return json.dumps(cpu)
 
     def instances_from_host(self, host_name):
         ret = []
@@ -252,10 +255,10 @@ class DataHandler:
             remove = self.__nova.remove_instance(id)
             return remove
 
-    def hosts_aggregation_cpu(self, timestamp_begin=None, timestamp_end=None):
+    def hosts_aggregation_cpu(self, hosts, timestamp_begin=None, timestamp_end=None):
         ret = []
 
-        cpu_data = self.hosts_cpu(timestamp_begin, timestamp_end)
+        cpu_data = self.points_reduction_by_server_cpu(timestamp_begin, timestamp_end, hosts)
         aggregates = self.__nova.host_aggregates('admin')
 
         for aggregate in aggregates:
@@ -288,10 +291,10 @@ class DataHandler:
             ret.append({"Aggregate":aggregate["name"], "data":result})
         return json.dumps(ret)
 
-    def hosts_aggregation_memory(self, timestamp_begin=None, timestamp_end=None):
+    def hosts_aggregation_memory(self,hosts, timestamp_begin=None, timestamp_end=None):
         ret = []
 
-        memory_data = self.hosts_memory(timestamp_begin, timestamp_end)
+        memory_data = self.points_reduction_by_server_memory(timestamp_begin, timestamp_end, hosts)
         aggregates = self.__nova.host_aggregates('admin')
 
         for aggregate in aggregates:
@@ -325,10 +328,10 @@ class DataHandler:
         return json.dumps(ret)
 
 
-    def hosts_aggregation_disk(self, timestamp_begin=None, timestamp_end=None):
+    def hosts_aggregation_disk(self,hosts, timestamp_begin=None, timestamp_end=None):
         ret = []
 
-        disk_data = self.hosts_disk(timestamp_begin, timestamp_end)
+        disk_data = self.points_reduction_by_server_disk(timestamp_begin, timestamp_end, hosts)
         aggregates = self.__nova.host_aggregates('admin')
 
         for aggregate in aggregates:
@@ -360,4 +363,56 @@ class DataHandler:
                         break
             ret.append({"Aggregate":aggregate["name"], "data":result})
         return json.dumps(ret)
+
+    def points_reduction_by_server_cpu(self, timestamp_begin, timestamp_end, hosts):
+        data = []
+        old_data = self.hosts_cpu(timestamp_begin, timestamp_end)
+        key = 'data'
+        if len(old_data)==0 or len(old_data[0][key]) <= 3:
+           result = old_data
+        else:
+            for host in range(len(hosts)):
+                dict_host = {}
+                dict_host["host_address"] = hosts[host]
+                dict_host['data'] = self.__reduction.points_reduction(old_data[host]['data'],key)
+                data.append(dict_host)
+                result = data
+        return result
+    
+    def points_reduction_by_server_memory(self, timestamp_begin, timestamp_end, hosts):
+        data = []
+        old_data = self.hosts_memory(timestamp_begin, timestamp_end)
+        key = 'data'
+        if len(old_data)==0 or len(old_data[0][key]) <= 3:
+           result = old_data
+        else:
+            for host in range(len(hosts)):
+                dict_host = {}
+                dict_host["host_address"] = hosts[host]
+                dict_host['data'] = self.__reduction.points_reduction_for_percent(old_data[host]['data'],key)
+                data.append(dict_host)
+                result = data
+        return result
+
+    def points_reduction_by_server_disk(self, timestamp_begin, timestamp_end, hosts):
+        data = []
+        old_data = self.hosts_disk(timestamp_begin, timestamp_end)
+        if len(old_data)==0 or len(old_data[0]['data']) <= 3:
+           result = old_data
+        else:
+            for host in range(len(hosts)):
+                dict_host = {}
+                dict_host["host_address"] = hosts[host]
+                dict_host['data'] = self.__reduction.points_reduction_disk(old_data[host]['data'])
+                data.append(dict_host)
+                result = data
+        return result
+
+
+    def points_reduction_vm(self, timestamp_begin,timestamp_end,resource_id):
+        old_data = json.loads(self.cpu_util_from(timestamp_begin,timestamp_end,resource_id))
+        key2 = "cpu_util_percent"
+        data = self.__reduction.points_reduction(old_data,key2)
+        return data
+
 
