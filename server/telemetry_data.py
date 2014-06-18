@@ -70,6 +70,10 @@ class DataHandler:
                         if( (j[j.keys()[0]]['Livre'][0] >= vms_aux[i][0]) and (j[j.keys()[0]]['Livre'][1] >= vms_aux[i][1])  and (j[j.keys()[0]]['Livre'][2] >= vms_aux[i][2])):
                             valores = [ j[j.keys()[0]]['Livre'][0] - vms_aux[i][0], j[j.keys()[0]]['Livre'][1] - vms_aux[i][1], j[j.keys()[0]]['Livre'][2] - vms_aux[i][2] ]
                             j[j.keys()[0]]['Livre'] = valores
+                            dic = j[j.keys()[0]]['vms']
+                            dic[vms_aux.keys()[0]] = vms_aux[vms_aux.keys()[0]]
+                            j[j.keys()[0]]['vms'] = dic
+                            j[j.keys()[0]]['nomes'][i] = dic_aux[chave]['nomes'][i]
                             migracoes[chave][ e[chave]['nomes'].get(i) ] = j.keys()[0]
                             migra = True
                             break
