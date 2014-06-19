@@ -212,3 +212,14 @@ class NovaClient:
                 pass
 
         return None
+
+    def critical_instances(self, project):
+        nova = client.Client(env.OS_USERNAME,env.OS_PASSWORD,project,env.OS_AUTH_URL)
+        instances = nova.servers.list()
+        has_meta = []
+        for instance in instances:
+            meta = instance.metadata
+            if meta.has_key('critical'):
+                if meta['critical'] == 'true':
+                    has_meta.append(instance.id)
+        return has_meta
