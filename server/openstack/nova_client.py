@@ -1,19 +1,24 @@
 import subprocess
 import json, requests
-import env
 from keystone_client import KeystoneClient
 from novaclient.v3 import client
 from novaclient.v3.servers import ServerManager
 
 class NovaClient:
 
+    def __init__(self, config):
+        self.__os_username = config.get('Openstack', 'osusername')
+        self.__os_password = config.get('Openstack', 'ospassword')
+        self.__os_auth_url = config.get('Openstack', 'osauthurl')
+        self.__os_tenant_admin = config.get('Openstack', 'ostenantadmin')
+
     def instances(self, project):
-        nova = client.Client(env.OS_USERNAME, env.OS_PASSWORD, project, env.OS_AUTH_URL)
+        nova = client.Client(self.__os_username, self.__os_password, project, self.__os_auth_url)
         return nova.servers.list()
 
     def metrics(self, project):
 
-        nova = client.Client(env.OS_USERNAME, env.OS_PASSWORD, project, env.OS_AUTH_URL)
+        nova = client.Client(self.__os_username, self.__os_password, project, self.__os_auth_url)
         hosts = nova.hosts.list()
         nome_dos_hosts = []
         dic_dos_hosts = {}
@@ -45,9 +50,9 @@ class NovaClient:
 
 
     def host_describe(self, host_name):
-        auth_tokens_url = env.OS_AUTH_URL + '/tokens'
+        auth_tokens_url = self.__os_auth_url + '/tokens'
         headers = {'Content-Type':'application/json','Accept':'application/json'}
-        payload = {"auth": {"tenantName": env.OS_ADMIN_TENANT, "passwordCredentials": {"username": env.OS_USERNAME, "password": env.OS_PASSWORD}}}
+        payload = {"auth": {"tenantName": self.__os_tenant_admin, "passwordCredentials": {"username": self.__os_username, "password": self.__os_password}}}
 
         r = requests.post(auth_tokens_url, data=json.dumps(payload), headers=headers)
         if r.status_code != 200:
@@ -78,19 +83,19 @@ class NovaClient:
         return r.json()
         
     def vm_migration(self,project_name,host_name,instance_id):
-        nova = client.Client(env.OS_USERNAME, env.OS_PASSWORD, project_name, env.OS_AUTH_URL)
+        nova = client.Client(self.__os_username, self.__os_password, project_name, self.__os_auth_url)
         server = ServerManager(nova)
         block = True
         disk_commit = False 
         server.live_migrate(instance_id,host_name,block,disk_commit)
 
     def vm_hostname(self,project_name,instance_id):
-        nova = client.Client(env.OS_USERNAME, env.OS_PASSWORD, project_name, env.OS_AUTH_URL)
+        nova = client.Client(self.__os_username, self.__os_password, project_name, self.__os_auth_url)
         server = ServerManager(nova)
         return server.get(instance_id)
 
     def flavor_information(self, project):
-        nova = client.Client(env.OS_USERNAME, env.OS_PASSWORD, project, env.OS_AUTH_URL)
+        nova = client.Client(self.__os_username, self.__os_password, project, self.__os_auth_url)
         dic_flavors = {}
         lista_flavors = nova.flavors.list()
         for flavor in lista_flavors:
@@ -105,7 +110,7 @@ class NovaClient:
         for host in keys:
             dic_hosts[host] = {'Total':host_statistics[host]['Total'], 'Livre': [a - b for a,b in zip(host_statistics[host]['Total'],host_statistics[host]['Em uso']) ] , 'vms':{} , 'nomes':{} }
         for p in projects:
-            nova = client.Client(env.OS_USERNAME, env.OS_PASSWORD, p, env.OS_AUTH_URL)
+            nova = client.Client(self.__os_username, self.__os_password, p, self.__os_auth_url)
             flavors = self.flavor_information(p)
             vm_list = nova.servers.list()
             if len(vm_list) > 0:
@@ -129,7 +134,7 @@ class NovaClient:
         return lista_ordenada2 
 
     def start_instance_bench(self, project):
-        nova = client.Client(env.OS_USERNAME, env.OS_PASSWORD, project, env.OS_AUTH_URL)
+        nova = client.Client(self.__os_username, self.__os_password, project, self.__os_auth_url)
         servers = nova.servers.list()
         for server in servers:
             if server.name == 'benchmark':
@@ -138,7 +143,7 @@ class NovaClient:
         return 'instancia disparada'
 
     def get_benchmark_ip(self, project):
-        nova = client.Client(env.OS_USERNAME, env.OS_PASSWORD, project, env.OS_AUTH_URL)
+        nova = client.Client(self.__os_username, self.__os_password, project, self.__os_auth_url)
         servers = nova.servers.list()
         benchmark_id  = ' '
         for server in servers:
@@ -150,14 +155,14 @@ class NovaClient:
         return instance_bench.addresses['private'][0]['addr']
 
     def remove_instance(self, id):
-        nova = client.Client(env.OS_USERNAME,env.OS_PASSWORD,"admin",env.OS_AUTH_URL)
+        nova = client.Client(self.__os_username,self.__os_password,"admin",self.__os_auth_url)
         sm = ServerManager(nova)
         instancia = sm.get(id)
         sm.delete(instancia)
         return True
 
     def benchmark_id(self):
-        nova = client.Client(env.OS_USERNAME,env.OS_PASSWORD,"admin",env.OS_AUTH_URL)
+        nova = client.Client(self.__os_username,self.__os_password,self.os_tenant_admin,self.__os_auth_url)
         servers = nova.servers.list()
         for server in servers:
             if server.name != 'benchmark':
@@ -171,7 +176,7 @@ class NovaClient:
         return hosts[host_name]
 
     def host_aggregates(self, project):
-        nova = client.Client(env.OS_USERNAME,env.OS_PASSWORD,project,env.OS_AUTH_URL)
+        nova = client.Client(self.__os_username,self.__os_password,project,self.__os_auth_url)
         aggregates = nova.aggregates.list()
         aggregates_hosts = []        
         for aggregate in aggregates:
@@ -192,8 +197,7 @@ class NovaClient:
 
 
     def resource_aggregates(self, name):
-
-        nova = client.Client(env.OS_USERNAME,env.OS_PASSWORD,'admin',env.OS_AUTH_URL)
+        nova = client.Client(self.__os_username,self.__os_password,self.__os_tenant_admin,self.__os_auth_url)
         aggregates = nova.aggregates.list()
 
         for aggregate in aggregates:
@@ -214,7 +218,7 @@ class NovaClient:
         return None
 
     def critical_instances(self, project):
-        nova = client.Client(env.OS_USERNAME,env.OS_PASSWORD,project,env.OS_AUTH_URL)
+        nova = client.Client(self.__os_username,self.__os_password,project,self.__os_auth_url)
         instances = nova.servers.list()
         has_meta = []
         for instance in instances:

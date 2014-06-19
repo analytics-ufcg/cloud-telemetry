@@ -1,12 +1,18 @@
-import env, ast
+import ast
 from keystone_client import KeystoneClient
 
 from ceilometerclient import client
 
 class CeilometerClient:
 
-    def __init__(self):
-        self.ceilometer = client.get_client(env.CEILOMETER_API_VERSION, os_username=env.OS_USERNAME, os_password=env.OS_PASSWORD, os_tenant_name=env.OS_TENANT_NAME, os_auth_url=env.OS_AUTH_URL)
+    def __init__(self, config):
+        ceilometer_api_version = config.get('Openstack', 'ceilometerapiversion')
+        username = config.get('Openstack', 'osusername')
+        password = config.get('Openstack', 'ospassword')
+        tenant_admin = config.get('Openstack', 'ostenantadmin')
+        auth_url = config.get('Openstack', 'osauthurl')
+        self.__alarm_url = config.get('Misc', 'alarmposturl')
+        self.ceilometer = client.get_client(ceilometer_api_version, os_username=username, os_password=password, os_tenant_name=tenant_admin, os_auth_url=auth_url)
 
     def __get_cpu_util_raw(self, timestamp_begin=None, timestamp_end=None, resource_id=None, project_id=None):
         query = []
@@ -43,7 +49,7 @@ class CeilometerClient:
 
     def set_alarm(self, name, meter, threshold, operator, period, evaluation_period):
         try:
-            alarm = self.ceilometer.alarms.create(name=name, meter_name=meter, threshold=threshold, comparison_operator=operator, statistic='avg', period=period, evaluation_periods=evaluation_period, repeat_actions=True, alarm_actions=['http://localhost:9090/alarm'])
+            alarm = self.ceilometer.alarms.create(name=name, meter_name=meter, threshold=threshold, comparison_operator=operator, statistic='avg', period=period, evaluation_periods=evaluation_period, repeat_actions=True, alarm_actions=[self.__alarm_url, 'log:/'])
             return alarm
         except:
             return None

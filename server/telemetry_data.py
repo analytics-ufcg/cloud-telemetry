@@ -5,12 +5,9 @@ from host_data import HostDataHandler
 from benchmark_data import BenchmarkDataHandler
 from reduction import Reduction
 
-import json, ast, smtplib, math, requests, numpy
+import json, ast, smtplib, math, requests, numpy, ast
 
 import analytics.recommendations
-
-HOSTS = ['150.165.15.4','150.165.15.38', '150.165.15.42']
-
 
 def send_email(from_addr, to_addr_list, cc_addr_list,
               subject, message,
@@ -39,10 +36,11 @@ class MigrateException(Exception):
 
 class DataHandler:
 
-    def __init__(self):
-        self.__ceilometer = CeilometerClient()
-        self.__keystone = KeystoneClient()
-        self.__nova = NovaClient()
+    def __init__(self, config):
+        self.__config = config
+        self.__ceilometer = CeilometerClient(config)
+        self.__keystone = KeystoneClient(config)
+        self.__nova = NovaClient(config)
         self.__hosts_db = HostDataHandler()
         self.__benchmark_db = BenchmarkDataHandler()
         self.__reduction = Reduction()

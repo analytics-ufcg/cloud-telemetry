@@ -2,20 +2,23 @@ from flask import Flask, render_template, request, make_response
 
 from telemetry_data import DataHandler, MigrateException
 
-import json, requests, threading
+import json, requests, threading, ConfigParser, ast
 
 from agent_server import store_host_data
 
 from start_bench_thread import start_bench_ 
 
 
-
 LOGFILE = 'telemetry_server'
 
 app = Flask(__name__)
-data_handler = DataHandler()
 
-HOSTS = ['150.165.15.4','150.165.15.38', '150.165.15.42']
+config = ConfigParser.ConfigParser()
+config.read("environment.conf")
+
+HOSTS = ast.literal_eval(config.get('Openstack', 'computenodes'))
+
+data_handler = DataHandler(config)
 
 @app.route('/projects')
 def projects():
