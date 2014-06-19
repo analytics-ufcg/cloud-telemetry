@@ -130,12 +130,12 @@ class DataHandler:
         projectId = self.__ceilometer.get_alarm_projectid(alarm_id)
         userEmail = self.__keystone.get_user_email(userId, projectId)
 
-        send_email('cloudtelemetry@gmail.com', 
+        send_email('cloudtelemetry.service@gmail.com', 
                         [userEmail],
                         [],
                         'Alert Telemetry Cloud',
                         'Email disparado pelo alarme!!!', 
-                        'cloudtelemetry@gmail.com',
+                        'cloudtelemetry.service@gmail.com',
                         '4n4lyt1cs')
 
     def alarm_description(self):
