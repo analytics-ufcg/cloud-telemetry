@@ -13,18 +13,20 @@ class NovaClient:
         self.__os_tenant_admin = config.get('Openstack', 'ostenantadmin')
 
     def instances(self, project):
+        from novaclient.v1_1 import client # nova client v3 raises exception for this
         nova = client.Client(self.__os_username, self.__os_password, project, self.__os_auth_url)
         return nova.servers.list()
 
     def metrics(self, project):
-
+        from novaclient.v1_1 import client # nova client v3 raises exception for this
         nova = client.Client(self.__os_username, self.__os_password, project, self.__os_auth_url)
         hosts = nova.hosts.list()
         nome_dos_hosts = []
         dic_dos_hosts = {}
         for host in hosts:
-            corte = str(host)[7:-1]
-            nome_dos_hosts.append(corte)
+            if host.service == 'compute':
+                corte = str(host)[7:-1]
+                nome_dos_hosts.append(corte)
         nome_dos_hosts = list(set(nome_dos_hosts))
 
         for host in nome_dos_hosts:
@@ -95,6 +97,7 @@ class NovaClient:
         return server.get(instance_id)
 
     def flavor_information(self, project):
+        from novaclient.v1_1 import client # nova client v3 raises exception for this
         nova = client.Client(self.__os_username, self.__os_password, project, self.__os_auth_url)
         dic_flavors = {}
         lista_flavors = nova.flavors.list()
@@ -105,21 +108,23 @@ class NovaClient:
 
     def vm_info(self,projects):
         dic_hosts = {}
+        attr_host = 'OS-EXT-SRV-ATTR:host'
         host_statistics = json.loads( self.metrics(projects[0]) )
         keys = host_statistics.keys()
         for host in keys:
             dic_hosts[host] = {'Total':host_statistics[host]['Total'], 'Livre': [a - b for a,b in zip(host_statistics[host]['Total'],host_statistics[host]['Em uso']) ] , 'vms':{} , 'nomes':{} }
         for p in projects:
+            from novaclient.v1_1 import client # nova client v3 raises exception for this
             nova = client.Client(self.__os_username, self.__os_password, p, self.__os_auth_url)
             flavors = self.flavor_information(p)
             vm_list = nova.servers.list()
             if len(vm_list) > 0:
                 for vm in vm_list:
-                    if vm._info['os-extended-server-attributes:host'] == None:
+                    if vm._info[attr_host] == None:
                         pass
                     else:
-                        dic_hosts[vm._info['os-extended-server-attributes:host']]['vms'][vm.id] = flavors[vm.flavor['id']]
-                        dic_hosts[vm._info['os-extended-server-attributes:host']]['nomes'][vm.id] = vm._info['name']
+                        dic_hosts[vm._info[attr_host]]['vms'][vm.id] = flavors[vm.flavor['id']]
+                        dic_hosts[vm._info[attr_host]]['nomes'][vm.id] = vm._info['name']
         lista_ordenada = []
         dic_ord = sorted( dic_hosts.items(), key=lambda x: (  len( x[1]['vms'].keys() )==0, -x[1]['Livre'][0] ))
         for e in dic_ord:
@@ -176,6 +181,7 @@ class NovaClient:
         return hosts[host_name]
 
     def host_aggregates(self, project):
+        from novaclient.v1_1 import client # nova client v3 raises exception for this
         nova = client.Client(self.__os_username,self.__os_password,project,self.__os_auth_url)
         aggregates = nova.aggregates.list()
         aggregates_hosts = []        
@@ -190,11 +196,8 @@ class NovaClient:
         hosts = {'150.165.15.4':'truta', '150.165.15.38':'cloud-analytics1'  ,'150.165.15.42':'cloud-analytics1'}
         return hosts[ip]
 
-
     def resource_host(self, host):
         return self.host_describe(host)['host'][0]['resource']
-
-
 
     def resource_aggregates(self, name):
         nova = client.Client(self.__os_username,self.__os_password,self.__os_tenant_admin,self.__os_auth_url)
