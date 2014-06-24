@@ -165,16 +165,19 @@ class NovaClient:
     def server_get_ip_by_name(self, host_name):
         hosts = {'truta':'150.165.15.4', 'cloud-analytics1':'150.165.15.38'  ,'cloud-analytics2':'150.165.15.42'}
         return hosts[host_name]
+
     def critical_instances(self, project):
-        nova = client.Client(env.OS_USERNAME,env.OS_PASSWORD,project,env.OS_AUTH_URL)
-        instances = nova.servers.list()
-        has_meta = []
-        for instance in instances:
-            meta = instance.metadata
-            if meta.has_key('critical'):
-                if meta['critical'] == 'true':
-                    has_meta.append(instance.id)
+        for proj in project:
+            nova = client.Client(env.OS_USERNAME,env.OS_PASSWORD,proj,env.OS_AUTH_URL)
+            instances = nova.servers.list()
+            has_meta = []
+            for instance in instances:
+                meta = instance.metadata
+                if meta.has_key('critical'):
+                    if meta['critical'] == 'true':
+                        has_meta.append(instance.id)
         return has_meta
+
     def host_aggregates(self, project):
         nova = client.Client(env.OS_USERNAME,env.OS_PASSWORD,project,env.OS_AUTH_URL)
         aggregates = nova.aggregates.list()
