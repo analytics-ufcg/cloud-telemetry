@@ -134,10 +134,13 @@ class NovaClient:
         return lista_ordenada2 
   
 
-    #def get_benchmark_id(self):
-     #   nova = client.Client(env.OS_USERNAME, env.OS_PASSWORD, 'admin', env.OS_AUTH_URL)
-      #  nova.
-        
+    def get_benchmark_id(self):
+        nova = client.Client(env.OS_USERNAME, env.OS_PASSWORD, 'admin', env.OS_AUTH_URL)
+        images = self.images_list()['images']
+        for image in images:
+            if image['name']=='benchmark':
+                return image['id']
+        return False        
         
 
 
