@@ -44,7 +44,7 @@ class NovaClient:
         return json.dumps(dic_dos_hosts)
 
 
-    def host_describe(self, host_name):
+    def get_nova_urls(self, url):
         auth_tokens_url = env.OS_AUTH_URL + '/tokens'
         headers = {'Content-Type':'application/json','Accept':'application/json'}
         payload = {"auth": {"tenantName": env.OS_ADMIN_TENANT, "passwordCredentials": {"username": env.OS_USERNAME, "password": env.OS_PASSWORD}}}
@@ -68,7 +68,7 @@ class NovaClient:
 
         admin_url = compute_service['endpoints'][0]['adminURL']
         headers = {'X-Auth-Project-Id':'admin', 'Accept':'application/json', 'X-Auth-Token':token}
-        os_hosts_url = admin_url + '/os-hosts/' + host_name
+        os_hosts_url = admin_url + url
 
         r = requests.get(os_hosts_url, headers=headers)
         if r.status_code != 200:
@@ -76,6 +76,15 @@ class NovaClient:
             raise Exception(msg)
 
         return r.json()
+
+    def host_describe(self, host_name):
+        url = '/os-hosts/' + host_name
+        return self.get_nova_urls(url)
+
+    def images_list(self):
+        url = '/images/detail'
+        return self.get_nova_urls(url)
+
         
     def vm_migration(self,project_name,host_name,instance_id):
         nova = client.Client(env.OS_USERNAME, env.OS_PASSWORD, project_name, env.OS_AUTH_URL)
@@ -123,6 +132,15 @@ class NovaClient:
                lista_ordenada2.remove(dic)
                lista_ordenada2.insert(0,dic)
         return lista_ordenada2 
+  
+
+    #def get_benchmark_id(self):
+     #   nova = client.Client(env.OS_USERNAME, env.OS_PASSWORD, 'admin', env.OS_AUTH_URL)
+      #  nova.
+        
+        
+
+
 
     def start_instance_bench(self, project):
         nova = client.Client(env.OS_USERNAME, env.OS_PASSWORD, project, env.OS_AUTH_URL)
