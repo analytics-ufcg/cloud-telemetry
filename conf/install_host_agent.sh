@@ -1,6 +1,5 @@
-echo 'Cloning telemetry git repo...'
-cd /etc
-git clone https://github.com/analyticsUfcg/cloud-telemetry.git
+echo 'Installing supervisor...'
+apt-get install supervisor
 echo 'Done.'
 
 echo 'Installing supervisor script...'
