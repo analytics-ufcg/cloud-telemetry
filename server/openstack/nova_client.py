@@ -143,6 +143,17 @@ class NovaClient:
         return False        
         
 
+    def get_benchmark_flavor(self):
+        nova = client.Client(env.OS_USERNAME, env.OS_PASSWORD, 'admin', env.OS_AUTH_URL)
+        flavors_begin = nova.flavors.list()
+        has_flavor = False
+        for flavor in flavors_begin:
+            if flavor.name == 'benchmark-flavor':
+                return flavor.id
+        bench_flavor = nova.flavors.create('benchmark-flavor', 1024, 1, 6)
+        return bench_flavor.id 
+            
+
 
 
     def start_instance_bench(self, project):
@@ -150,9 +161,9 @@ class NovaClient:
         servers = nova.servers.list()
         for server in servers:
             if server.name == 'benchmark':
-                return 'ja ha uma instancia chamada benchmark'
-        nova.servers.create('benchmark', '330a1d0b-5dc4-4dac-b83f-a45212abf5fd', '4d8a8f1a-2a43-4b0c-9af6-7e379a2358b8', availability_zone='nova:truta')
-        return 'instancia disparada'
+                return False
+        nova.servers.create('benchmark', self.get_benchmark_id(), self.get_benchmark_flavor(), availability_zone='nova:truta')
+        return True
 
     def get_benchmark_ip(self, project):
         nova = client.Client(env.OS_USERNAME, env.OS_PASSWORD, project, env.OS_AUTH_URL)
