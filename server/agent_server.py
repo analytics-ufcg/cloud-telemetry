@@ -1,8 +1,14 @@
 from host_data import HostDataHandler 
 import json, requests, time
 
-def store_host_data(hosts, interval=1, percpu=False):
-    db = HostDataHandler()
+def store_host_data(hosts, config, interval=1, percpu=False):
+    server = config.get('Misc', 'dbserver')
+    user = config.get('Misc', 'dbuser')
+    passwd = config.get('Misc', 'dbpass')
+    database = config.get('Misc', 'hostsdbname')
+    table = config.get('Misc', 'hostsdbtable')
+
+    db = HostDataHandler(server, user, passwd, database, table)
 
     while True:
         for host in hosts:

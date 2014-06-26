@@ -308,7 +308,7 @@ def hosts_aggregates():
     return resp
 
 if __name__ == '__main__':
-    worker = threading.Thread(target=store_host_data, kwargs={'hosts':HOSTS})
+    worker = threading.Thread(target=store_host_data, kwargs={'hosts' : HOSTS, 'config' : config})
     worker.daemon = False
     worker.start()
     
