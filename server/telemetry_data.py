@@ -41,7 +41,12 @@ class DataHandler:
         self.__ceilometer = CeilometerClient(config)
         self.__keystone = KeystoneClient(config)
         self.__nova = NovaClient(config)
-        self.__hosts_db = HostDataHandler()
+        server = config.get('Misc', 'dbserver')
+        user = config.get('Misc', 'dbuser')
+        passwd = config.get('Misc', 'dbpass')
+        database = config.get('Misc', 'hostsdbname')
+        table = config.get('Misc', 'hostsdbtable')
+        self.__hosts_db = HostDataHandler(server, user, passwd, database, table)
         self.__benchmark_db = BenchmarkDataHandler()
         self.__reduction = Reduction()
 
