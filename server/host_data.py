@@ -5,6 +5,11 @@ class HostDataHandler:
 
     def __init__(self, server='localhost', user='root', password='pass', db='hosts_data', table='hosts_data_table'):
         try:
+            print 'HostDataHandler'
+            print user
+            print password
+            print db
+            print table
             self.con = mdb.connect(server, user, password, db)
             self.table = table;
         except mdb.Error, e:

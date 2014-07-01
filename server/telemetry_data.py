@@ -209,21 +209,23 @@ class DataHandler:
         return json.dumps(ret)
 
     def instances_from_host(self, host_name):
+        attr_host = 'OS-EXT-SRV-ATTR:host'
         ret = []
         projects = self.__keystone.projects
         for project in projects:
             instances = self.__nova.instances(project['name'])
             for instance in instances:
                 print instance._info
-                if instance._info['os-extended-server-attributes:host'] == host_name:
+                if instance._info[attr_host] == host_name:
                     ret.append({'instance_name' : instance.name, 'instance_id' : instance.id})
         return ret   
 
     def migrate_to_host(self, project_name, host_name, instance_id):
         host_vm = self.__nova.vm_hostname(project_name,instance_id)
-        if host_vm._info['os-extended-server-attributes:host'] == host_name:
+        attr_host = 'OS-EXT-SRV-ATTR:host'
+        if host_vm._info[attr_host] == host_name:
             raise MigrateException(400,"Migracao para o mesmo destino")
-	elif host_vm._info['os-extended-server-attributes:host'] == 'truta' and host_name != 'truta':
+	elif host_vm._info[attr_host] == 'truta' and host_name != 'truta':
             raise MigrateException(500,"Migracao de host para compute node")
         else:
             self.__nova.vm_migration(project_name,host_name,instance_id)

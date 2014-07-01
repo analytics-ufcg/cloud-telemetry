@@ -85,13 +85,12 @@ class NovaClient:
         return r.json()
         
     def vm_migration(self,project_name,host_name,instance_id):
+        from novaclient.v1_1 import client # nova client v3 raises exception for this
         nova = client.Client(self.__os_username, self.__os_password, project_name, self.__os_auth_url)
-        server = ServerManager(nova)
-        block = True
-        disk_commit = False 
-        server.live_migrate(instance_id,host_name,block,disk_commit)
+        nova.servers.live_migrate(instance_id, host_name, True, False)
 
     def vm_hostname(self,project_name,instance_id):
+        from novaclient.v1_1 import client # nova client v3 raises exception for this
         nova = client.Client(self.__os_username, self.__os_password, project_name, self.__os_auth_url)
         server = ServerManager(nova)
         return server.get(instance_id)
