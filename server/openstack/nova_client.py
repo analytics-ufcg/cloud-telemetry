@@ -170,7 +170,9 @@ class NovaClient:
         for server in servers:
             if server.name == 'benchmark':
                 return False
-        nova.servers.create('benchmark', self.get_benchmark_id(), self.get_benchmark_flavor(), availability_zone='nova:truta')
+        hosts_name = self.__os_compute_nodes.keys()
+        for host in hosts_name:
+            nova.servers.create('benchmark', 'a382c667-31b2-4314-96ee-f99611f810e9', self.get_benchmark_flavor(), availability_zone='nova:'+host)
         return True
 
     def get_benchmark_ip(self, project):
