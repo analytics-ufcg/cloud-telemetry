@@ -253,13 +253,14 @@ class NovaClient:
 
     def critical_instances(self, project):
         from novaclient.v1_1 import client # nova client v3 raises exception for this
-        nova = client.Client(self.__os_username,self.__os_password,project,self.__os_auth_url)
-        instances = nova.servers.list()
         has_meta = []
-        for instance in instances:
-            meta = instance.metadata
-            if meta.has_key('critical'):
-                if meta['critical'] == 'true':
-                    has_meta.append(instance.id)
+        for i in project:
+            nova = client.Client(self.__os_username,self.__os_password,i,self.__os_auth_url)
+            instances = nova.servers.list()
+            for instance in instances:
+                meta = instance.metadata
+                if meta.has_key('critical'):
+                    if meta['critical'] == 'true':
+                        has_meta.append(instance.id)
         return has_meta
 
