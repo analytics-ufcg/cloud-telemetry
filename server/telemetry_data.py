@@ -3,6 +3,7 @@ from openstack.keystone_client import KeystoneClient
 from openstack.nova_client import NovaClient
 from host_data import HostDataHandler
 from benchmark_data import BenchmarkDataHandler
+from reduction import Reduction
 
 import json, ast, smtplib, math, requests, numpy, ast
 

@@ -128,7 +128,7 @@ class NovaClient:
             flavors = self.flavor_information(p)
             vm_list = nova.servers.list()
             for vm in vm_list:
-                dic_hosts[vm._info[attr_host]['vms'][vm.id] = flavors[vm.flavor['id']]
+                dic_hosts[vm._info[attr_host]]['vms'][vm.id] = flavors[vm.flavor['id']]
                 dic_hosts[vm._info[attr_host]]['nomes'][vm.id] = vm._info['name']
         lista_ordenada = []
         dic_ord = sorted( dic_hosts.items(), key=lambda x: (  len( x[1]['vms'].keys() )==0, -x[1]['Livre'][0] ))
