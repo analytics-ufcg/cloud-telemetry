@@ -53,7 +53,7 @@ class NovaClient:
 
 
     def get_nova_urls(self, url):
-        auth_tokens_url = env.OS_AUTH_URL + '/tokens'
+        auth_tokens_url = self.__os_auth_url + '/tokens'
         headers = {'Content-Type':'application/json','Accept':'application/json'}
         payload = {"auth": {"tenantName": self.__os_tenant_admin, "passwordCredentials": {"username": self.__os_username, "password": self.__os_password}}}
 
