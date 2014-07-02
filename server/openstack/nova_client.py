@@ -1,5 +1,5 @@
 import subprocess
-import json, requests
+import json, requests, ast
 from keystone_client import KeystoneClient
 from novaclient.v3 import client
 from novaclient.v3.servers import ServerManager
@@ -11,6 +11,7 @@ class NovaClient:
         self.__os_password = config.get('Openstack', 'ospassword')
         self.__os_auth_url = config.get('Openstack', 'osauthurl')
         self.__os_tenant_admin = config.get('Openstack', 'ostenantadmin')
+        self.__os_compute_nodes = ast.literal_eval(config.get('Openstack', 'computenodesmap'))
 
     def instances(self, project):
         from novaclient.v1_1 import client # nova client v3 raises exception for this
@@ -176,8 +177,7 @@ class NovaClient:
         return None
               
     def server_get_ip_by_name(self, host_name):
-        hosts = {'truta':'150.165.15.4', 'cloud-analytics1':'150.165.15.38'  ,'cloud-analytics2':'150.165.15.42'}
-        return hosts[host_name]
+        return self.__os_compute_nodes[host_name]
 
     def host_aggregates(self, project):
         from novaclient.v1_1 import client # nova client v3 raises exception for this
@@ -192,13 +192,16 @@ class NovaClient:
         return aggregates_hosts
 
     def server_name_by_ip(self, ip):
-        hosts = {'150.165.15.4':'truta', '150.165.15.38':'cloud-analytics1'  ,'150.165.15.42':'cloud-analytics1'}
-        return hosts[ip]
+        for name, serv_ip in self.__os_compute_nodes.iteritems():
+            if serv_ip == ip:
+                return name
+        return None
 
     def resource_host(self, host):
         return self.host_describe(host)['host'][0]['resource']
 
     def resource_aggregates(self, name):
+        from novaclient.v1_1 import client # nova client v3 raises exception for this
         nova = client.Client(self.__os_username,self.__os_password,self.__os_tenant_admin,self.__os_auth_url)
         aggregates = nova.aggregates.list()
 
@@ -220,6 +223,7 @@ class NovaClient:
         return None
 
     def critical_instances(self, project):
+        from novaclient.v1_1 import client # nova client v3 raises exception for this
         nova = client.Client(self.__os_username,self.__os_password,project,self.__os_auth_url)
         instances = nova.servers.list()
         has_meta = []

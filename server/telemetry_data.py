@@ -47,7 +47,7 @@ class DataHandler:
         database = config.get('Misc', 'hostsdbname')
         table = config.get('Misc', 'hostsdbtable')
         self.__hosts_db = HostDataHandler(server, user, passwd, database, table)
-        self.__benchmark_db = BenchmarkDataHandler()
+        self.__benchmark_db = BenchmarkDataHandler(server, user, passwd)
         self.__reduction = Reduction()
 
     def projects(self):

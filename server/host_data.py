@@ -5,11 +5,6 @@ class HostDataHandler:
 
     def __init__(self, server='localhost', user='root', password='pass', db='hosts_data', table='hosts_data_table'):
         try:
-            print 'HostDataHandler'
-            print user
-            print password
-            print db
-            print table
             self.con = mdb.connect(server, user, password, db)
             self.table = table;
         except mdb.Error, e:
@@ -19,7 +14,8 @@ class HostDataHandler:
     def save_data_db(self, cpu, memory, disk, host):
         cursor = self.con.cursor()
         try:
-            query = "INSERT INTO %s (Date, Cpu_Util, Memory, Disk, Host) VALUES('%s', %f, '%s', '%s', '%s')" % (self.table, datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'), cpu, json.dumps(memory), json.dumps(disk), host)
+            query = "INSERT INTO %s (Date, Cpu_Util, Memory, Disk, Host) VALUES(CURRENT_TIMESTAMP(), %f, '%s', '%s', '%s')" % (self.table, cpu, json.dumps(memory), json.dumps(disk), host)
+            #print query
             cursor.execute(query)
             self.con.commit()
             return "sucess"    
