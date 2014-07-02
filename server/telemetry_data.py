@@ -62,52 +62,45 @@ class DataHandler:
         migracoes = {}
         copia_hosts = host_vm_info[:]
         for host in host_vm_info:
-	 hostname = host.keys()[0]
-	 for server in servers_critical:
-		if((server in host[hostname]['nomes'].keys()) and(host.keys()[0] not in hosts_critical)):
-			hosts_critical.append(host.keys()[0])
+	    hostname = host.keys()[0]
 	desligar = {}
 	migracoes = {}
 	copia_hosts = host_vm_info[:]
 	for e in host_vm_info:
 		dic_aux = e.copy()
 		chave = e.keys()[0]
-		if(chave not in hosts_critical):
-			if( len( dic_aux[chave]['vms'].keys() ) > 0 ):
-				vms_aux = dic_aux[chave]['vms'].copy()
-				copia_hosts.remove(e)
-				migra = False
-				migracoes[chave] = {}
-				for i in vms_aux:
-				   for j in copia_hosts:
-					   if(i not in servers_critical):
-						   migra = False
-						   if( (j[j.keys()[0]]['Livre'][0] >= vms_aux[i][0]) and (j[j.keys()[0]]['Livre'][1] >= vms_aux[i][1])  and (j[j.keys()[0]]['Livre'][2] >= vms_aux[i][2])):
-							   valores = [ j[j.keys()[0]]['Livre'][0] - vms_aux[i][0], j[j.keys()[0]]['Livre'][1] - vms_aux[i][1], j[j.keys()[0]]['Livre'][2] - vms_aux[i][2] ]
-							   j[j.keys()[0]]['Livre'] = valores
-							   dic = j[j.keys()[0]]['vms']
-							   dic[vms_aux.keys()[0]] = vms_aux[vms_aux.keys()[0]]
-							   j[j.keys()[0]]['vms'] = dic
-							   j[j.keys()[0]]['nomes'][i] = dic_aux[chave]['nomes'][i]
-							   migracoes[chave][ e[chave]['nomes'].get(i) ] = j.keys()[0]
-							   migra = True
-							   break
-						   else:
-							   continue
+		if( len( dic_aux[chave]['vms'].keys() ) > 0 ):
+			vms_aux = dic_aux[chave]['vms'].copy()
+			copia_hosts.remove(e)
+			migra = False
+			migracoes[chave] = {}
+			for i in vms_aux:
+			   for j in copia_hosts:
+				   if(i not in servers_critical):
+					   migra = False
+					   if( (j[j.keys()[0]]['Livre'][0] >= vms_aux[i][0]) and (j[j.keys()[0]]['Livre'][1] >= vms_aux[i][1])  and (j[j.keys()[0]]['Livre'][2] >= vms_aux[i][2])):
+						   valores = [ j[j.keys()[0]]['Livre'][0] - vms_aux[i][0], j[j.keys()[0]]['Livre'][1] - vms_aux[i][1], j[j.keys()[0]]['Livre'][2] - vms_aux[i][2] ]
+						   j[j.keys()[0]]['Livre'] = valores
+						   dic = j[j.keys()[0]]['vms']
+						   dic[vms_aux.keys()[0]] = vms_aux[vms_aux.keys()[0]]
+						   j[j.keys()[0]]['vms'] = dic
+						   j[j.keys()[0]]['nomes'][i] = dic_aux[chave]['nomes'][i]
+						   migracoes[chave][ e[chave]['nomes'].get(i) ] = j.keys()[0]
+						   migra = True
+						   break
 					   else:
 						   continue
-				   if migra == False:
-					   migracoes[chave][ e[chave]['nomes'].get(i) ] = None
-					   desligar[chave] = False
-				if not chave in desligar:
-				   desligar[chave] = True
-			else:
-			   copia_hosts.remove(e)
+				   else:
+					   continue
+			   if migra == False:
+				   migracoes[chave][ e[chave]['nomes'].get(i) ] = None
+				   desligar[chave] = False
+			if not chave in desligar:
 			   desligar[chave] = True
-			   continue
 		else:
-		    desligar[chave] = False
-
+		   copia_hosts.remove(e)
+		   desligar[chave] = True
+		   continue
 	saida = {}
 	saida['Hosts']= desligar
 	saida['Migracoes'] = migracoes
