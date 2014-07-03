@@ -144,17 +144,19 @@ class NovaClient:
         return lista_ordenada2 
   
 
-    def get_benchmark_id(self):
+    def get_benchmark_id(self, host):
+        from novaclient.v1_1 import client
         nova = client.Client(env.OS_USERNAME, env.OS_PASSWORD, 'admin', env.OS_AUTH_URL)
         images = self.images_list()['images']
         for image in images:
-            if image['name']=='benchmark':
+            if image['name']=='benchmark-'+host:
                 return image['id']
         return False        
         
 
     def get_benchmark_flavor(self):
-        nova = client.Client(env.OS_USERNAME, env.OS_PASSWORD, 'admin', env.OS_AUTH_URL)
+        from novaclient.v1_1 import client
+        nova = client.Client(self.__os_username, self.__os_password, 'admin', self.__os_auth_url)
         flavors_begin = nova.flavors.list()
         has_flavor = False
         for flavor in flavors_begin:
@@ -163,25 +165,24 @@ class NovaClient:
         bench_flavor = nova.flavors.create('benchmark-flavor', 1024, 1, 6)
         return bench_flavor.id
 
-    def start_instance_bench(self, project):
+    def start_instance_bench(self, project, host_name):
         from novaclient.v1_1 import client # nova client v3 raises exception for this
         nova = client.Client(self.__os_username, self.__os_password, project, self.__os_auth_url)
         servers = nova.servers.list()
         for server in servers:
-            if server.name == 'benchmark':
+            if server.name == 'benchmark-'+host_name:
                 return False
         hosts_name = self.__os_compute_nodes.keys()
-        for host in hosts_name:
-            nova.servers.create('benchmark', 'a382c667-31b2-4314-96ee-f99611f810e9', self.get_benchmark_flavor(), availability_zone='nova:'+host)
+        nova.servers.create('benchmark-'+host_name, 'a382c667-31b2-4314-96ee-f99611f810e9', self.get_benchmark_flavor(), availability_zone='nova:'+host_name)
         return True
 
-    def get_benchmark_ip(self, project):
+    def get_benchmark_ip(self, project, host_name):
         from novaclient.v1_1 import client # nova client v3 raises exception for this
         nova = client.Client(self.__os_username, self.__os_password, project, self.__os_auth_url)
         servers = nova.servers.list()
         benchmark_id  = ' '
         for server in servers:
-            if server.name == 'benchmark':
+            if server.name == 'benchmark-'+host_name:
                 benchmark_id = server.id
         if benchmark_id == ' ':
             return 'nao ha instancia de benchmark'
@@ -196,12 +197,12 @@ class NovaClient:
         sm.delete(instancia)
         return True
 
-    def benchmark_id(self):
+    def benchmark_id(self, host):
         from novaclient.v1_1 import client # nova client v3 raises exception for this
         nova = client.Client(self.__os_username,self.__os_password,self.os_tenant_admin,self.__os_auth_url)
         servers = nova.servers.list()
         for server in servers:
-            if server.name != 'benchmark':
+            if server.name != 'benchmark-'+host:
                  pass
             else:
                  return server.id
