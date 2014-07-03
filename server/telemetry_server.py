@@ -277,7 +277,7 @@ def hosts_aggregation():
     timestamp_begin = request.args.get('timestamp_begin', None)
     timestamp_end = request.args.get('timestamp_end', None)
     
-    resp = make_response(data_handler.hosts_aggregation_cpu(HOSTS,timestamp_begin, timestamp_end))
+    resp = make_response(data_handler.hosts_aggregation_cpu(timestamp_begin, timestamp_end))
     resp.headers['Access-Control-Allow-Origin'] = "*"
     return resp
 
@@ -286,7 +286,7 @@ def hosts_aggregation_memory():
     timestamp_begin = request.args.get('timestamp_begin', None)
     timestamp_end = request.args.get('timestamp_end', None)
 
-    resp = make_response(data_handler.hosts_aggregation_memory(HOSTS, timestamp_begin, timestamp_end))
+    resp = make_response(data_handler.hosts_aggregation_memory(timestamp_begin, timestamp_end))
     resp.headers['Access-Control-Allow-Origin'] = "*"
     return resp
 
@@ -295,7 +295,7 @@ def hosts_aggregation_disk():
     timestamp_begin = request.args.get('timestamp_begin', None)
     timestamp_end = request.args.get('timestamp_end', None)
 
-    resp = make_response(data_handler.hosts_aggregation_disk(HOSTS, timestamp_begin, timestamp_end))
+    resp = make_response(data_handler.hosts_aggregation_disk(timestamp_begin, timestamp_end))
     resp.headers['Access-Control-Allow-Origin'] = "*"
     return resp
 
@@ -313,5 +313,5 @@ if __name__ == '__main__':
     worker.start()
     
     app.debug = True
-    app.run(host='0.0.0.0', port=10090)
+    app.run(host='0.0.0.0', port=10013)
 
