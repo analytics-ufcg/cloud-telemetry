@@ -309,3 +309,54 @@ class DataHandler:
                         break
             ret.append({"Aggregate":aggregate["name"], "data":result})
         return json.dumps(ret)
+
+    def points_reduction_by_server_cpu(self, timestamp_begin, timestamp_end, hosts):
+        data = []
+        old_data = self.hosts_cpu(timestamp_begin, timestamp_end)
+        key = 'data'
+        if len(old_data)==0 or len(old_data[0][key]) <= 3:
+           result = old_data
+        else:
+            for host in range(len(hosts)):
+                dict_host = {}
+                dict_host["host_address"] = hosts[host]
+                dict_host['data'] = self.__reduction.points_reduction(old_data[host]['data'],key)
+                data.append(dict_host)
+                result = data
+        return result
+    
+    def points_reduction_by_server_memory(self, timestamp_begin, timestamp_end, hosts):
+        data = []
+        old_data = self.hosts_memory(timestamp_begin, timestamp_end)
+        key = 'data'
+        if len(old_data)==0 or len(old_data[0][key]) <= 3:
+           result = old_data
+        else:
+            for host in range(len(hosts)):
+                dict_host = {}
+                dict_host["host_address"] = hosts[host]
+                dict_host['data'] = self.__reduction.points_reduction_for_percent(old_data[host]['data'],key)
+                data.append(dict_host)
+                result = data
+        return result
+
+    def points_reduction_by_server_disk(self, timestamp_begin, timestamp_end, hosts):
+        data = []
+        old_data = self.hosts_disk(timestamp_begin, timestamp_end)
+        if len(old_data)==0 or len(old_data[0]['data']) <= 3:
+           result = old_data
+        else:
+            for host in range(len(hosts)):
+                dict_host = {}
+                dict_host["host_address"] = hosts[host]
+                dict_host['data'] = self.__reduction.points_reduction_disk(old_data[host]['data'])
+                data.append(dict_host)
+                result = data
+        return result
+
+
+    def points_reduction_vm(self, timestamp_begin,timestamp_end,resource_id):
+        old_data = json.loads(self.cpu_util_from(timestamp_begin,timestamp_end,resource_id))
+        key2 = "cpu_util_percent"
+        data = self.__reduction.points_reduction(old_data,key2)
+        return data
