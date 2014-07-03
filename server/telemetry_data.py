@@ -384,9 +384,6 @@ class DataHandler:
         return json.dumps(ret)
 
 
-
-
-
     def points_reduction_by_server_cpu(self, timestamp_begin, timestamp_end, hosts):
         data = []
         old_data = self.hosts_cpu(timestamp_begin, timestamp_end)
