@@ -268,7 +268,7 @@ def repeat_benchmark():
 
 @app.route('/start_bench_th')
 def start_bench_thread():
-    resp = make_response(json.dumps(start_bench_()))
+    resp = make_response(json.dumps(start_bench_(config)))
     resp.headers['Access-Control-Allow-Origin'] = "*"
     return resp
 
