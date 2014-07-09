@@ -102,8 +102,7 @@ class NovaClient:
     def vm_hostname(self,project_name,instance_id):
         from novaclient.v1_1 import client # nova client v3 raises exception for this
         nova = client.Client(self.__os_username, self.__os_password, project_name, self.__os_auth_url)
-        server = ServerManager(nova)
-        return server.get(instance_id)
+        return nova.servers.get(instance_id)
 
     def flavor_information(self, project):
         from novaclient.v1_1 import client # nova client v3 raises exception for this
@@ -121,15 +120,18 @@ class NovaClient:
         host_statistics = json.loads( self.metrics(projects[0]) )
         keys = host_statistics.keys()
         for host in keys:
-            dic_hosts[host] = {'Total':host_statistics[host]['Total'], 'Livre': [a - b for a,b in zip(host_statistics[host]['Total'],host_statistics[host]['Em uso']) ] , 'vms':{} , 'nomes':{} }
+            dic_hosts[host] = {'Total':host_statistics[host]['Total'],'Info_project':{}, 'Livre': [a - b for a,b in zip(host_statistics[host]['Total'],host_statistics[host]['Em uso']) ] , 'vms':{} , 'nomes':{} }
         for p in projects:
             from novaclient.v1_1 import client # nova client v3 raises exception for this
             nova = client.Client(self.__os_username, self.__os_password, p, self.__os_auth_url)
             flavors = self.flavor_information(p)
             vm_list = nova.servers.list()
             for vm in vm_list:
+                list_instances = []
                 dic_hosts[vm._info[attr_host]]['vms'][vm.id] = flavors[vm.flavor['id']]
                 dic_hosts[vm._info[attr_host]]['nomes'][vm.id] = vm._info['name']
+                list_instances.append(vm.id)
+                dic_hosts[vm._info[attr_host]]['Info_project'][str(p)]=list_instances
         lista_ordenada = []
         dic_ord = sorted( dic_hosts.items(), key=lambda x: (  len( x[1]['vms'].keys() )==0, -x[1]['Livre'][0] ))
         for e in dic_ord:
