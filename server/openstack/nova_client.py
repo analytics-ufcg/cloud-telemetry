@@ -222,9 +222,23 @@ class NovaClient:
         return aggregates_hosts
 
     def server_name_by_ip(self, ip):
-        hosts = {'150.165.15.4':'truta', '150.165.15.38':'cloud-analytics1'  ,'150.165.15.42':'cloud-analytics1'}
+        hosts = {'150.165.15.4':'truta', '150.165.15.38':'cloud-analytics1'  ,'150.165.15.42':'cloud-analytics2'}
         return hosts[ip]
 
 
     def resource_host(self, host):
         return self.host_describe(host)['host'][0]['resource']
+
+    def vcpus_for_aggregate(self, project):
+        aggregates = self.host_aggregates(project)
+        ret = []
+        for hosts in aggregates:
+            total_vcpus = 0
+            for host in hosts['host_address']:
+                host_name = self.server_name_by_ip(host)
+                host_data = self.host_describe(host_name)
+                for instance in host_data['host']:
+                    if((instance['resource'])['project']=='(used_now)'):
+                        total_vcpus += (instance['resource'])['cpu']
+            ret.append("{'name':" + "'" + hosts['name'] + "'" + ", 'vcpus':" + str(total_vcpus) + "}")
+        return ret

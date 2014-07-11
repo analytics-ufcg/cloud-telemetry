@@ -307,3 +307,6 @@ class DataHandler:
                         break
             ret.append({"Aggregate":aggregate["name"], "data":result})
         return json.dumps(ret)
+
+    def vcpus_for_aggregate(self, project):
+        return json.dumps(self.__nova.vcpus_for_aggregate(project))
