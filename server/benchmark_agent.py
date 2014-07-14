@@ -11,14 +11,10 @@ def start_bench_th(projeto, host):
     dados.start_instance_bench('admin', host)
     while True:
         try:
-            print 'aaaaaaaaaaaaaaaaaaaaaaa'+host
-            print dados.get_benchmark_status('admin', host)
             if dados.get_benchmark_status('admin', host) == 'True':
                 break
             time.sleep(5)
-            print 'bbbbbbbbbbbb'+host
         except:
-            print 'cccccccccccccc'+host
             continue
 
     read_benchmark = json.loads(dados.get_benchmark('admin', host)[0])
