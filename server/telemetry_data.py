@@ -56,8 +56,6 @@ class DataHandler:
     def sugestion(self):
         project_list = [ a['name'] for a in json.loads(self.projects()) ]
         host_vm_info = self.__nova.vm_info(project_list)
-        print ("Project_list: "+ str(project_list))
-        print ("Host_vm_info: "+str(host_vm_info))
         id_projetos = {}
         for j in range(len(host_vm_info)):
             for w in host_vm_info[j]:
@@ -94,10 +92,16 @@ class DataHandler:
 						   dic[vms_aux.keys()[0]] = vms_aux[vms_aux.keys()[0]]
 						   j[j.keys()[0]]['vms'] = dic
 						   j[j.keys()[0]]['nomes'][i] = dic_aux[chave]['nomes'][i]
+                                                   atualiza = False
                                                    for x in migracoes.keys():
-                                                       migracoes[x].pop(i,None)
-						   migracoes[chave][i] = [j.keys()[0],e[chave]['nomes'].get(i),id_projetos[i]]
-						   migra = True
+                                                       if(i in migracoes[x].keys()):
+                                                           migracoes[x][i] = [j.keys()[0],e[chave]['nomes'].get(i),id_projetos[i]]
+                                                           atualiza = True
+
+                                                   migra = True
+                                                   if(atualiza):
+                                                      break
+                                                   migracoes[x][i] = [j.keys()[0],e[chave]['nomes'].get(i),id_projetos[i]]
 						   break
 					   else:
 						   continue
