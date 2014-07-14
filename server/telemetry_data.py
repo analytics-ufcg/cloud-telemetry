@@ -441,3 +441,6 @@ class DataHandler:
         key2 = "cpu_util_percent"
         data = self.__reduction.points_reduction(old_data,key2)
         return data
+
+    def vcpus_for_aggregate(self, project):
+        return json.dumps(self.__nova.vcpus_for_aggregate(project))

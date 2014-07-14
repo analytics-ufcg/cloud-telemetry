@@ -269,3 +269,16 @@ class NovaClient:
                         has_meta.append(instance.id)
         return has_meta
 
+    def vcpus_for_aggregate(self, project):
+        aggregates = self.host_aggregates(project)
+        ret = []
+        for hosts in aggregates:
+            total_vcpus = 0
+            for host in hosts['host_address']:
+                host_name = self.server_name_by_ip(host)
+                host_data = self.host_describe(host_name)
+                for instance in host_data['host']:
+                    if((instance['resource'])['project']=='(used_now)'):
+                        total_vcpus += (instance['resource'])['cpu']
+            ret.append("{'name':" + "'" + hosts['name'] + "'" + ", 'vcpus':" + str(total_vcpus) + "}")
+        return ret
