@@ -274,11 +274,14 @@ class NovaClient:
         ret = []
         for hosts in aggregates:
             total_vcpus = 0
+            total_cpus = 0
             for host in hosts['host_address']:
                 host_name = self.server_name_by_ip(host)
                 host_data = self.host_describe(host_name)
                 for instance in host_data['host']:
                     if((instance['resource'])['project']=='(used_now)'):
                         total_vcpus += (instance['resource'])['cpu']
-            ret.append("{'name':" + "'" + hosts['name'] + "'" + ", 'vcpus':" + str(total_vcpus) + "}")
+                    if((instance['resource'])['project']=='(total)'):
+                        total_cpus += (instance['resource'])['cpu']
+            ret.append("{'name':" + "'" + hosts['name'] + "'" + ", 'vcpus':" + str(total_vcpus) + ", 'cpus':" + str(total_cpus)  + "}")
         return ret
