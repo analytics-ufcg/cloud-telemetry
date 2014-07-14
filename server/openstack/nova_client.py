@@ -146,12 +146,12 @@ class NovaClient:
         return lista_ordenada2 
   
 
-    def get_benchmark_id(self, host):
+    def get_benchmark_id(self):
         from novaclient.v1_1 import client
-        nova = client.Client(env.OS_USERNAME, env.OS_PASSWORD, 'admin', env.OS_AUTH_URL)
+        nova = client.Client(self.__os_username, self.__os_password, 'admin', self.__os_auth_url)
         images = self.images_list()['images']
         for image in images:
-            if image['name']=='benchmark-'+host:
+            if image['name']==  'ubuntu-benchmark':
                 return image['id']
         return False        
         
@@ -175,7 +175,7 @@ class NovaClient:
             if server.name == 'benchmark-'+host_name:
                 return False
         hosts_name = self.__os_compute_nodes.keys()
-        nova.servers.create('benchmark-'+host_name, '4649dd41-0a17-4eb6-996b-6c2609334cf4', self.get_benchmark_flavor(), availability_zone='nova:'+host_name, nics=[{'net-id':'68f33fc4-9a9e-48bd-9e00-9f3b23dab808'}])
+        nova.servers.create('benchmark-'+host_name, self.get_benchmark_id(), self.get_benchmark_flavor(), availability_zone='nova:'+host_name, nics=[{'net-id':'68f33fc4-9a9e-48bd-9e00-9f3b23dab808'}])
         return True
 
     def get_benchmark_ip(self, project, host_name):
