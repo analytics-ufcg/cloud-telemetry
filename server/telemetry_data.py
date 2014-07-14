@@ -56,6 +56,13 @@ class DataHandler:
     def sugestion(self):
         project_list = [ a['name'] for a in json.loads(self.projects()) ]
         host_vm_info = self.__nova.vm_info(project_list)
+        id_projetos = {}
+        for j in range(len(host_vm_info)):
+            for w in host_vm_info[j]:
+                host_vm_info[j][w]['Info_project'].keys()
+                for i in host_vm_info[j][w]['Info_project'].keys():
+                    for s in host_vm_info[j][w]['Info_project'][i]:
+                        id_projetos[s] = i
         hosts_critical =[]
         servers_critical = self.__nova.critical_instances(project_list)
         desligar = {}
@@ -65,13 +72,13 @@ class DataHandler:
 	    hostname = host.keys()[0]
 	desligar = {}
 	migracoes = {}
-	copia_hosts = host_vm_info[:]
+	copia_hosts = host_vm_info[:]	
 	for e in host_vm_info:
 		dic_aux = e.copy()
 		chave = e.keys()[0]
 		if( len( dic_aux[chave]['vms'].keys() ) > 0 ):
 			vms_aux = dic_aux[chave]['vms'].copy()
-			copia_hosts.remove(e)
+			copia_hosts.pop(0)
 			migra = False
 			migracoes[chave] = {}
 			for i in vms_aux:
@@ -85,15 +92,23 @@ class DataHandler:
 						   dic[vms_aux.keys()[0]] = vms_aux[vms_aux.keys()[0]]
 						   j[j.keys()[0]]['vms'] = dic
 						   j[j.keys()[0]]['nomes'][i] = dic_aux[chave]['nomes'][i]
-						   migracoes[chave][ e[chave]['nomes'].get(i) ] = j.keys()[0]
-						   migra = True
+                                                   atualiza = False
+                                                   for x in migracoes.keys():
+                                                       if(i in migracoes[x].keys()):
+                                                           migracoes[x][i] = [j.keys()[0],e[chave]['nomes'].get(i),id_projetos[i]]
+                                                           atualiza = True
+
+                                                   migra = True
+                                                   if(atualiza):
+                                                      break
+                                                   migracoes[x][i] = [j.keys()[0],e[chave]['nomes'].get(i),id_projetos[i]]
 						   break
 					   else:
 						   continue
 				   else:
 					   continue
 			   if migra == False:
-				   migracoes[chave][ e[chave]['nomes'].get(i) ] = None
+				   migracoes[chave][i] = None
 				   desligar[chave] = False
 			if not chave in desligar:
 			   desligar[chave] = True
@@ -232,15 +247,15 @@ class DataHandler:
         return ret   
 
     def migrate_to_host(self, project_name, host_name, instance_id):
-        host_vm = self.__nova.vm_hostname(project_name,instance_id)
-        attr_host = 'OS-EXT-SRV-ATTR:host'
-        if host_vm._info[attr_host] == host_name:
-            raise MigrateException(400,"Migracao para o mesmo destino")
-	elif host_vm._info[attr_host] == 'truta' and host_name != 'truta':
-            raise MigrateException(500,"Migracao de host para compute node")
-        else:
-            self.__nova.vm_migration(project_name,host_name,instance_id)
-            return True
+        #host_vm = self.__nova.vm_hostname(project_name,instance_id)
+        #attr_host = 'OS-EXT-SRV-ATTR:host'
+        #if host_vm._info[attr_host] == host_name:
+        #    raise MigrateException(400,"Migracao para o mesmo destino")
+	#elif host_vm._info[attr_host] == 'truta' and host_name != 'truta':
+        #    raise MigrateException(500,"Migracao de host para compute node")
+        #else:
+        self.__nova.vm_migration(project_name,host_name,instance_id)
+        return True
 
 
     def get_benchmark_bd(self):
@@ -435,3 +450,6 @@ class DataHandler:
         key2 = "cpu_util_percent"
         data = self.__reduction.points_reduction(old_data,key2)
         return data
+
+    def vcpus_for_aggregate(self, project):
+        return json.dumps(self.__nova.vcpus_for_aggregate(project))
