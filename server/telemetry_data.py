@@ -259,6 +259,7 @@ class DataHandler:
  
     def get_benchmark_status(self, project, host):
         benchmark_ip = self.__nova.get_benchmark_ip(project, host)
+        print benchmark_ip
         data = requests.get('http://'+benchmark_ip+':5151/get_status')
         return data.text
 
