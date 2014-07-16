@@ -303,6 +303,7 @@ def hosts_aggregation_disk():
 def vcpus_for_aggregate():
     project = request.args.get('project')
     resp = make_response(data_handler.vcpus_for_aggregate(project))
+    resp.headers['Access-Control-Allow-Origin'] = "*"
     return resp
 
 @app.route('/hosts_aggregates')

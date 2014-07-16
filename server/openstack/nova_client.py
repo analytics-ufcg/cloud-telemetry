@@ -286,5 +286,5 @@ class NovaClient:
                         total_vcpus += (instance['resource'])['cpu']
                     if((instance['resource'])['project']=='(total)'):
                         total_cpus += (instance['resource'])['cpu']
-            ret.append("{'name':" + "'" + hosts['name'] + "'" + ", 'vcpus':" + str(total_vcpus) + ", 'cpus':" + str(total_cpus)  + "}")
+            ret.append('{"name":' + '"' + hosts["name"] + '"' + ', "vcpus":' + str(total_vcpus) + ', "cpus":' + str(total_cpus)  + '}')
         return ret
