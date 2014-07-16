@@ -57,6 +57,8 @@ class DataHandler:
         project_list = [ a['name'] for a in json.loads(self.projects()) ]
         host_vm_info = self.__nova.vm_info(project_list)
         id_projetos = {}
+        print("project_list: "+str(project_list))
+        print("host_vm_info: "+str(host_vm_info))
         for j in range(len(host_vm_info)):
             for w in host_vm_info[j]:
                 host_vm_info[j][w]['Info_project'].keys()
@@ -78,35 +80,26 @@ class DataHandler:
 		chave = e.keys()[0]
 		if( len( dic_aux[chave]['vms'].keys() ) > 0 ):
 			vms_aux = dic_aux[chave]['vms'].copy()
-			copia_hosts.pop(0)
+			copia_hosts.remove(e)
 			migra = False
 			migracoes[chave] = {}
 			for i in vms_aux:
 			   for j in copia_hosts:
 				   if(i not in servers_critical):
 					   migra = False
-					   if( (j[j.keys()[0]]['Livre'][0] >= vms_aux[i][0]) and (j[j.keys()[0]]['Livre'][1] >= vms_aux[i][1])  and (j[j.keys()[0]]['Livre'][2] >= vms_aux[i][2])):
-						   valores = [ j[j.keys()[0]]['Livre'][0] - vms_aux[i][0], j[j.keys()[0]]['Livre'][1] - vms_aux[i][1], j[j.keys()[0]]['Livre'][2] - vms_aux[i][2] ]
+					   if( (j[j.keys()[0]]['Livre'][0] >= vms_aux[i][0]) and (j[j.keys()[0]]['Livre'][1] >= vms_aux[i][1])  and (j[j.keys()[0]]['Livre'][2] >= vms_aux[i][2])):  
+                                                   valores = [ j[j.keys()[0]]['Livre'][0] - vms_aux[i][0], j[j.keys()[0]]['Livre'][1] - vms_aux[i][1], j[j.keys()[0]]['Livre'][2] - vms_aux[i][2] ]
 						   j[j.keys()[0]]['Livre'] = valores
 						   dic = j[j.keys()[0]]['vms']
 						   dic[vms_aux.keys()[0]] = vms_aux[vms_aux.keys()[0]]
 						   j[j.keys()[0]]['vms'] = dic
 						   j[j.keys()[0]]['nomes'][i] = dic_aux[chave]['nomes'][i]
-                                                   atualiza = False
-                                                   for x in migracoes.keys():
-                                                       if(i in migracoes[x].keys()):
-                                                           migracoes[x][i] = [j.keys()[0],e[chave]['nomes'].get(i),id_projetos[i]]
-                                                           atualiza = True
-
-                                                   migra = True
-                                                   if(atualiza):
-                                                      break
-                                                   migracoes[x][i] = [j.keys()[0],e[chave]['nomes'].get(i),id_projetos[i]]
-						   break
+                                                   migra= True
+                                                   migracoes[chave][i] = [j.keys()[0],e[chave]['nomes'].get(i),id_projetos[i]]
 					   else:
-						   continue
+					       break
 				   else:
-					   continue
+			               continue
 			   if migra == False:
 				   migracoes[chave][i] = None
 				   desligar[chave] = False
@@ -116,10 +109,12 @@ class DataHandler:
 		   copia_hosts.remove(e)
 		   desligar[chave] = True
 		   continue
+        
 	saida = {}
 	saida['Hosts']= desligar
 	saida['Migracoes'] = migracoes
-        return json.dumps(saida)    
+        return json.dumps(saida)
+
 
     def cpu_util_from(self, timestamp_begin=None, timestamp_end=None, resource_id=None):
         return json.dumps(self.__ceilometer.get_cpu_util(timestamp_begin, timestamp_end, resource_id))
