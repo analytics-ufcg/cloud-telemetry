@@ -97,8 +97,12 @@ class NovaClient:
     def vm_migration(self,project_name,host_name,instance_id):
         from novaclient.v1_1 import client # nova client v3 raises exception for this
         nova = client.Client(self.__os_username, self.__os_password, project_name, self.__os_auth_url)
-        nova.servers.live_migrate(instance_id, host_name, True, False)
-
+        try:
+            nova.servers.live_migrate(instance_id, host_name, True, False)
+        except Exception as e:
+            raise Exception(e.message)
+        return "Ok"
+  
     def vm_hostname(self,project_name,instance_id):
         from novaclient.v1_1 import client # nova client v3 raises exception for this
         nova = client.Client(self.__os_username, self.__os_password, project_name, self.__os_auth_url)

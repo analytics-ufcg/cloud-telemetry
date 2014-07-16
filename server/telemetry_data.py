@@ -247,8 +247,11 @@ class DataHandler:
 	#elif host_vm._info[attr_host] == 'truta' and host_name != 'truta':
         #    raise MigrateException(500,"Migracao de host para compute node")
         #else:
-        self.__nova.vm_migration(project_name,host_name,instance_id)
-        return True
+        try:
+            retorno = self.__nova.vm_migration(project_name,host_name,instance_id)
+        except Exception as a:
+            return {"erro":a.message}
+        return {"status":"success"}
 
 
     def get_benchmark_bd(self):
