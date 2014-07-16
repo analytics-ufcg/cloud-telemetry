@@ -57,8 +57,6 @@ class DataHandler:
         project_list = [ a['name'] for a in json.loads(self.projects()) ]
         host_vm_info = self.__nova.vm_info(project_list)
         id_projetos = {}
-        print("project_list: "+str(project_list))
-        print("host_vm_info: "+str(host_vm_info))
         for j in range(len(host_vm_info)):
             for w in host_vm_info[j]:
                 host_vm_info[j][w]['Info_project'].keys()
