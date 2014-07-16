@@ -1,9 +1,7 @@
 import threading, ast, ConfigParser
 from benchmark_agent import start_bench_th
 
-def start_bench_():
-    config = ConfigParser.ConfigParser()
-    config.read("environment.conf")
+def start_bench_(config):
     hosts = ast.literal_eval(config.get('Openstack', 'computenodesmap'))
     host_names =  hosts.keys()
     for instance in host_names:
