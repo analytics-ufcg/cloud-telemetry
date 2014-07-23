@@ -241,6 +241,15 @@ def can_migrate():
     resp.headers['Access-Control-Allow-Origin']="*"
     return resp
 
+
+@app.route('/host_migration_selection')
+def host_migration_selection():
+    hosts_name = request.args.get('hosts')
+    hosts_list = hosts_name.split(",")
+    return json.dumps(hosts_list)
+
+
+
 @app.route('/benchmark_data')
 def benchmark_data():
     resp = make_response(data_handler.get_benchmark_bd())
