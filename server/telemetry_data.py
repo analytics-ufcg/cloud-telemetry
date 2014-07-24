@@ -53,7 +53,7 @@ class DataHandler:
     def projects(self):
         return json.dumps(self.__keystone.projects)
 
-    def sugestion(self, list_ignore=[]):
+    def sugestion(self, list_not_ignore=[]):
         project_list = [ a['name'] for a in json.loads(self.projects()) ]
         host_vm_info = self.__nova.vm_info(project_list)
         id_projetos = {}
@@ -93,10 +93,11 @@ class DataHandler:
 						   j[j.keys()[0]]['vms'] = dic
 						   j[j.keys()[0]]['nomes'][i] = dic_aux[chave]['nomes'][i]
                                                    migra= True
-                                                   if chave in list_ignore:
-                                                       migra = False
+                                                   if chave not in list_not_ignore:
+						       migracoes[chave][i] = [j.keys()[0],e[chave]['nomes'].get(i),id_projetos[i]]
+
                                                    else:
-                                                       migracoes[chave][i] = [j.keys()[0],e[chave]['nomes'].get(i),id_projetos[i]]
+						       migra = False
 					   else:
 					       break
 				   else:

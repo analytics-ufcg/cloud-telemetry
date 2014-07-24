@@ -246,7 +246,10 @@ def can_migrate():
 def host_migration_selection():
     hosts_name = request.args.get('hosts')
     hosts_list = hosts_name.split(",")
-    return json.dumps(hosts_list)
+    migrate = data_handler.sugestions(hosts_list)
+    resp = make_response(migrate)
+    resp.headers['Access-Control-Allow-Origin']="*"
+    return resp
 
 
 
