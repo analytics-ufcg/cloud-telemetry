@@ -205,7 +205,7 @@ def alarm_description():
     resp.headers['Access-Control-Allow-Origin'] = "*"
     return resp
 
-@app.route('/alarm_delete')
+@app.route('/alarm_delete', methods=['POST'])
 def alarm_delete():
     alarm_id = request.args.get('alarm_id')
     resp = make_response(data_handler.delete_alarm(alarm_id))
