@@ -236,7 +236,7 @@ def live_migration():
 
 @app.route('/host_migration')
 def can_migrate():
-    migrate = data_handler.sugestion()
+    migrate = data_handler.suggestion()
     resp = make_response(migrate)
     resp.headers['Access-Control-Allow-Origin']="*"
     return resp
@@ -246,7 +246,7 @@ def can_migrate():
 def host_migration_selection():
     hosts_name = request.args.get('hosts')
     hosts_list = hosts_name.split(",")
-    migrate = data_handler.sugestions(hosts_list)
+    migrate = data_handler.suggestion(hosts_list)
     resp = make_response(migrate)
     resp.headers['Access-Control-Allow-Origin']="*"
     return resp
