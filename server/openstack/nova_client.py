@@ -51,6 +51,13 @@ class NovaClient:
 
         return json.dumps(dic_dos_hosts)
 
+    def verify_host_has_server(self, host_name, server_id):
+        from novaclient.v1_1 import client # nova client v3 raises exception for this
+        nova = client.Client(self.__os_username, self.__os_password, 'admin', self.__os_auth_url)
+        server = nova.servers.get(server_id)
+        if server._info['OS-EXT-SRV-ATTR:host'] == host_name:
+            return True
+        return False
 
     def get_nova_urls(self, url):
         auth_tokens_url = self.__os_auth_url + '/tokens'

@@ -69,53 +69,65 @@ class DataHandler:
         migracoes = {}
         copia_hosts = host_vm_info[:]
         for host in host_vm_info:
-	    hostname = host.keys()[0]
-	desligar = {}
-	migracoes = {}
-	copia_hosts = host_vm_info[:]	
-	for e in host_vm_info:
-		dic_aux = e.copy()
-		chave = e.keys()[0]
-		if( len( dic_aux[chave]['vms'].keys() ) > 0 ):
-			vms_aux = dic_aux[chave]['vms'].copy()
-			copia_hosts.remove(e)
-			migra = False
-			migracoes[chave] = {}
-			for i in vms_aux:
-			   for j in copia_hosts:
-				   if(i not in servers_critical):
-					   migra = False
-					   if( (j[j.keys()[0]]['Livre'][0] >= vms_aux[i][0]) and (j[j.keys()[0]]['Livre'][1] >= vms_aux[i][1])  and (j[j.keys()[0]]['Livre'][2] >= vms_aux[i][2])):  
+            hostname = host.keys()[0]
+        desligar = {}
+        migracoes = {}
+        copia_hosts = host_vm_info[:]
+        for e in host_vm_info:
+                dic_aux = e.copy()
+                chave = e.keys()[0]
+                if( len( dic_aux[chave]['vms'].keys() ) > 0 ):
+                        vms_aux = dic_aux[chave]['vms'].copy()
+                        copia_hosts.remove(e)
+                        migra = False
+                        migracoes[chave] = {}
+                        for i in vms_aux:
+                           for j in copia_hosts:
+                                   if(i not in servers_critical):
+                                           migra = False
+                                           if( (j[j.keys()[0]]['Livre'][0] >= vms_aux[i][0]) and (j[j.keys()[0]]['Livre'][1] >= vms_aux[i][1])  and (j[j.keys()[0]]['Livre'][2] >= vms_aux[i][2])):
                                                    valores = [ j[j.keys()[0]]['Livre'][0] - vms_aux[i][0], j[j.keys()[0]]['Livre'][1] - vms_aux[i][1], j[j.keys()[0]]['Livre'][2] - vms_aux[i][2] ]
-						   j[j.keys()[0]]['Livre'] = valores
-						   dic = j[j.keys()[0]]['vms']
-						   dic[vms_aux.keys()[0]] = vms_aux[vms_aux.keys()[0]]
-						   j[j.keys()[0]]['vms'] = dic
-						   j[j.keys()[0]]['nomes'][i] = dic_aux[chave]['nomes'][i]
+                                                   j[j.keys()[0]]['Livre'] = valores
+                                                   dic = j[j.keys()[0]]['vms']
+                                                   dic[vms_aux.keys()[0]] = vms_aux[vms_aux.keys()[0]]
+                                                   j[j.keys()[0]]['vms'] = dic
+                                                   j[j.keys()[0]]['nomes'][i] = dic_aux[chave]['nomes'][i]
                                                    migra= True
-                                                   if chave not in list_not_ignore:
-						       migracoes[chave][i] = [j.keys()[0],e[chave]['nomes'].get(i),id_projetos[i]]
+                                                   if list_not_ignore == []:
+                                                       migracoes[chave][i] = [j.keys()[0],e[chave]['nomes'].get(i),id_projetos[i]]
+
+                                                   elif chave in list_not_ignore:
+                                                       migracoes[chave][i] = [j.keys()[0],e[chave]['nomes'].get(i),id_projetos[i]]
 
                                                    else:
-						       migra = False
-					   else:
-					       break
-				   else:
-			               continue
-			   if migra == False:
-				   migracoes[chave][i] = None
-				   desligar[chave] = False
-			if not chave in desligar:
-			   desligar[chave] = True
-		else:
-		   copia_hosts.remove(e)
-		   desligar[chave] = True
-		   continue
-        
-	saida = {}
-	saida['Hosts']= desligar
-	saida['Migracoes'] = migracoes
-        return json.dumps(saida)
+                                                       migra = False
+                                           else:
+                                               break
+                                   else:
+                                       continue
+                           if migra == False:
+                                   migracoes[chave][i] = None
+                                   desligar[chave] = False
+                        if not chave in desligar:
+                           desligar[chave] = True
+                else:
+                   copia_hosts.remove(e)
+                   desligar[chave] = True
+                   continue
+
+        saida = {}
+        saida['Hosts']= desligar
+        saida['Migracoes'] = migracoes
+        #return json.dumps(saida)
+        return json.dumps(self.fix_migration(saida))
+
+    def fix_migration(self, saida):
+        aux_dic = saida
+        for host in aux_dic['Migracoes'].keys():
+            for server in aux_dic['Migracoes'][host].keys():
+                if not self.__nova.verify_host_has_server(host, server):
+                    aux_dic['Migracoes'][host].pop(server)
+        return aux_dic 
 
 
     def cpu_util_from(self, timestamp_begin=None, timestamp_end=None, resource_id=None):

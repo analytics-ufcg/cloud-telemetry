@@ -246,7 +246,7 @@ def can_migrate():
 def host_migration_selection():
     hosts_name = request.args.get('hosts')
     hosts_list = hosts_name.split(",")
-    migrate = data_handler.sugestions(hosts_list)
+    migrate = data_handler.sugestion(hosts_list)
     resp = make_response(migrate)
     resp.headers['Access-Control-Allow-Origin']="*"
     return resp
@@ -330,5 +330,5 @@ if __name__ == '__main__':
     worker.start()
     
     app.debug = True
-    app.run(host='0.0.0.0', port=10090)
+    app.run(host='0.0.0.0', port=10033)
 
