@@ -53,7 +53,7 @@ class DataHandler:
     def projects(self):
         return json.dumps(self.__keystone.projects)
 
-    def suggestion(self, list_not_ignore=[]):
+    def suggestion(self, list_not_ignore=['compute1', 'compute2', 'compute3']):
         project_list = [ a['name'] for a in json.loads(self.projects()) ]
         host_vm_info = self.__nova.vm_info(project_list)
         id_projetos = {}
