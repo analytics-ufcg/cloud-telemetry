@@ -182,8 +182,9 @@ def add_alarm():
     threshold = request.args.get('threshold')
     period = request.args.get('period')
     evalperiod = request.args.get('evalperiod')
+    send_mail = request.args.get('send_mail')
 
-    alarm = data_handler.add_alarm(name, resource, threshold, operator, period, evalperiod)
+    alarm = data_handler.add_alarm(name, resource, threshold, operator, period, evalperiod, send_mail)
     
     if alarm:
         resp = make_response(json.dumps({'alarm_id' : alarm.alarm_id}))
