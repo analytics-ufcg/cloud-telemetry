@@ -59,6 +59,28 @@ class NovaClient:
             return True
         return False
 
+    def list_compute_nodes(self):
+        from novaclient.v1_1 import client # nova client v3 raises exception for this
+        nova = client.Client(self.__os_username, self.__os_password, 'admin', self.__os_auth_url)
+        hosts = nova.hosts.list()
+        compute_nodes = []
+        for host in hosts:
+            if host._info['service']=='compute':
+                compute_nodes.append(host)
+        return compute_nodes
+
+    def get_servers_by_host(self, host_name, project_list):
+        host_servers = []
+        from novaclient.v1_1 import client # nova client v3 raises exception for this
+        for project in project_list:
+            nova = client.Client(self.__os_username, self.__os_password, project, self.__os_auth_url)
+            servers = nova.servers.list()
+            for server in servers:
+                if server._info['OS-EXT-SRV-ATTR:host'] == host_name:
+                    host_servers.append(server)
+        return host_servers
+
+
     def get_nova_urls(self, url):
         auth_tokens_url = self.__os_auth_url + '/tokens'
         headers = {'Content-Type':'application/json','Accept':'application/json'}
@@ -299,3 +321,4 @@ class NovaClient:
                         total_cpus += (instance['resource'])['cpu']
             ret.append('{"name":' + '"' + hosts["name"] + '"' + ', "vcpus":' + str(total_vcpus) + ', "cpus":' + str(total_cpus)  + '}')
         return ret
+
