@@ -154,8 +154,8 @@ class DataHandler:
         output['Hosts'] = shutdown
         output['Migracoes'] = migrations
         recomendation = self.remove_duplicated_migrations(output)
-        #return json.dumps(recomendation)
-        return json.dumps(output)
+        return json.dumps(recomendation)
+        #return json.dumps(output)
 
     def remove_duplicated_migrations(self, output):
         result = output
