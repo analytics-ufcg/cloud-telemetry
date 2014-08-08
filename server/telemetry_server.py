@@ -182,8 +182,9 @@ def add_alarm():
     threshold = request.args.get('threshold')
     period = request.args.get('period')
     evalperiod = request.args.get('evalperiod')
+    send_mail = request.args.get('send_mail')
 
-    alarm = data_handler.add_alarm(name, resource, threshold, operator, period, evalperiod)
+    alarm = data_handler.add_alarm(name, resource, threshold, operator, period, evalperiod, send_mail)
     
     if alarm:
         resp = make_response(json.dumps({'alarm_id' : alarm.alarm_id}))
@@ -237,7 +238,10 @@ def live_migration():
 @app.route('/host_migration')
 def host_migration_selection():
     hosts_name = request.args.get('hosts')
-    hosts_list = hosts_name.split(",")
+    if hosts_name == '':
+        hosts_list = []
+    else:
+        hosts_list = hosts_name.split(",")
     migrate = data_handler.suggestion(hosts_list)
     resp = make_response(migrate)
     resp.headers['Access-Control-Allow-Origin']="*"

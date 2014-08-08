@@ -19,13 +19,14 @@ def send_email(from_addr, to_addr_list, cc_addr_list,
     header += 'Subject: %s\n\n' % subject
     message = header + message
 
-
+    
     server = smtplib.SMTP(smtpserver)
     server.starttls()
     server.login(login,password)
     problems = server.sendmail(from_addr, to_addr_list, message)
     server.quit()
     return problems
+
 
 class MigrateException(Exception):
     
@@ -163,8 +164,7 @@ class DataHandler:
             for server  in result['Migracoes'][compute_node].keys():
                 if not self.__nova.verify_host_has_server(compute_node,server):
                     result['Migracoes'][compute_node].pop(server)
-        return result           
-
+        return result
 
     def cpu_util_from(self, timestamp_begin=None, timestamp_end=None, resource_id=None):
         return json.dumps(self.__ceilometer.get_cpu_util(timestamp_begin, timestamp_end, resource_id))
@@ -202,14 +202,16 @@ class DataHandler:
         userId = self.__ceilometer.get_alarm_userid(alarm_id)
         projectId = self.__ceilometer.get_alarm_projectid(alarm_id)
         userEmail = self.__keystone.get_user_email(userId, projectId)
-
-        send_email('cloudtelemetry@gmail.com', 
-                        [userEmail],
-                        [],
-                        'Alert Telemetry Cloud',
-                        'Email disparado pelo alarme!!!', 
-                        'cloudtelemetry@gmail.com',
-                        '4n4lyt1cs')
+        status = self.__ceilometer.get_alarm_email_status(alarm_id)
+       
+        if status == True or status == 'True':  
+            send_email('cloudtelemetry.service@gmail.com', 
+                            [userEmail],
+                            [],
+                            'Alert Telemetry Cloud',
+                            'Email disparado pelo alarme!!!', 
+                            'cloudtelemetry.service@gmail.com',
+                            '4n4lyt1cs')
 
     def alarm_description(self):
         return json.dumps(self.__ceilometer.get_alarm_parameters())
