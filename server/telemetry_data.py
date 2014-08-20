@@ -202,16 +202,14 @@ class DataHandler:
         userId = self.__ceilometer.get_alarm_userid(alarm_id)
         projectId = self.__ceilometer.get_alarm_projectid(alarm_id)
         userEmail = self.__keystone.get_user_email(userId, projectId)
-        status = self.__ceilometer.get_alarm_email_status(alarm_id)
        
-        if status == True or status == 'True':  
-            send_email('cloudtelemetry.service@gmail.com', 
-                            [userEmail],
-                            [],
-                            'Alert Telemetry Cloud',
-                            'Email disparado pelo alarme!!!', 
-                            'cloudtelemetry.service@gmail.com',
-                            '4n4lyt1cs')
+	send_email('cloudtelemetry.service@gmail.com', 
+                   [userEmail],
+                   [],
+                   'Alert Telemetry Cloud',
+                   'Email disparado pelo alarme!!!', 
+                   'cloudtelemetry.service@gmail.com',
+                   '4n4lyt1cs')
 
     def alarm_description(self):
         return json.dumps(self.__ceilometer.get_alarm_parameters())
